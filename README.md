@@ -58,6 +58,32 @@ Toolkit.init({
 });
 ```
 
+<h3>Native components</h3>
+HTML5 supports various native versions of components, and therefore so does HaxeUI. There are a few different ways to do this:
+
+<h4>Using a theme (applies to all relevant components)</h4>
+```haxe
+Toolkit.theme = "native"; // will try to use native components where possible
+```
+
+<h4>Using haxe code (applies to single component)</h4>
+```haxe
+var button:Button = new Button();
+button.native = true; // this component alone will be native
+```
+
+<h4>Using an inline style (applies to single component)</h4>
+```xml
+<button text="Native" style="native:true;" />
+```
+<h4>Using CSS (applies to groups of components)</h4>
+```css
+.button, #myNativeButton, .myNativeStyle {
+	native: true;
+}
+
+```
+
 <h2>Addtional resources</h2>
 * <a href="http://haxeui.github.io/haxeui-api/">haxeui-api</a> - The HaxeUI api docs.
 * <a href="https://github.com/haxeui/haxeui-guides">haxeui-guides</a> - Set of guides to working with HaxeUI and backends.
