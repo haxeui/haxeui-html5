@@ -2,6 +2,8 @@
   <img src="https://dl.dropboxusercontent.com/u/26678671/haxeui2-warning.png"/>
 </p>
 
+<a href="https://www.patreon.com/haxeui"><img src="https://dl.dropboxusercontent.com/u/26678671/patreon_button.png" title="Support this project on Patreon!"/></a>
+
 <h2>haxeui-html5</h2>
 `haxeui-html5` is the pure HTML5 backend for HaxeUI. It has no other framework dependency except `haxeui-core` itself and outputs a DOM tree.
 
