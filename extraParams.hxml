@@ -1,0 +1,3 @@
+--macro include("haxe.ui.html5.native.behaviours")
+--macro include("haxe.ui.html5.native.layouts")
+--macro include("haxe.ui.html5.native.size")

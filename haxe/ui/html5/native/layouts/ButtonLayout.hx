@@ -1,10 +1,10 @@
 package haxe.ui.html5.native.layouts;
+
 import haxe.ui.layouts.DefaultLayout;
 import haxe.ui.util.Size;
 import js.html.Element;
 import js.html.ImageElement;
 import js.html.SpanElement;
-
 
 @:keep
 class ButtonLayout extends DefaultLayout {
