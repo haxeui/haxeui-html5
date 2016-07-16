@@ -18,7 +18,7 @@ class AppBase {
     
     private function getToolkitInit():Dynamic {
         return {
-            stage: findContainer(Toolkit.backendProperties.getProp("haxe.ui.html5.container"))
+            container: findContainer(Toolkit.backendProperties.getProp("haxe.ui.html5.container"))
         };
     }
     

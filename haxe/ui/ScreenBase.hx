@@ -53,10 +53,10 @@ class ScreenBase {
 	
 	private var container(get, null):Element;
 	private function get_container():Element {
-		if (options == null || options.stage == null) {
+		if (options == null || options.container == null) {
 			return Browser.document.body;
 		}
-		return  options.stage;
+		return  options.container;
 	}
 	
     private var _hasListener:Bool = false;
