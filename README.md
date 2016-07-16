@@ -41,3 +41,28 @@ Toolkit.init();
 Once the toolkit is initialised you can add components using the methods specified <a href="https://github.com/haxeui/haxeui-core#adding-components-using-haxe-code">here</a>.
 
 <h2>HTML5 specifics</h2>
+
+As well as using the generic `Screen.instance.addComponent`, it is also possible to simply add components directly to any other DOM node, the `haxeui-html5` backend exposes a special `element` property for this purpose. Eg:
+
+```haxe
+js.Browser.document.getElementById("myContainer").appendChild(main.element);
+```
+
+<h3>Initialisation options</h3>
+The configuration options that may be passed to `Tookit.init()` are as follows:
+
+```haxe
+Toolkit.init({
+    container: js.Browser.document.getElementById("myContainer") // where 'Screen' will place components
+                                                                 // defaults to the document body
+});
+```
+
+<h2>Addtional resources</h2>
+* <a href="http://haxeui.github.io/haxeui-api/">haxeui-api</a> - The HaxeUI api docs.
+* <a href="https://github.com/haxeui/haxeui-guides">haxeui-guides</a> - Set of guides to working with HaxeUI and backends.
+* <a href="https://github.com/haxeui/haxeui-demo">haxeui-demo</a> - Demo application written using HaxeUI.
+* <a href="https://github.com/haxeui/haxeui-templates">haxeui-templates</a> - Set of templates for IDE's to allow quick project creation.
+* <a href="https://github.com/haxeui/haxeui-bdd">haxeui-bdd</a> - A behaviour driven development engine written specifically for HaxeUI (uses <a href="https://github.com/haxeui/haxe-bdd">haxe-bdd</a> which is a gherkin/cucumber inspired project).
+* <a href="https://www.youtube.com/watch?v=L8J8qrR2VSg&feature=youtu.be">WWX2016 presentation</a> - A presentation given at WWX2016 regarding HaxeUI.
+
