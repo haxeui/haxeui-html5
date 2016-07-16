@@ -10,20 +10,20 @@ import js.html.ImageElement;
 
 @:keep
 class ElementImage extends Behaviour {
-	public override function set(value:Variant) {
+    public override function set(value:Variant) {
         if (value.isNull) {
             return;
         }
-        
-		var el:Element = _component.element;
+
+        var el:Element = _component.element;
         var img:ImageElement = null;
         var list = el.getElementsByTagName("img");
         if (list != null && list.length == 1) {
-            img = cast list.item(0); 
+            img = cast list.item(0);
         } else {
             img = Browser.document.createImageElement();
-			img.style.display = "inline";
-			img.style.verticalAlign = "middle";
+            img.style.display = "inline";
+            img.style.verticalAlign = "middle";
             img.style.marginTop = "-1px";
             el.appendChild(img);
         }
@@ -32,10 +32,10 @@ class ElementImage extends Behaviour {
            img.src = image.data.src;
            _component.invalidateLayout();
         });
-	}
-	
-	public override function get():Variant {
-		var el:Element = _component.element;
-		return null;
-	}
+    }
+
+    public override function get():Variant {
+        var el:Element = _component.element;
+        return null;
+    }
 }

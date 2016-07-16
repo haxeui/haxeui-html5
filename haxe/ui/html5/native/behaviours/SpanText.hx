@@ -8,15 +8,15 @@ import js.html.SpanElement;
 
 @:keep
 class SpanText extends Behaviour {
-	public override function set(value:Variant) {
-		var el:Element = _component.element;
+    public override function set(value:Variant) {
+        var el:Element = _component.element;
         var span:SpanElement = getSpan(el);
         if (span == null) {
-			span = Browser.document.createSpanElement();
-			span.style.display = "inline-block";
-			span.style.verticalAlign = "middle";
-            
-            
+            span = Browser.document.createSpanElement();
+            span.style.display = "inline-block";
+            span.style.verticalAlign = "middle";
+
+
             var style:String = getConfigValue("style");
             if (style != null) {
                 var styles:Array<String> = style.split(";");
@@ -29,13 +29,13 @@ class SpanText extends Behaviour {
                     span.style.setProperty(StringTools.trim(parts[0]), StringTools.trim(parts[1]));
                 }
             }
-            
-			el.appendChild(span);
-        } 
 
-		span.textContent = value;
-	}
-    
+            el.appendChild(span);
+        }
+
+        span.textContent = value;
+    }
+
     private function getSpan(el:Element):SpanElement {
         var span:SpanElement = null;
         var list = el.getElementsByTagName("span");

@@ -6,13 +6,13 @@ import js.html.ImageElement;
 
 @:keep
 class ButtonSize extends DelegateLayoutSize {
-	public function new() {
-		
-	}
+    public function new() {
 
-	private override function get_width():Float {
-		var size = HtmlUtils.measureText(component.text);
-        
+    }
+
+    private override function get_width():Float {
+        var size = HtmlUtils.measureText(component.text);
+
         var iconCX:Float = getIconWidth();
         var cx:Float = size.width;
         var iconPosition:String = component.style.iconPosition;
@@ -23,13 +23,13 @@ class ButtonSize extends DelegateLayoutSize {
         } else {
             cx += iconCX + component.style.horizontalSpacing;
         }
-        
-		return cx + getInt("incrementWidthBy");
-	}
-	
-	private override function get_height():Float {
-		var size = HtmlUtils.measureText(component.text);
-        
+
+        return cx + getInt("incrementWidthBy");
+    }
+
+    private override function get_height():Float {
+        var size = HtmlUtils.measureText(component.text);
+
         var iconCY:Float = getIconHeight();
         var cy:Float = size.height;
         var iconPosition:String = component.style.iconPosition;
@@ -40,10 +40,10 @@ class ButtonSize extends DelegateLayoutSize {
                 cy = iconCY;
             }
         }
-        
-		return cy + getInt("incrementHeightBy");
-	}
-    
+
+        return cy + getInt("incrementHeightBy");
+    }
+
     private function getIconWidth():Float {
         var cx:Float = 0;
         var icon:ImageElement = getIcon();
@@ -52,7 +52,7 @@ class ButtonSize extends DelegateLayoutSize {
         }
         return cx;
     }
-    
+
     private function getIconHeight():Float {
         var cy:Float = 0;
         var icon:ImageElement = getIcon();
@@ -61,7 +61,7 @@ class ButtonSize extends DelegateLayoutSize {
         }
         return cy;
     }
-    
+
     private function getIcon():ImageElement {
         var img:ImageElement = null;
         var el:Element = component.element;

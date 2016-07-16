@@ -6,13 +6,13 @@ import js.html.Element;
 
 @:keep
 class ElementValue extends Behaviour {
-	public override function set(value:Variant) {
-		var el:Element = _component.element;
-		el.setAttribute("value", value);
-	}
-	
-	public override function get():Variant {
-		var el:Element = _component.element;
-		return el.textContent;
-	}
+    public override function set(value:Variant) {
+        var el:Element = _component.element;
+        el.setAttribute("value", value);
+    }
+
+    public override function get():Variant {
+        var el:Element = _component.element;
+        return el.textContent;
+    }
 }

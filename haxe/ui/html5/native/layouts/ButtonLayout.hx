@@ -11,12 +11,12 @@ class ButtonLayout extends DefaultLayout {
     public function new() {
         super();
     }
-    
+
     public override function calcAutoSize():Size {
         //var size:Size = super.calcAutoSize();
-        
-		var textSize:Size = HtmlUtils.measureText(component.text);
-        
+
+        var textSize:Size = HtmlUtils.measureText(component.text);
+
         var iconCX:Float = getIconWidth();
         var iconCY:Float = getIconHeight();
         var cx:Float = textSize.width;
@@ -33,14 +33,14 @@ class ButtonLayout extends DefaultLayout {
                 cy = iconCY;
             }
         }
-        
+
         var size:Size = new Size(cx, cy);
         size.width += paddingLeft + paddingRight + 6;
         size.height += paddingTop + paddingBottom + 2;
-        
+
         return size;
     }
-    
+
     private override function repositionChildren() {
         var el:Element = component.element;
         if (el.childElementCount == 2) {
@@ -57,7 +57,7 @@ class ButtonLayout extends DefaultLayout {
                         HtmlUtils.swapElements(last, first);
                     }
             }
-            
+
             var img:ImageElement = getIcon();
             if (img != null) {
                 switch (component.style.iconPosition) {
@@ -73,7 +73,7 @@ class ButtonLayout extends DefaultLayout {
                         img.style.marginRight = HtmlUtils.px(_component.style.horizontalSpacing);
                 }
             }
-            
+
             var text:SpanElement = getText();
             if (text != null) {
                 switch (component.style.iconPosition) {
@@ -85,7 +85,7 @@ class ButtonLayout extends DefaultLayout {
             }
         }
     }
-    
+
     private function getIconWidth():Float {
         var cx:Float = 0;
         var icon:ImageElement = getIcon();
@@ -94,7 +94,7 @@ class ButtonLayout extends DefaultLayout {
         }
         return cx;
     }
-    
+
     private function getIconHeight():Float {
         var cy:Float = 0;
         var icon:ImageElement = getIcon();
@@ -103,7 +103,7 @@ class ButtonLayout extends DefaultLayout {
         }
         return cy;
     }
-    
+
     private function getIcon():ImageElement {
         var img:ImageElement = null;
         var el:Element = component.element;
@@ -113,7 +113,7 @@ class ButtonLayout extends DefaultLayout {
         }
         return img;
     }
-    
+
     private function getText():SpanElement {
         var span:SpanElement = null;
         var el:Element = component.element;

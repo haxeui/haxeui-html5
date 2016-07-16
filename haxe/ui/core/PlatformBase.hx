@@ -16,7 +16,7 @@ class PlatformBase {
         }
         return 0;
     }
-    
+
     private static var _vscrollWidth:Float = -1;
     private static var _hscrollHeight:Float = -1;
     private static function calcScrollSize():Void {
@@ -25,12 +25,12 @@ class PlatformBase {
         }
 
         var div = Browser.document.createElement("div");
-		div.style.position = "absolute";
-		div.style.top = "-99999px"; // position off-screen!
-		div.style.left = "-99999px"; // position off-screen!
-        div.style.height = "100px";        
-        div.style.width = "100px";     
-        div.style.overflow = "scroll";     
+        div.style.position = "absolute";
+        div.style.top = "-99999px"; // position off-screen!
+        div.style.left = "-99999px"; // position off-screen!
+        div.style.height = "100px";
+        div.style.width = "100px";
+        div.style.overflow = "scroll";
         Browser.document.body.appendChild(div);
         _vscrollWidth = div.offsetWidth - div.clientWidth;
         _hscrollHeight = div.offsetHeight - div.clientHeight;
