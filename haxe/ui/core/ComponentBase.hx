@@ -214,7 +214,7 @@ class ComponentBase {
     private function handleReady() {
 
     }
-// test
+ test
     private function handleClipRect(value:Rectangle):Void {
         var parent:ComponentBase = cast(this, Component).parentComponent;
         if (parent._nativeElement == null) {
