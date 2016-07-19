@@ -83,15 +83,12 @@ class ComponentBase {
                 element.style.overflow = "auto";
                 return;
             } else {
-                var nativeConfig:GenericConfig = Toolkit.backendConfig.findBy("native");
-                if (nativeConfig != null) {
-                    var componentConfig:GenericConfig = nativeConfig.findBy("component", "id", className);
-                    if (componentConfig != null) {
-                        var nativeComponentClass:String = componentConfig.values.get("class");
-                        _nativeElement = Type.createInstance(Type.resolveClass(nativeComponentClass), [this]);
-                        _nativeElement.config = componentConfig.values;
-                        newElement = _nativeElement.create();
-                    }
+                var component:Component = cast(this, Component);
+                var nativeConfig:Map<String, String> = component.getNativeConfigProperties();
+                if (nativeConfig != null && nativeConfig.exists("class")) {
+                    _nativeElement = Type.createInstance(Type.resolveClass(nativeConfig.get("class")), [this]);
+                    _nativeElement.config = nativeConfig;
+                    newElement = _nativeElement.create();
                 }
             }
 
