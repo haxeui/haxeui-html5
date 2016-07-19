@@ -1,5 +1,10 @@
 package haxe.ui.backend;
 
+import haxe.ui.backend.html5.EventMapper;
+import haxe.ui.backend.html5.HtmlUtils;
+import haxe.ui.backend.html5.StyleHelper;
+import haxe.ui.backend.html5.UserAgent;
+import haxe.ui.backend.html5.native.NativeElement;
 import haxe.ui.components.VProgress;
 import haxe.ui.core.Component;
 import haxe.ui.core.ImageDisplay;
@@ -8,11 +13,6 @@ import haxe.ui.core.Screen;
 import haxe.ui.core.TextDisplay;
 import haxe.ui.core.TextInput;
 import haxe.ui.core.UIEvent;
-import haxe.ui.backend.html5.EventMapper;
-import haxe.ui.backend.html5.HtmlUtils;
-import haxe.ui.backend.html5.StyleHelper;
-import haxe.ui.backend.html5.UserAgent;
-import haxe.ui.backend.html5.native.NativeElement;
 import haxe.ui.styles.Style;
 import haxe.ui.util.GenericConfig;
 import haxe.ui.util.Rectangle;
@@ -24,6 +24,7 @@ import js.html.CSSStyleDeclaration;
 import js.html.Element;
 import js.html.MutationObserver;
 import js.html.MutationRecord;
+import js.html.Node;
 import js.html.WheelEvent;
 
 class ComponentBase {
@@ -41,8 +42,20 @@ class ComponentBase {
         _mutationObserver.observe(Screen.instance.container, { childList: true });
     }
 
-    private function onMutationEvent(r:Array<MutationRecord>, o:MutationObserver) {
-        recursiveReady();
+    private function onMutationEvent(records:Array<MutationRecord>, o:MutationObserver) {
+        var done:Bool = false;
+        for (record in records) {
+            for (i in 0...record.addedNodes.length) {
+                var node:Node = record.addedNodes.item(i);
+                if (node == element) {
+                    recursiveReady();
+                    done = true;
+                }
+            }
+            if (done == true) {
+                break;
+            }
+        }
     }
 
     private function recursiveReady() {
@@ -213,7 +226,9 @@ class ComponentBase {
     }
 
     private function handleReady() {
-
+        if (cast(this, Component).id != null) {
+            element.id = cast(this, Component).id;
+        }
     }
 
     private function handleClipRect(value:Rectangle):Void {
