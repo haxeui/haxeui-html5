@@ -462,10 +462,12 @@ class ComponentBase {
     //***********************************************************************************************************
     private function __onMouseEvent(event:js.html.MouseEvent) {
         var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
-        //trace(type + ", " + event.target);
         if (type != null) {
             var fn = _eventMap.get(type);
             if (fn != null) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                event.stopPropagation();
                 var mouseEvent = new MouseEvent(type);
                 mouseEvent.screenX = event.pageX;
                 mouseEvent.screenY = event.pageY;
