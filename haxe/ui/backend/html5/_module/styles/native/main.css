@@ -1,11 +1,8 @@
 .button {
-    __background-color: red !important;
-    __native: false;
 }
 
 .tabbar-button {
     native: false;
-    __background-color: red;
 }
 
 .tabbar-button {
@@ -17,13 +14,10 @@
 }
 
 .tabbar-button:down {
-    __border: 1px solid #ABABAB;
 }
 
 .tabbar-button-selected, .tabbar-button-selected:hover, .tabbar-button-selected:down {
     border-radius: 0px;
-    __background-color: white;
-    __border: 1px solid #ABABAB;
 
     border: 1px solid #ABABAB;
     border-bottom-width: 1px;

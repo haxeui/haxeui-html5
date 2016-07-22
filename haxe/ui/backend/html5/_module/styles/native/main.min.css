@@ -1,6 +1,6 @@
-.button{__background-color:red!important;__native:false;}
-.tabbar-button{native:false;__background-color:red;}
+.button{}
+.tabbar-button{native:false;}
 .tabbar-button{border-radius:0px;background:#EDEDED #E6E6E6;padding:6px;vertical-align:bottom;border:1px solid #ABABAB;}
-.tabbar-button:down{__border:1px solid #ABABAB;}
-.tabbar-button-selected,.tabbar-button-selected:hover,.tabbar-button-selected:down{border-radius:0px;__background-color:white;__border:1px solid #ABABAB;border:1px solid #ABABAB;border-bottom-width:1px;border-bottom-color:white;background-color:white;}
+.tabbar-button:down{}
+.tabbar-button-selected,.tabbar-button-selected:hover,.tabbar-button-selected:down{border-radius:0px;border:1px solid #ABABAB;border-bottom-width:1px;border-bottom-color:white;background-color:white;}
 
