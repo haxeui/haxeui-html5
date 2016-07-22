@@ -465,8 +465,6 @@ class ComponentBase {
         if (type != null) {
             var fn = _eventMap.get(type);
             if (fn != null) {
-                event.preventDefault();
-                event.stopImmediatePropagation();
                 event.stopPropagation();
                 var mouseEvent = new MouseEvent(type);
                 mouseEvent.screenX = event.pageX;
