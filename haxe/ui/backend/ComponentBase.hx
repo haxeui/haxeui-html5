@@ -232,8 +232,8 @@ class ComponentBase {
         var parent:ComponentBase = cast(this, Component).parentComponent;
         if (parent._nativeElement == null) {
             element.style.clip = 'rect(${HtmlUtils.px(value.top)},${HtmlUtils.px(value.right)},${HtmlUtils.px(value.bottom)},${HtmlUtils.px(value.left)})';
-            element.style.left = '${HtmlUtils.px(-value.left + 0)}';
-            element.style.top = '${HtmlUtils.px(-value.top + 0)}';
+            element.style.left = '${HtmlUtils.px(-value.left + 1)}';
+            element.style.top = '${HtmlUtils.px(-value.top + 1)}';
         } else {
             element.style.removeProperty("clip");
         }
