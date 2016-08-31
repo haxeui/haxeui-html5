@@ -6,6 +6,7 @@ import haxe.ui.backend.html5.HtmlUtils;
 import js.Browser;
 import js.html.CSSStyleDeclaration;
 import js.html.DivElement;
+import js.html.Text;
 
 class TextDisplayBase {
     public var element:DivElement;
@@ -242,6 +243,7 @@ class TextDisplayBase {
         if (height > 0) {
             style.height = HtmlUtils.px(height);
         }
+        measureText();
     }
 
     private function measureText() {
@@ -251,12 +253,16 @@ class TextDisplayBase {
         }
 
         var div = Browser.document.createElement("div");
-        div.style.fontFamily = element.style.fontFamily;
-        div.style.fontSize = element.style.fontSize;
-        div.innerHTML = t;
         div.style.position = "absolute";
         div.style.top = "-99999px"; // position off-screen!
         div.style.left = "-99999px"; // position off-screen!
+        div.style.visibility = "hidden";
+        div.style.fontFamily = element.style.fontFamily;
+        div.style.fontSize = element.style.fontSize;
+        div.innerHTML = t;
+        if (width > 0) {
+            div.style.width = '${HtmlUtils.px(width)}';
+        }
         Browser.document.body.appendChild(div);
 
         _textWidth = div.clientWidth + 2;

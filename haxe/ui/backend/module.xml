@@ -9,7 +9,6 @@
         </global>
         <default>
             <style resource="styles/default/main.css" />
-            <style resource="styles/default/app.css" />
         </default>
         <native>
             <style resource="styles/native/main.css" />

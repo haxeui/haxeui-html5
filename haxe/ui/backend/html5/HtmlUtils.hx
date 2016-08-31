@@ -38,7 +38,7 @@ class HtmlUtils {
 
     public static function removeElement(el:Element) {
         // el.remove() - IE is crap
-        if  (el.parentElement != null) {
+        if  (el != null && el.parentElement != null) {
             el.parentElement.removeChild(el);
         }
     }

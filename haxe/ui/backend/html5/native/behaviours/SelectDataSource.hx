@@ -10,7 +10,7 @@ import js.Browser;
 @:keep
 class SelectDataSource extends Behaviour {
     public override function set(value:Variant) {
-        var ds:DataSource<Dynamic> = Variant.toDynamic(value);
+        var ds:DataSource<Dynamic> = value;
         var el:Element = _component.element;
         while (el.childElementCount > 0) {
             el.removeChild(el.children[0]);

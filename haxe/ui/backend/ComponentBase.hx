@@ -74,7 +74,7 @@ class ComponentBase {
         var newElement = null;
         if (native == true) {
             var className = Type.getClassName(Type.getClass(this));
-            if (className == "haxe.ui.containers.ScrollView") { // special case for scrollview
+            if (className == "haxe.ui.containers.ScrollView" || className == "haxe.ui.containers.TableView3") { // special case for scrollview
                 _nativeElement = new NativeElement(cast this);
                 if (element == null) {
                     element = _nativeElement.create();
@@ -109,7 +109,7 @@ class ComponentBase {
         }
 
         if (newElement == null) {
-            if (Type.getClassName(Type.getClass(this)) == "haxe.ui.containers.ScrollView") {
+            if (Type.getClassName(Type.getClass(this)) == "haxe.ui.containers.ScrollView" || Type.getClassName(Type.getClass(this)) == "haxe.ui.containers.TableView3") {
                 _nativeElement = null;
                 if (element == null) {
                     element = Browser.document.createDivElement();
@@ -204,8 +204,8 @@ class ComponentBase {
 
         var css:CSSStyleDeclaration = element.style;
         StyleHelper.apply(this, width, height, style);
-
-        var parent:ComponentBase = cast(this, Component).parentComponent;
+        var c:Component = cast(this, Component);
+        var parent:ComponentBase = c.parentComponent;
         if (parent != null && parent.element.style.borderWidth != null) {
             css.marginTop = '-${parent.element.style.borderWidth}';
             css.marginLeft = '-${parent.element.style.borderWidth}';
@@ -229,11 +229,12 @@ class ComponentBase {
     }
 
     private function handleClipRect(value:Rectangle):Void {
-        var parent:ComponentBase = cast(this, Component).parentComponent;
+        var c:Component = cast(this, Component);
+        var parent:Component = c.parentComponent;
         if (parent._nativeElement == null) {
             element.style.clip = 'rect(${HtmlUtils.px(value.top)},${HtmlUtils.px(value.right)},${HtmlUtils.px(value.bottom)},${HtmlUtils.px(value.left)})';
-            element.style.left = '${HtmlUtils.px(-value.left + 1)}';
-            element.style.top = '${HtmlUtils.px(-value.top + 1)}';
+            element.style.left = '${HtmlUtils.px(c.left - value.left)}';
+            element.style.top = '${HtmlUtils.px(c.top - value.top)}';
         } else {
             element.style.removeProperty("clip");
         }

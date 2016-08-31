@@ -4,6 +4,7 @@ import haxe.ui.core.Behaviour;
 import haxe.ui.util.Variant;
 import js.Browser;
 import js.html.Element;
+import js.html.InputElement;
 import js.html.SpanElement;
 
 @:keep
@@ -11,6 +12,15 @@ class SpanText extends Behaviour {
     public override function set(value:Variant) {
         var el:Element = _component.element;
         var span:SpanElement = getSpan(el);
+        var checkbox:InputElement = getInput(el, "checkbox");
+        if (value.isNull) {
+            HtmlUtils.removeElement(span);
+            if (checkbox != null) {
+                checkbox.style.marginTop = "-15px";
+            }
+            return;
+        }
+        
         if (span == null) {
             span = Browser.document.createSpanElement();
             span.style.display = "inline-block";
@@ -30,6 +40,9 @@ class SpanText extends Behaviour {
                 }
             }
 
+            if (checkbox != null) {
+                checkbox.style.marginTop = "0";
+            }
             el.appendChild(span);
         }
 
@@ -43,5 +56,20 @@ class SpanText extends Behaviour {
             span = cast list.item(0);
         }
         return span;
+    }
+    
+    private function getInput(el:Element, type:String):InputElement {
+        var input:InputElement = null;
+        var list = el.getElementsByTagName("input");
+        if (list.length != 0) { 
+            for (n in 0...list.length) {
+                var child = list.item(n);
+                if (Std.is(child, InputElement) && cast(child, InputElement).type == type) {
+                    input = cast child;
+                    break;
+                }
+            }
+        }
+        return input;
     }
 }

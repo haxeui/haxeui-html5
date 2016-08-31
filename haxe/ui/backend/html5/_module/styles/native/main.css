@@ -24,3 +24,8 @@
     border-bottom-color: white;
     background-color: white;
 }
+
+.tableview .header {
+    margin-top: -1px;
+    margin-left: -1px;
+}
