@@ -152,10 +152,6 @@ class ComponentBase {
             _nativeElement = null;
 
             remapEvents();
-            
-            if (Std.is(this, Header)) {
-                element.style.position = "fixed";
-            }            
         }
     }
 
@@ -187,7 +183,7 @@ class ComponentBase {
             element.style.top = HtmlUtils.px(top);
         }
 
-        if (Std.is(this, TableView) && left != null && top != null) {
+        if (Std.is(this, TableView) && left != null && top != null && cast(this, TableView).native == true) {
             var c:Component = cast(this, Component);
             var h = c.findComponent(Header);
             h.element.style.left = '${HtmlUtils.px(h.screenLeft)}';
@@ -246,7 +242,10 @@ class ComponentBase {
         var parent:Component = c.parentComponent;
         if (parent._nativeElement == null || Std.is(c, Header)) {
             element.style.clip = 'rect(${HtmlUtils.px(value.top)},${HtmlUtils.px(value.right)},${HtmlUtils.px(value.bottom)},${HtmlUtils.px(value.left)})';
-            if (element.style.position == "fixed") {
+            if (Std.is(this, Header) && parent.native == true) {
+                if (element.style.position != "fixed") {
+                    element.style.position = "fixed";
+                }
                 element.style.left = '${HtmlUtils.px(c.screenLeft - value.left)}';
                 element.style.top = '${HtmlUtils.px(c.screenTop - value.top)}';
             } else {
