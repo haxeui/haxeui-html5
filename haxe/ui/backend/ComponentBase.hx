@@ -6,6 +6,9 @@ import haxe.ui.backend.html5.StyleHelper;
 import haxe.ui.backend.html5.UserAgent;
 import haxe.ui.backend.html5.native.NativeElement;
 import haxe.ui.components.VProgress;
+import haxe.ui.containers.Header;
+import haxe.ui.containers.ScrollView;
+import haxe.ui.containers.TableView;
 import haxe.ui.core.Component;
 import haxe.ui.core.ImageDisplay;
 import haxe.ui.core.MouseEvent;
@@ -73,8 +76,7 @@ class ComponentBase {
     public function handleCreate(native:Bool) {
         var newElement = null;
         if (native == true) {
-            var className = Type.getClassName(Type.getClass(this));
-            if (className == "haxe.ui.containers.ScrollView" || className == "haxe.ui.containers.TableView3") { // special case for scrollview
+            if (Std.is(this, ScrollView)) { // special case for scrollview
                 _nativeElement = new NativeElement(cast this);
                 if (element == null) {
                     element = _nativeElement.create();
@@ -109,7 +111,7 @@ class ComponentBase {
         }
 
         if (newElement == null) {
-            if (Type.getClassName(Type.getClass(this)) == "haxe.ui.containers.ScrollView" || Type.getClassName(Type.getClass(this)) == "haxe.ui.containers.TableView3") {
+            if (Std.is(this, ScrollView)) {
                 _nativeElement = null;
                 if (element == null) {
                     element = Browser.document.createDivElement();
@@ -127,7 +129,7 @@ class ComponentBase {
                 element.scrollLeft = 0;
                 element.style.overflow = "hidden";
                 return;
-            }
+            } 
 
             newElement = Browser.document.createDivElement();
 
@@ -150,6 +152,10 @@ class ComponentBase {
             _nativeElement = null;
 
             remapEvents();
+            
+            if (Std.is(this, Header)) {
+                element.style.position = "fixed";
+            }            
         }
     }
 
@@ -180,6 +186,14 @@ class ComponentBase {
         if (top != null) {
             element.style.top = HtmlUtils.px(top);
         }
+
+        if (Std.is(this, TableView) && left != null && top != null) {
+            var c:Component = cast(this, Component);
+            var h = c.findComponent(Header);
+            h.element.style.left = '${HtmlUtils.px(h.screenLeft)}';
+            h.element.style.top = '${HtmlUtils.px(h.screenTop)}';
+            
+        }
     }
 
     private function handleSize(width:Null<Float>, height:Null<Float>, style:Style) {
@@ -201,10 +215,9 @@ class ComponentBase {
             }
         }
 
-
+        var c:Component = cast(this, Component);
         var css:CSSStyleDeclaration = element.style;
         StyleHelper.apply(this, width, height, style);
-        var c:Component = cast(this, Component);
         var parent:ComponentBase = c.parentComponent;
         if (parent != null && parent.element.style.borderWidth != null) {
             css.marginTop = '-${parent.element.style.borderWidth}';
@@ -231,10 +244,15 @@ class ComponentBase {
     private function handleClipRect(value:Rectangle):Void {
         var c:Component = cast(this, Component);
         var parent:Component = c.parentComponent;
-        if (parent._nativeElement == null) {
+        if (parent._nativeElement == null || Std.is(c, Header)) {
             element.style.clip = 'rect(${HtmlUtils.px(value.top)},${HtmlUtils.px(value.right)},${HtmlUtils.px(value.bottom)},${HtmlUtils.px(value.left)})';
-            element.style.left = '${HtmlUtils.px(c.left - value.left)}';
-            element.style.top = '${HtmlUtils.px(c.top - value.top)}';
+            if (element.style.position == "fixed") {
+                element.style.left = '${HtmlUtils.px(c.screenLeft - value.left)}';
+                element.style.top = '${HtmlUtils.px(c.screenTop - value.top)}';
+            } else {
+                element.style.left = '${HtmlUtils.px(c.left - value.left)}';
+                element.style.top = '${HtmlUtils.px(c.top - value.top)}';
+            }
         } else {
             element.style.removeProperty("clip");
         }
