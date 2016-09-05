@@ -46,7 +46,20 @@ class SpanText extends Behaviour {
             el.appendChild(span);
         }
 
+        var invalidate:Bool = false;
+        if (_component.autoWidth == true) {
+            _component.element.style.width = null;
+            invalidate = true;
+        }
+        if (_component.autoHeight == true) {
+            _component.element.style.height = null;
+            invalidate = true;
+        }
+        
         span.textContent = value;
+        if (invalidate == true) {
+            _component.invalidateLayout();
+        }
     }
 
     private function getSpan(el:Element):SpanElement {
