@@ -6,6 +6,7 @@ import haxe.ui.backend.html5.StyleHelper;
 import haxe.ui.backend.html5.UserAgent;
 import haxe.ui.backend.html5.native.NativeElement;
 import haxe.ui.components.VProgress;
+import haxe.ui.components.VScroll;
 import haxe.ui.containers.Header;
 import haxe.ui.containers.ScrollView;
 import haxe.ui.containers.TableView;
@@ -344,6 +345,15 @@ class ComponentBase {
         }
     }
 
+    private function handleSetComponentIndex(child:Component, index:Int) {
+        //HtmlUtils.removeElement(child.element);
+        if (index == cast(this, Component).childComponents.length - 1) {
+            element.appendChild(child.element);
+        } else {
+            HtmlUtils.insertBefore(cast(this, Component).childComponents[index + 1].element, child.element);
+        }
+    }
+    
     //***********************************************************************************************************
     // Display tree
     //***********************************************************************************************************
@@ -378,7 +388,6 @@ class ComponentBase {
                     element.style.boxShadow = 'inset ${dropShadow.distance}px ${dropShadow.distance}px ${dropShadow.blurX}px 0px ${HtmlUtils.rgba(dropShadow.color, dropShadow.alpha)}';
                 }
             } else if (style.filter[0] == "blur") {
-                trace(style.filter);
                 var blur:Blur = FilterParser.parseBlur(style.filter);
                 element.style.setProperty("-webkit-filter", 'blur(1px)');
                 element.style.setProperty("-moz-filter", 'blur(1px)');

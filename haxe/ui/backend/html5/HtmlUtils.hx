@@ -36,6 +36,10 @@ class HtmlUtils {
         el2.parentNode.insertBefore(el2, el1);
     }
 
+    public static function insertBefore(el:Element, before:Element) {
+        before.parentNode.insertBefore(before, el);
+    }
+
     public static function removeElement(el:Element) {
         // el.remove() - IE is crap
         if  (el != null && el.parentElement != null) {

@@ -6,10 +6,14 @@ import haxe.ui.backend.html5.HtmlUtils;
 import js.Browser;
 import js.html.CSSStyleDeclaration;
 import js.html.DivElement;
+import js.html.Element;
+import js.html.InputElement;
+import js.html.Range;
+import js.html.Selection;
 import js.html.Text;
 
 class TextDisplayBase {
-    public var element:DivElement;
+    public var element:Element;
 
     public var parentComponent:Component;
 
@@ -18,6 +22,7 @@ class TextDisplayBase {
         //element.style.display = "inline";
         element.style.position = "absolute";
         element.style.cursor = "default";
+        multiline = false;
     }
 
     private var _text:String;
@@ -30,7 +35,17 @@ class TextDisplayBase {
             return value;
         }
 
-        element.innerHTML = value;
+        var html:String = value;
+        html = StringTools.replace(html, "\r\n", "<br/>");
+        html = StringTools.replace(html, "\r", "<br/>");
+        html = StringTools.replace(html, "\n", "<br/>");
+        
+        if (Std.is(element, InputElement)) {
+            cast(element, InputElement).value = html;
+        } else {
+            element.innerHTML = html;
+        }
+
         _text = value;
         measureText();
         return value;
@@ -105,13 +120,10 @@ class TextDisplayBase {
     private var _textHeight:Float = 0;
     public var textHeight(get, null):Float;
     private function get_textHeight():Float {
-        return _textHeight;
-        /*
-        if (element.offsetHeight > _textHeight) {
-            return element.offsetHeight;
+        if (_textHeight == 0) {
+            measureText();
         }
         return _textHeight;
-        */
     }
 
     private var _color:Int;
@@ -225,6 +237,55 @@ class TextDisplayBase {
         return value;
     }
 
+    private var _multiline:Bool = true;
+    public var multiline(get, set):Bool;
+    private function get_multiline():Bool {
+        return _multiline;
+    }
+    private function set_multiline(value:Bool):Bool {
+        if (value == _multiline) {
+            return value;
+        }
+        
+        _multiline = value;
+        if (_multiline == false) {
+            element.addEventListener("keypress", onKeyPress);
+        } else {
+            element.removeEventListener("keypress", onKeyPress);
+        }
+        
+        return value;
+    }
+    
+    private function onKeyPress(e) {
+        if  (_multiline == false && e.which == 13) {
+            e.preventDefault();
+            return false;
+        }
+        return true;
+    }
+    
+    private var _wordWrap:Bool = false;
+    public var wordWrap(get, set):Bool;
+    private function get_wordWrap():Bool {
+        return _wordWrap;
+    }
+    private function set_wordWrap(value:Bool):Bool {
+        if (value == _wordWrap) {
+            return value;
+        }
+        
+        _wordWrap = value;
+        if (_wordWrap == true) {
+            element.style.removeProperty("white-space");
+        } else {
+            element.style.whiteSpace = "nowrap";
+        }
+        measureText();
+        
+        return value;
+    }
+    
     //***********************************************************************************************************
     // Util functions
     //***********************************************************************************************************
@@ -249,7 +310,7 @@ class TextDisplayBase {
     private function measureText() {
         var t:String = _text;
         if (t == null || t.length == 0) {
-            t = " ";
+            t = "|";
         }
 
         var div = Browser.document.createElement("div");
