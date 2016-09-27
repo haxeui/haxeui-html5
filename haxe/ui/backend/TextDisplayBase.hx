@@ -28,14 +28,30 @@ class TextDisplayBase {
     private var _text:String;
     public var text(get, set):String;
     private function get_text():String {
-        return element.innerHTML;
+        var r:String = null;
+        if (Std.is(element, InputElement)) {
+            r = cast(element, InputElement).value;
+        } else {
+            r = element.innerHTML;
+        }
+        return r;
     }
+    private var _dirty:Bool = false;
     private function set_text(value:String):String {
         if (value == _text) {
             return value;
         }
 
+        /*
+        if (value == null || value.length == 0) {
+            _text = value;
+            _dirty = true;
+            return value;
+        }
+        */
+        
         var html:String = value;
+        html = HtmlUtils.escape(html);
         html = StringTools.replace(html, "\r\n", "<br/>");
         html = StringTools.replace(html, "\r", "<br/>");
         html = StringTools.replace(html, "\n", "<br/>");
@@ -46,6 +62,7 @@ class TextDisplayBase {
             element.innerHTML = html;
         }
 
+        _dirty = true;
         _text = value;
         measureText();
         return value;
@@ -114,13 +131,24 @@ class TextDisplayBase {
     private var _textWidth:Float = 0;
     public var textWidth(get, null):Float;
     private function get_textWidth():Float {
+        if (_text == null || _text.length == 0) {
+            return 0;
+        }
+        if (_textWidth == 0) {
+            _dirty = true;
+            measureText();
+        }
         return _textWidth;
     }
 
     private var _textHeight:Float = 0;
     public var textHeight(get, null):Float;
     private function get_textHeight():Float {
+        if (_text == null || _text.length == 0) {
+            return 0;
+        }
         if (_textHeight == 0) {
+            _dirty = true;
             measureText();
         }
         return _textHeight;
@@ -304,23 +332,36 @@ class TextDisplayBase {
         if (height > 0) {
             style.height = HtmlUtils.px(height);
         }
+        _dirty = true;
         measureText();
     }
 
+    private static var calls:Int = 0;
     private function measureText() {
+        if (_dirty == false) {
+            return;
+        }
+        
         var t:String = _text;
         if (t == null || t.length == 0) {
             t = "|";
         }
 
+        var html:String = t;
+        html = HtmlUtils.escape(html);
+        html = StringTools.replace(html, "\r\n", "<br/>");
+        html = StringTools.replace(html, "\r", "<br/>");
+        html = StringTools.replace(html, "\n", "<br/>");
+        
         var div = Browser.document.createElement("div");
         div.style.position = "absolute";
         div.style.top = "-99999px"; // position off-screen!
         div.style.left = "-99999px"; // position off-screen!
         div.style.visibility = "hidden";
+        //div.style.display = "none";
         div.style.fontFamily = element.style.fontFamily;
         div.style.fontSize = element.style.fontSize;
-        div.innerHTML = t;
+        div.innerHTML = html;
         if (width > 0) {
             div.style.width = '${HtmlUtils.px(width)}';
         }
@@ -330,5 +371,6 @@ class TextDisplayBase {
         _textHeight = div.clientHeight - 1;
         //div.remove();
         HtmlUtils.removeElement(div);
+        _dirty = false;
     }
 }
