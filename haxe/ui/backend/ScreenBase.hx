@@ -19,11 +19,13 @@ class ScreenBase {
 
     public function new() {
         _mapping = new Map<String, UIEvent->Void>();
+        /* might need this later
         Browser.document.body.addEventListener("mousedown", function(e) {
             e.stopPropagation();
             e.preventDefault();
             return false;
         });
+        */
     }
 
     public var width(get, null):Float;
@@ -38,6 +40,7 @@ class ScreenBase {
 
     private var __topLevelComponents:Array<Component> = new Array<Component>();
     public function addComponent(component:Component) {
+        component.ready();
         __topLevelComponents.push(component);
         addResizeListener();
         resizeComponent(component);
