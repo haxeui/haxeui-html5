@@ -123,14 +123,26 @@ class StyleHelper {
                     gradientStyle = "vertical";
                 }
 
-                if (gradientStyle == "vertical") {
-                    css.background = 'linear-gradient(to bottom, ${HtmlUtils.color(style.backgroundColor)}, ${HtmlUtils.color(style.backgroundColorEnd)})';
-                } else if (gradientStyle == "horizontal") {
-                    css.background = 'linear-gradient(to right, ${HtmlUtils.color(style.backgroundColor)}, ${HtmlUtils.color(style.backgroundColorEnd)})';
+                if (style.backgroundOpacity != null) {
+                    if (gradientStyle == "vertical") {
+                        css.background = 'linear-gradient(to bottom, ${HtmlUtils.rgba(style.backgroundColor, style.backgroundOpacity)}, ${HtmlUtils.rgba(style.backgroundColorEnd, style.backgroundOpacity)})';
+                    } else if (gradientStyle == "horizontal") {
+                        css.background = 'linear-gradient(to right, ${HtmlUtils.rgba(style.backgroundColor, style.backgroundOpacity)}, ${HtmlUtils.rgba(style.backgroundColorEnd, style.backgroundOpacity)})';
+                    }
+                } else {
+                    if (gradientStyle == "vertical") {
+                        css.background = 'linear-gradient(to bottom, ${HtmlUtils.color(style.backgroundColor)}, ${HtmlUtils.color(style.backgroundColorEnd)})';
+                    } else if (gradientStyle == "horizontal") {
+                        css.background = 'linear-gradient(to right, ${HtmlUtils.color(style.backgroundColor)}, ${HtmlUtils.color(style.backgroundColorEnd)})';
+                    }
                 }
             } else {
                 css.removeProperty("background");
-                css.backgroundColor = HtmlUtils.color(style.backgroundColor);
+                if (style.backgroundOpacity != null) {
+                    css.backgroundColor = HtmlUtils.rgba(style.backgroundColor, style.backgroundOpacity);
+                } else {
+                    css.backgroundColor = HtmlUtils.color(style.backgroundColor);
+                }
             }
         } else {
             css.removeProperty("background");
