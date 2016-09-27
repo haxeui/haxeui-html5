@@ -499,6 +499,14 @@ class ComponentBase {
     private function __onMouseEvent(event:js.html.MouseEvent) {
         var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
         if (type != null) {
+            try { // set/releaseCapture isnt currently supported in chrome
+                if (type == MouseEvent.MOUSE_DOWN) {
+                    element.setCapture();
+                } else if (type == MouseEvent.MOUSE_UP) {
+                    element.releaseCapture();
+                }
+            } catch (e:Dynamic) { }
+            
             var fn = _eventMap.get(type);
             if (fn != null) {
                 //event.stopPropagation();
