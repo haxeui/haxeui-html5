@@ -20,6 +20,15 @@ class HtmlUtils {
         return 'rgba(${r}, ${g}, ${b}, ${alpha})';
     }
 
+    public static function escape(s):String {
+        //s = StringTools.replace(s, "&", "&amp;");
+        s = StringTools.replace(s, "\"", "&quot;");
+        s = StringTools.replace(s, "'", "&#39;");
+        s = StringTools.replace(s, "<", "&lt;");
+        s = StringTools.replace(s, ">", "&gt;");
+        return s;
+    }
+    
     public static function measureText(text:String, addWidth:Float = 0, addHeight:Float = 0):Size {
         var div = Browser.document.createElement("div");
         div.innerHTML = text;
