@@ -37,23 +37,26 @@ class ComponentBase {
 
     private var _nativeElement:NativeElement;
 
-    private var _mutationObserver:MutationObserver;
-
+    private static var _mutationObserver:MutationObserver;
+    private static var elementToComponent:Map<Node, Component> = new Map<Node, Component>();
+    
     @:access(haxe.ui.backend.ScreenBase)
     public function new() {
         _eventMap = new Map<String, UIEvent->Void>();
-        _mutationObserver = new MutationObserver(onMutationEvent);
-        _mutationObserver.observe(Screen.instance.container, { childList: true });
+        if (_mutationObserver == null) {
+            _mutationObserver = new MutationObserver(onMutationEvent);
+            _mutationObserver.observe(Screen.instance.container, { childList: true } );
+        }
     }
 
-    private function onMutationEvent(records:Array<MutationRecord>, o:MutationObserver) {
+    private static function onMutationEvent(records:Array<MutationRecord>, o:MutationObserver) {
         var done:Bool = false;
         for (record in records) {
             for (i in 0...record.addedNodes.length) {
                 var node:Node = record.addedNodes.item(i);
-                if (node == element) {
-                    recursiveReady();
-                    done = true;
+                var c:Component = elementToComponent.get(node);
+                if (c != null) {
+                    c.recursiveReady();
                 }
             }
             if (done == true) {
@@ -63,10 +66,7 @@ class ComponentBase {
     }
 
     private function recursiveReady() {
-        if (_mutationObserver != null) {
-            _mutationObserver.disconnect();
-            _mutationObserver = null;
-        }
+        elementToComponent.remove(element);
         var component:Component = cast(this, Component);
         component.ready();
         for (child in component.childComponents) {
@@ -84,6 +84,7 @@ class ComponentBase {
                 }
                 element.style.position = "absolute";
                 element.style.overflow = "auto";
+                elementToComponent.set(element, cast(this, Component));
                 return;
             } else {
                 var component:Component = cast(this, Component);
@@ -101,6 +102,7 @@ class ComponentBase {
                 if (element != null) {
                     var p = element.parentElement;
                     if (p != null) {
+                        elementToComponent.remove(element);
                         p.replaceChild(newElement, element);
                     }
                 }
@@ -129,6 +131,7 @@ class ComponentBase {
                 element.scrollTop = 0;
                 element.scrollLeft = 0;
                 element.style.overflow = "hidden";
+                elementToComponent.set(element, cast(this, Component));
                 return;
             } 
 
@@ -145,11 +148,13 @@ class ComponentBase {
             if (element != null) {
                 var p = element.parentElement;
                 if (p != null) {
+                    elementToComponent.remove(element);
                     p.replaceChild(newElement, element);
                 }
             }
 
             element = newElement;
+            elementToComponent.set(element, cast(this, Component));
             _nativeElement = null;
 
             remapEvents();
@@ -229,6 +234,10 @@ class ComponentBase {
             if (style.borderTopSize != null && style.borderTopSize > 0) {
                 child.element.style.marginTop = '-${style.borderTopSize}px';
             }
+        }
+        
+        if (style.clip == true) {
+            handleClipRect(new Rectangle(0, 0, width, height));
         }
     }
 
@@ -492,7 +501,7 @@ class ComponentBase {
         if (type != null) {
             var fn = _eventMap.get(type);
             if (fn != null) {
-                event.stopPropagation();
+                //event.stopPropagation();
                 var mouseEvent = new MouseEvent(type);
                 mouseEvent.screenX = event.pageX;
                 mouseEvent.screenY = event.pageY;
