@@ -15,8 +15,6 @@ class ScreenBase {
     private var _mapping:Map<String, UIEvent->Void>;
 
     public var focus:Component;
-    public var options(default, default):Dynamic;
-
     public function new() {
         _mapping = new Map<String, UIEvent->Void>();
         /* might need this later
@@ -28,6 +26,16 @@ class ScreenBase {
         */
     }
 
+    private var _options:Dynamic;
+    public var options(get, set):Dynamic;
+    private function get_options():Dynamic {
+        return _options;
+    }
+    private function set_options(value:Dynamic):Dynamic {
+        _options = value;
+        return value;
+    }
+    
     public var width(get, null):Float;
     public function get_width():Float {
         return container.offsetWidth;
@@ -72,10 +80,16 @@ class ScreenBase {
 
     private var container(get, null):Element;
     private function get_container():Element {
+        var c = null;
         if (options == null || options.container == null) {
-            return Browser.document.body;
+            c = Browser.document.body;
+        } else {
+            c = options.container;
         }
-        return  options.container;
+        if (c.style.overflow == null || c.style.overflow == "") {
+            c.style.overflow = "hidden";
+        }
+        return c;
     }
 
     private var _hasListener:Bool = false;
@@ -84,13 +98,13 @@ class ScreenBase {
             return;
         }
 
+        _hasListener = true;
         Browser.window.onresize = function(e) {
            for (c in __topLevelComponents) {
                resizeComponent(c);
            }
         }
 
-        _hasListener = true;
     }
 
     //***********************************************************************************************************
