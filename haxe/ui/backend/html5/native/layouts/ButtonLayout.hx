@@ -1,5 +1,6 @@
 package haxe.ui.backend.html5.native.layouts;
 
+import haxe.ui.core.Component;
 import haxe.ui.layouts.DefaultLayout;
 import haxe.ui.util.Size;
 import js.html.Element;
@@ -12,7 +13,7 @@ class ButtonLayout extends DefaultLayout {
         super();
     }
 
-    public override function calcAutoSize():Size {
+    public override function calcAutoSize(exclusions:Array<Component> = null):Size {
         //var size:Size = super.calcAutoSize();
 
         var textSize:Size = HtmlUtils.measureText(component.text);
