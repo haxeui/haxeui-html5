@@ -212,6 +212,7 @@ class TextDisplayBase {
         _fontName = value;
 
         element.style.fontFamily = _fontName;
+        _dirty = true;
         measureText();
         //parentComponent.invalidate();
         parentComponent.invalidateLayout();
@@ -261,6 +262,7 @@ class TextDisplayBase {
         }
         _fontSize = value;
         element.style.fontSize = value + "px";
+        _dirty = true;
         measureText();
         return value;
     }
