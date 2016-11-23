@@ -46,9 +46,27 @@ class ScreenBase {
         return container.offsetHeight;
     }
 
+    public var dpi(get, null):Float;
+    private function get_dpi():Float {
+        return 72;
+    }
+    
     private var __topLevelComponents:Array<Component> = new Array<Component>();
     public function addComponent(component:Component) {
         component.ready();
+        
+        if (Toolkit.scaleX != 1 || Toolkit.scaleY != 1) {
+            var transformString = '';
+            if (Toolkit.scaleX != 1) {
+                transformString += 'scaleX(${Toolkit.scaleX}) ';
+            }
+            if (Toolkit.scaleY != 1) {
+                transformString += 'scaleY(${Toolkit.scaleY}) ';
+            }
+            component.element.style.transform = transformString;
+            component.element.style.transformOrigin = "top left";
+        }
+        
         __topLevelComponents.push(component);
         addResizeListener();
         resizeComponent(component);
