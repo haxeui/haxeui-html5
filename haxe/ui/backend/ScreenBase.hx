@@ -178,8 +178,8 @@ class ScreenBase {
             var fn = _mapping.get(type);
             if (fn != null) {
                 var mouseEvent = new MouseEvent(type);
-                mouseEvent.screenX = event.pageX;
-                mouseEvent.screenY = event.pageY;
+                mouseEvent.screenX = event.pageX / Toolkit.scaleX;
+                mouseEvent.screenY = event.pageY / Toolkit.scaleY;
                 fn(mouseEvent);
             }
         }
