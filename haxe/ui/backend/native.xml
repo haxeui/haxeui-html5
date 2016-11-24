@@ -47,6 +47,8 @@
     </component>
     <component id="haxe.ui.containers.ScrollView" class="haxe.ui.backend.html5.native.NativeElement">
     </component>
+    <component id="haxe.ui.containers.ListView" class="haxe.ui.backend.html5.native.NativeElement">
+    </component>
     <component id="haxe.ui.containers.TableView" class="haxe.ui.backend.html5.native.NativeElement">
     </component>
     <component id="haxe.ui.components.DropDown" class="haxe.ui.backend.html5.native.NativeElement" nodeType="select" style="padding:3px;" allowChildren="false">
