@@ -1,3 +1,1 @@
-.tabbar-button-selected .label{offset-top:-1px;}
-.label,.textfield{font-name:"Arial";}
-
+.button:native{background:none;border:none;border-radius:none;}
