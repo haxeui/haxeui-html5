@@ -42,11 +42,11 @@ class HtmlUtils {
     }
 
     public static function swapElements(el1:Element, el2:Element) {
-        el2.parentNode.insertBefore(el2, el1);
+        el2.parentElement.insertBefore(el2, el1);
     }
 
     public static function insertBefore(el:Element, before:Element) {
-        before.parentNode.insertBefore(before, el);
+        before.parentElement.insertBefore(before, el);
     }
 
     public static function removeElement(el:Element) {

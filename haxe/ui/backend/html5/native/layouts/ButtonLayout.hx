@@ -55,7 +55,7 @@ class ButtonLayout extends DefaultLayout {
                     }
                 case "right" | "bottom":
                     if (Std.is(last, ImageElement) == false) {
-                        HtmlUtils.swapElements(last, first);
+                        HtmlUtils.swapElements(first, last);
                     }
             }
 
