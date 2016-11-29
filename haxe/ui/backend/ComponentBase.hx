@@ -417,6 +417,10 @@ class ComponentBase {
         if (style.opacity != null) {
             element.style.opacity = '${style.opacity}';
         }
+        
+        if (style.fontSize != null) {
+            element.style.fontSize = HtmlUtils.px(style.fontSize);
+        }
     }
 
     //***********************************************************************************************************
