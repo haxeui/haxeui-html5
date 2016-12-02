@@ -18,9 +18,9 @@ class SelectDataSource extends Behaviour {
         
         for (n in 0...ds.size) {
             var item = ds.get(n);
-            if (item.text != null) {
+            if (item.value != null) {
                 var option:OptionElement = Browser.document.createOptionElement();
-                option.text = item.text;
+                option.text = item.value;
                 el.appendChild(option);
             }
         }
