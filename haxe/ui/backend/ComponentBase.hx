@@ -68,6 +68,7 @@ class ComponentBase {
     private function recursiveReady() {
         elementToComponent.remove(element);
         var component:Component = cast(this, Component);
+        component.invalidateLayout();
         component.ready();
         for (child in component.childComponents) {
             child.recursiveReady();
