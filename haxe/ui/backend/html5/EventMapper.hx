@@ -7,7 +7,8 @@ class EventMapper {
         haxe.ui.core.MouseEvent.MOUSE_OUT => "mouseout",
         haxe.ui.core.MouseEvent.MOUSE_DOWN => "mousedown",
         haxe.ui.core.MouseEvent.MOUSE_UP => "mouseup",
-        haxe.ui.core.MouseEvent.CLICK => "click"
+        haxe.ui.core.MouseEvent.CLICK => "click",
+        haxe.ui.core.UIEvent.CHANGE => "change"
     ];
 
     public static var DOM_TO_HAXEUI:Map<String, String> = [
@@ -16,6 +17,7 @@ class EventMapper {
         "mouseout" => haxe.ui.core.MouseEvent.MOUSE_OUT,
         "mousedown" => haxe.ui.core.MouseEvent.MOUSE_DOWN,
         "mouseup" => haxe.ui.core.MouseEvent.MOUSE_UP,
-        "click" => haxe.ui.core.MouseEvent.CLICK
+        "click" => haxe.ui.core.MouseEvent.CLICK,
+        "change" => haxe.ui.core.UIEvent.CHANGE
     ];
 }

@@ -471,6 +471,11 @@ class ComponentBase {
                     _eventMap.set(type, listener);
                     element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
                 }
+            case UIEvent.CHANGE:
+                if (_eventMap.exists(type) == false) {
+                    _eventMap.set(type, listener);
+                    element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onChangeEvent);
+                }
             case MouseEvent.MOUSE_WHEEL:
                 _eventMap.set(type, listener);
                 if (UserAgent.instance.firefox == true) {
@@ -487,7 +492,9 @@ class ComponentBase {
                 | MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
                 _eventMap.remove(type);
                 element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
-
+            case UIEvent.CHANGE:
+                _eventMap.remove(type);
+                element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onChangeEvent);
             case MouseEvent.MOUSE_WHEEL:
                 _eventMap.remove(type);
                 if (UserAgent.instance.firefox == true) {
@@ -501,6 +508,18 @@ class ComponentBase {
     //***********************************************************************************************************
     // Event Handlers
     //***********************************************************************************************************
+    private function __onChangeEvent(event:js.html.UIEvent) {
+        var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
+        if (type != null) {
+            var fn = _eventMap.get(type);
+            if (fn != null) {
+                var uiEvent = new UIEvent(type);
+                fn(uiEvent);
+            }
+        }
+        
+    }
+    
     private function __onMouseEvent(event:js.html.MouseEvent) {
         var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
         if (type != null) {
