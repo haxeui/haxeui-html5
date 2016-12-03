@@ -8,6 +8,7 @@ import js.html.OptionElement;
 import js.Browser;
 
 @:keep
+@:access(haxe.ui.backend.ComponentBase)
 class SelectDataSource extends Behaviour {
     public override function set(value:Variant) {
         var ds:DataSource<Dynamic> = value;
@@ -24,5 +25,7 @@ class SelectDataSource extends Behaviour {
                 el.appendChild(option);
             }
         }
+        
+        _component.set("dataSource", ds);
     }
 }

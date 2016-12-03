@@ -460,6 +460,28 @@ class ComponentBase {
         }
     }
 
+    private var __props:Map<String, Dynamic>;
+    private function get(name:String):Dynamic {
+        if (__props == null) {
+            return null;
+        }
+        return __props.get(name);
+    }
+    
+    private function set(name:String, value:Dynamic) {
+        if (__props == null) {
+            __props = new Map<String, Dynamic>();
+        }
+        __props.set(name, value);
+    }
+    
+    private function has(name:String):Bool {
+        if (__props == null) {
+            return false;
+        }
+        return __props.exists(name);
+    }
+    
     //***********************************************************************************************************
     // Events
     //***********************************************************************************************************
