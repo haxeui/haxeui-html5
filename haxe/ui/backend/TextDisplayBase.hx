@@ -267,6 +267,21 @@ class TextDisplayBase {
         return value;
     }
 
+    private var _textAlign:String;
+    public var textAlign(get, set):Null<String>;
+    private function get_textAlign():Null<String> {
+        return _textAlign;
+    }
+    private function set_textAlign(value:Null<String>):Null<String> {
+        if(_textAlign == value) {
+            return value;
+        }
+        _textAlign = value;
+        element.style.textAlign = value;
+
+        return value;
+    }
+
     private var _multiline:Bool = true;
     public var multiline(get, set):Bool;
     private function get_multiline():Bool {
