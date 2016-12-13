@@ -20,7 +20,7 @@ class SpanText extends Behaviour {
             }
             return;
         }
-        
+
         if (span == null) {
             span = Browser.document.createSpanElement();
             span.style.display = "inline-block";
@@ -55,7 +55,7 @@ class SpanText extends Behaviour {
             _component.element.style.height = null;
             invalidate = true;
         }
-        
+
         span.textContent = value;
         if (invalidate == true) {
             _component.invalidateLayout();
@@ -70,11 +70,11 @@ class SpanText extends Behaviour {
         }
         return span;
     }
-    
+
     private function getInput(el:Element, type:String):InputElement {
         var input:InputElement = null;
         var list = el.getElementsByTagName("input");
-        if (list.length != 0) { 
+        if (list.length != 0) {
             for (n in 0...list.length) {
                 var child = list.item(n);
                 if (Std.is(child, InputElement) && cast(child, InputElement).type == type) {

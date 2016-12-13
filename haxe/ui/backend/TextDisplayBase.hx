@@ -49,13 +49,13 @@ class TextDisplayBase {
             return value;
         }
         */
-        
+
         var html:String = value;
         html = HtmlUtils.escape(html);
         html = StringTools.replace(html, "\r\n", "<br/>");
         html = StringTools.replace(html, "\r", "<br/>");
         html = StringTools.replace(html, "\n", "<br/>");
-        
+
         if (Std.is(element, InputElement)) {
             cast(element, InputElement).value = html;
         } else {
@@ -276,17 +276,17 @@ class TextDisplayBase {
         if (value == _multiline) {
             return value;
         }
-        
+
         _multiline = value;
         if (_multiline == false) {
             element.addEventListener("keypress", onKeyPress);
         } else {
             element.removeEventListener("keypress", onKeyPress);
         }
-        
+
         return value;
     }
-    
+
     private function onKeyPress(e) {
         if  (_multiline == false && e.which == 13) {
             e.preventDefault();
@@ -294,7 +294,7 @@ class TextDisplayBase {
         }
         return true;
     }
-    
+
     private var _wordWrap:Bool = false;
     public var wordWrap(get, set):Bool;
     private function get_wordWrap():Bool {
@@ -304,7 +304,7 @@ class TextDisplayBase {
         if (value == _wordWrap) {
             return value;
         }
-        
+
         _wordWrap = value;
         if (_wordWrap == true) {
             element.style.removeProperty("white-space");
@@ -312,10 +312,10 @@ class TextDisplayBase {
             element.style.whiteSpace = "nowrap";
         }
         measureText();
-        
+
         return value;
     }
-    
+
     //***********************************************************************************************************
     // Util functions
     //***********************************************************************************************************
@@ -343,7 +343,7 @@ class TextDisplayBase {
         if (_dirty == false) {
             return;
         }
-        
+
         var t:String = _text;
         if (t == null || t.length == 0) {
             t = "|";
@@ -354,7 +354,7 @@ class TextDisplayBase {
         html = StringTools.replace(html, "\r\n", "<br/>");
         html = StringTools.replace(html, "\r", "<br/>");
         html = StringTools.replace(html, "\n", "<br/>");
-        
+
         var div = Browser.document.createElement("div");
         div.style.position = "absolute";
         div.style.top = "-99999px"; // position off-screen!

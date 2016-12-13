@@ -28,7 +28,7 @@ class HtmlUtils {
         s = StringTools.replace(s, ">", "&gt;");
         return s;
     }
-    
+
     public static function measureText(text:String, addWidth:Float = 0, addHeight:Float = 0):Size {
         var div = Browser.document.createElement("div");
         div.innerHTML = text;

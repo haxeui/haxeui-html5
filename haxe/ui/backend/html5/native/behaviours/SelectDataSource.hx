@@ -16,7 +16,7 @@ class SelectDataSource extends Behaviour {
         while (el.childElementCount > 0) {
             el.removeChild(el.children[0]);
         }
-        
+
         for (n in 0...ds.size) {
             var item = ds.get(n);
             if (item.value != null) {
@@ -25,7 +25,7 @@ class SelectDataSource extends Behaviour {
                 el.appendChild(option);
             }
         }
-        
+
         _component.set("dataSource", ds);
     }
 }

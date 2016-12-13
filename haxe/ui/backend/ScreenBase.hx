@@ -35,7 +35,7 @@ class ScreenBase {
         _options = value;
         return value;
     }
-    
+
     public var width(get, null):Float;
     public function get_width():Float {
         return container.offsetWidth;
@@ -50,11 +50,11 @@ class ScreenBase {
     private function get_dpi():Float {
         return 72;
     }
-    
+
     private var __topLevelComponents:Array<Component> = new Array<Component>();
     public function addComponent(component:Component) {
         component.ready();
-        
+
         if (Toolkit.scaleX != 1 || Toolkit.scaleY != 1) {
             var transformString = '';
             if (Toolkit.scaleX != 1) {
@@ -66,7 +66,7 @@ class ScreenBase {
             component.element.style.transform = transformString;
             component.element.style.transformOrigin = "top left";
         }
-        
+
         __topLevelComponents.push(component);
         addResizeListener();
         resizeComponent(component);
@@ -86,7 +86,7 @@ class ScreenBase {
             HtmlUtils.insertBefore(cast(this, Screen).rootComponents[index + 1].element, child.element);
         }
     }
-    
+
     private function resizeComponent(c:Component) {
         if (c.percentWidth > 0) {
             c.width = (this.width * c.percentWidth) / 100;
@@ -172,7 +172,7 @@ class ScreenBase {
     //***********************************************************************************************************
     private function __onMouseEvent(event:js.html.MouseEvent) {
         event.preventDefault();
-        
+
         var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
         if (type != null) {
             var fn = _mapping.get(type);

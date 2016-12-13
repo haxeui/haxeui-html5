@@ -39,7 +39,7 @@ class ComponentBase {
 
     private static var _mutationObserver:MutationObserver;
     private static var elementToComponent:Map<Node, Component> = new Map<Node, Component>();
-    
+
     @:access(haxe.ui.backend.ScreenBase)
     public function new() {
         _eventMap = new Map<String, UIEvent->Void>();
@@ -134,7 +134,7 @@ class ComponentBase {
                 element.style.overflow = "hidden";
                 elementToComponent.set(element, cast(this, Component));
                 return;
-            } 
+            }
 
             newElement = Browser.document.createDivElement();
 
@@ -195,7 +195,7 @@ class ComponentBase {
             var h = c.findComponent(Header);
             h.element.style.left = '${HtmlUtils.px(h.screenLeft)}';
             h.element.style.top = '${HtmlUtils.px(h.screenTop)}';
-            
+
         }
     }
 
@@ -236,7 +236,7 @@ class ComponentBase {
                 child.element.style.marginTop = '-${style.borderTopSize}px';
             }
         }
-        
+
         if (style.clip == true) {
             handleClipRect(new Rectangle(0, 0, width, height));
         }
@@ -363,7 +363,7 @@ class ComponentBase {
             HtmlUtils.insertBefore(cast(this, Component).childComponents[index + 1].element, child.element);
         }
     }
-    
+
     //***********************************************************************************************************
     // Display tree
     //***********************************************************************************************************
@@ -418,7 +418,7 @@ class ComponentBase {
         if (style.opacity != null) {
             element.style.opacity = '${style.opacity}';
         }
-        
+
         if (style.fontSize != null) {
             element.style.fontSize = HtmlUtils.px(style.fontSize);
         }
@@ -467,21 +467,21 @@ class ComponentBase {
         }
         return __props.get(name);
     }
-    
+
     private function set(name:String, value:Dynamic) {
         if (__props == null) {
             __props = new Map<String, Dynamic>();
         }
         __props.set(name, value);
     }
-    
+
     private function has(name:String):Bool {
         if (__props == null) {
             return false;
         }
         return __props.exists(name);
     }
-    
+
     //***********************************************************************************************************
     // Events
     //***********************************************************************************************************
@@ -539,9 +539,9 @@ class ComponentBase {
                 fn(uiEvent);
             }
         }
-        
+
     }
-    
+
     private function __onMouseEvent(event:js.html.MouseEvent) {
         var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
         if (type != null) {
@@ -552,7 +552,7 @@ class ComponentBase {
                     element.releaseCapture();
                 }
             } catch (e:Dynamic) { }
-            
+
             var fn = _eventMap.get(type);
             if (fn != null) {
                 //event.stopPropagation();
