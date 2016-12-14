@@ -37,12 +37,12 @@ class ScreenBase {
     }
 
     public var width(get, null):Float;
-    public function get_width():Float {
+    private function get_width():Float {
         return container.offsetWidth;
     }
 
     public var height(get, null):Float;
-    public function get_height() {
+    private function get_height() {
         return container.offsetHeight;
     }
 
