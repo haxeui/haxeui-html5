@@ -337,7 +337,7 @@ class TextDisplayBase {
     private function updatePos() {
         var style:CSSStyleDeclaration = element.style;
         style.left = HtmlUtils.px(_left);
-        style.top = HtmlUtils.px(_top);
+        style.top = HtmlUtils.px(_top - 1);
     }
 
 
