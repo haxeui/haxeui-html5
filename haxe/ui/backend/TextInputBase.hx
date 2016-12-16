@@ -1,4 +1,7 @@
 package haxe.ui.backend;
+
+import haxe.ui.backend.html5.HtmlUtils;
+import js.html.InputElement;
 import js.Browser;
 
 class TextInputBase extends TextDisplayBase {
@@ -14,5 +17,19 @@ class TextInputBase extends TextDisplayBase {
         element.style.overflow = "hidden";
         element.style.cursor = "initial";
         element.style.position = "absolute";
+    }
+
+    private override function get_text():String {
+        return cast(element, InputElement).value;
+    }
+
+    private override function set_text(value:String):String {
+        var html:String = text2Html(value);
+        cast(element, InputElement).value = html;
+
+        _dirty = true;
+        _text = value;
+        measureText();
+        return value;
     }
 }
