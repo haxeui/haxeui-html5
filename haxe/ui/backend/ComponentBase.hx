@@ -1,12 +1,13 @@
 package haxe.ui.backend;
 
+import haxe.ui.core.KeyboardEvent;
+import haxe.ui.components.TextField;
 import haxe.ui.backend.html5.EventMapper;
 import haxe.ui.backend.html5.HtmlUtils;
 import haxe.ui.backend.html5.StyleHelper;
 import haxe.ui.backend.html5.UserAgent;
 import haxe.ui.backend.html5.native.NativeElement;
 import haxe.ui.components.VProgress;
-import haxe.ui.components.VScroll;
 import haxe.ui.containers.Header;
 import haxe.ui.containers.ScrollView;
 import haxe.ui.containers.TableView;
@@ -18,7 +19,6 @@ import haxe.ui.core.TextDisplay;
 import haxe.ui.core.TextInput;
 import haxe.ui.core.UIEvent;
 import haxe.ui.styles.Style;
-import haxe.ui.util.GenericConfig;
 import haxe.ui.util.Rectangle;
 import haxe.ui.util.filters.Blur;
 import haxe.ui.util.filters.DropShadow;
@@ -494,9 +494,15 @@ class ComponentBase {
                     element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
                 }
             case UIEvent.CHANGE:
+
                 if (_eventMap.exists(type) == false) {
                     _eventMap.set(type, listener);
-                    element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onChangeEvent);
+
+                    if(Std.is(this, TextField)) {
+                        element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(KeyboardEvent.KEY_UP), __onTextFieldChangeEvent);
+                    } else {
+                        element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onChangeEvent);
+                    }
                 }
             case MouseEvent.MOUSE_WHEEL:
                 _eventMap.set(type, listener);
@@ -516,7 +522,12 @@ class ComponentBase {
                 element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
             case UIEvent.CHANGE:
                 _eventMap.remove(type);
-                element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onChangeEvent);
+
+                if(Std.is(this, TextField)) {
+                    element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(KeyboardEvent.KEY_UP), __onTextFieldChangeEvent);
+                } else {
+                    element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onChangeEvent);
+                }
             case MouseEvent.MOUSE_WHEEL:
                 _eventMap.remove(type);
                 if (UserAgent.instance.firefox == true) {
@@ -539,7 +550,14 @@ class ComponentBase {
                 fn(uiEvent);
             }
         }
+    }
 
+    private function __onTextFieldChangeEvent(event:js.html.UIEvent) {
+        var fn = _eventMap.get(UIEvent.CHANGE);
+        if (fn != null) {
+            var uiEvent = new UIEvent(UIEvent.CHANGE);
+            fn(uiEvent);
+        }
     }
 
     private function __onMouseEvent(event:js.html.MouseEvent) {
