@@ -3,6 +3,8 @@
 </p>
 
 [![Build Status](https://travis-ci.org/haxeui/haxeui-html5.svg?branch=master)](https://travis-ci.org/haxeui/haxeui-html5)
+[![Code Climate](https://codeclimate.com/github/haxeui/haxeui-html5/badges/gpa.svg)](https://codeclimate.com/github/haxeui/haxeui-html5)
+[![Issue Count](https://codeclimate.com/github/haxeui/haxeui-html5/badges/issue_count.svg)](https://codeclimate.com/github/haxeui/haxeui-html5)
 [![Support this project on Patreon](https://dl.dropboxusercontent.com/u/26678671/patreon_button.png)](https://www.patreon.com/haxeui)
 
 <h2>haxeui-html5</h2>
