@@ -1,0 +1,10 @@
+engines:
+  haxe-checkstyle:
+    enabled: true
+  markdownlint:
+    enabled: false
+  csslint:
+    enabled: false  
+ratings:
+  paths:
+    - "**.hx"

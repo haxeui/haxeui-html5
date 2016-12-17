@@ -13,7 +13,7 @@ class AssetsBase {
         return null;
     }
 
-    private function getImageInternal(resourceId:String, callback:ImageInfo->Void):Void {
+    private function getImageInternal(resourceId:String, callback:ImageInfo->Void) {
         var bytes = Resource.getBytes(resourceId);
         if (bytes != null) {
             callback(null);
@@ -52,7 +52,7 @@ class AssetsBase {
         image.src = "data:image/png;base64," + base64;
     }
 
-    private function getFontInternal(resourceId:String, callback:FontInfo->Void):Void {
+    private function getFontInternal(resourceId:String, callback:FontInfo->Void) {
         callback(null);
     }
 

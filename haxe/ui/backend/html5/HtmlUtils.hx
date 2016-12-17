@@ -5,15 +5,15 @@ import js.Browser;
 import js.html.Element;
 
 class HtmlUtils {
-    public inline static function px(value:Float) {
+    public static inline function px(value:Float):String {
         return '${value}px';
     }
 
-    public static function color(value:Int) {
+    public static function color(value:Int):String {
         return '#${StringTools.hex(value, 6)}';
     }
 
-    public static function rgba(value:Int, alpha:Float = 1) {
+    public static function rgba(value:Int, alpha:Float = 1):String {
         var r:Int = (value >> 16) & 0xFF;
         var g:Int = (value >> 8) & 0xFF;
         var b:Int = value & 0xFF;

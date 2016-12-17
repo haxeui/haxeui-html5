@@ -37,7 +37,6 @@ class ElementImage extends Behaviour {
     }
 
     public override function get():Variant {
-        var el:Element = _component.element;
         return null;
     }
 }

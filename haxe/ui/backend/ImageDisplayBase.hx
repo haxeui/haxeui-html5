@@ -74,7 +74,7 @@ class ImageDisplayBase {
         return value;
     }
 
-    public function get_imageHeight() {
+    public function get_imageHeight():Float {
         return _imageHeight;
     }
 

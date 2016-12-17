@@ -2,11 +2,9 @@ package haxe.ui.backend.html5.native;
 
 import haxe.ui.components.Slider;
 import haxe.ui.core.Component;
-import haxe.ui.styles.Style;
 import js.Browser;
 import js.html.Element;
 import js.html.InputElement;
-import js.html.SpanElement;
 
 @:keep
 class NativeElement {
@@ -50,25 +48,6 @@ class NativeElement {
         }
 
         return el;
-    }
-
-    public function paint():Void {
-        var el:Element = _component.element;
-        var style:Style = _component.style;
-        var nodeType:String = el.nodeName.toLowerCase();
-        if (nodeType == "button") {
-            var list = el.getElementsByTagName("span");
-            if (list != null && list.length > 0) {
-                var span:SpanElement = cast list.item(0);
-                if (style.color != null) {
-                    span.style.color = HtmlUtils.color(style.color);
-                }
-            }
-        } else if (nodeType == "label") {
-            if (style.color != null) {
-                el.style.color = HtmlUtils.color(style.color);
-            }
-        }
     }
 
     private function onChange(e) {

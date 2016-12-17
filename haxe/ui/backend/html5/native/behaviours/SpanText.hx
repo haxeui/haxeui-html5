@@ -26,7 +26,6 @@ class SpanText extends Behaviour {
             span.style.display = "inline-block";
             span.style.verticalAlign = "middle";
 
-
             var style:String = getConfigValue("style");
             if (style != null) {
                 var styles:Array<String> = style.split(";");

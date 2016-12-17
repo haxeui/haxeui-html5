@@ -1,7 +1,6 @@
 package haxe.ui.backend.html5;
 
 import haxe.ui.assets.ImageInfo;
-import haxe.ui.core.Component;
 import haxe.ui.backend.ComponentBase;
 import haxe.ui.styles.Style;
 import haxe.ui.util.Rectangle;
@@ -15,8 +14,7 @@ import js.html.Image;
 
 class StyleHelper {
     @:access(haxe.ui.core.ComponentBase)
-    public static function apply(component:ComponentBase, width:Float, height:Float, style:Style):Void {
-        var parent:ComponentBase = cast(component, Component).parentComponent;
+    public static function apply(component:ComponentBase, width:Float, height:Float, style:Style) {
         var element:Element = component.element;
         var css:CSSStyleDeclaration = element.style;
 
@@ -24,10 +22,10 @@ class StyleHelper {
         css.height = HtmlUtils.px(height);
 
         // border size
-        if (style.borderLeftSize != null
-            && style.borderLeftSize == style.borderRightSize
-            && style.borderLeftSize == style.borderBottomSize
-            && style.borderLeftSize == style.borderTopSize) { // full border
+        if (style.borderLeftSize != null &&
+            style.borderLeftSize == style.borderRightSize &&
+            style.borderLeftSize == style.borderBottomSize &&
+            style.borderLeftSize == style.borderTopSize) { // full border
 
             if (style.borderLeftSize > 0) {
                 css.borderWidth = HtmlUtils.px(style.borderLeftSize);
@@ -36,10 +34,10 @@ class StyleHelper {
                 css.removeProperty("border-width");
                 css.removeProperty("border-style");
             }
-        } else if (style.borderLeftSize == null
-            && style.borderRightSize == null
-            && style.borderBottomSize == null
-            && style.borderTopSize == null) { // no border
+        } else if (style.borderLeftSize == null &&
+            style.borderRightSize == null &&
+            style.borderBottomSize == null &&
+            style.borderTopSize == null) { // no border
             css.removeProperty("border-width");
             css.removeProperty("border-style");
         } else { // compound border
@@ -77,16 +75,16 @@ class StyleHelper {
         }
 
         // border colour
-        if (style.borderLeftColor != null
-            && style.borderLeftColor == style.borderRightColor
-            && style.borderLeftColor == style.borderBottomColor
-            && style.borderLeftColor == style.borderTopColor) {
+        if (style.borderLeftColor != null &&
+            style.borderLeftColor == style.borderRightColor &&
+            style.borderLeftColor == style.borderBottomColor &&
+            style.borderLeftColor == style.borderTopColor) {
 
             css.borderColor = HtmlUtils.color(style.borderLeftColor);
-        } else if (style.borderLeftColor == null
-            && style.borderRightColor == null
-            && style.borderBottomColor == null
-            && style.borderTopColor == null) {
+        } else if (style.borderLeftColor == null &&
+            style.borderRightColor == null &&
+            style.borderBottomColor == null &&
+            style.borderTopColor == null) {
             css.removeProperty("border-color");
         } else {
             if (style.borderTopColor != null) {
@@ -167,10 +165,10 @@ class StyleHelper {
                 }
 
                 var imageRect:Rectangle = new Rectangle(0, 0, imageInfo.width, imageInfo.height);
-                if (style.backgroundImageClipTop != null
-                    && style.backgroundImageClipLeft != null
-                    && style.backgroundImageClipBottom != null
-                    && style.backgroundImageClipRight != null) {
+                if (style.backgroundImageClipTop != null &&
+                    style.backgroundImageClipLeft != null &&
+                    style.backgroundImageClipBottom != null &&
+                    style.backgroundImageClipRight != null) {
                         imageRect = new Rectangle(style.backgroundImageClipLeft,
                                                   style.backgroundImageClipTop,
                                                   style.backgroundImageClipRight - style.backgroundImageClipLeft,
@@ -178,10 +176,10 @@ class StyleHelper {
                 }
 
                 var slice:Rectangle = null;
-                if (style.backgroundImageSliceTop != null
-                    && style.backgroundImageSliceLeft != null
-                    && style.backgroundImageSliceBottom != null
-                    && style.backgroundImageSliceRight != null) {
+                if (style.backgroundImageSliceTop != null &&
+                    style.backgroundImageSliceLeft != null &&
+                    style.backgroundImageSliceBottom != null &&
+                    style.backgroundImageSliceRight != null) {
                     slice = new Rectangle(style.backgroundImageSliceLeft,
                                           style.backgroundImageSliceTop,
                                           style.backgroundImageSliceRight - style.backgroundImageSliceLeft,

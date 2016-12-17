@@ -1,4 +1,5 @@
 package haxe.ui.backend;
+
 import js.Browser;
 
 class TextInputBase extends TextDisplayBase {

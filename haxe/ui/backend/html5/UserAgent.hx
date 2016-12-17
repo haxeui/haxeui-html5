@@ -15,7 +15,6 @@ class UserAgent {
     // far from bullet proof and easy to fake - will do for now
     public function new() {
         var ua:String = Browser.navigator.userAgent;
-        trace(ua);
 
         if (ua.indexOf("Opera") != -1 || ua.indexOf('OPR') != -1) {
             _opera = true;

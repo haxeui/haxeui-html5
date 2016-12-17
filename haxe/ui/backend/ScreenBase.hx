@@ -42,7 +42,7 @@ class ScreenBase {
     }
 
     public var height(get, null):Float;
-    private function get_height() {
+    private function get_height():Float {
         return container.offsetHeight;
     }
 
@@ -51,7 +51,7 @@ class ScreenBase {
         return 72;
     }
 
-    private var __topLevelComponents:Array<Component> = new Array<Component>();
+    private var __topLevelComponents:Array<Component> = [];
     public function addComponent(component:Component) {
         component.ready();
 
@@ -149,8 +149,8 @@ class ScreenBase {
 
     private function mapEvent(type:String, listener:UIEvent->Void) {
         switch (type) {
-            case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT
-                | MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
+            case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
+                MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
                 if (_mapping.exists(type) == false) {
                     _mapping.set(type, listener);
                     container.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
@@ -160,8 +160,8 @@ class ScreenBase {
 
     private function unmapEvent(type:String, listener:UIEvent->Void) {
         switch (type) {
-            case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT
-                | MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
+            case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
+                MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
                 _mapping.remove(type);
                 container.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
         }

@@ -6,7 +6,6 @@ import haxe.ui.backend.html5.StyleHelper;
 import haxe.ui.backend.html5.UserAgent;
 import haxe.ui.backend.html5.native.NativeElement;
 import haxe.ui.components.VProgress;
-import haxe.ui.components.VScroll;
 import haxe.ui.containers.Header;
 import haxe.ui.containers.ScrollView;
 import haxe.ui.containers.TableView;
@@ -18,7 +17,6 @@ import haxe.ui.core.TextDisplay;
 import haxe.ui.core.TextInput;
 import haxe.ui.core.UIEvent;
 import haxe.ui.styles.Style;
-import haxe.ui.util.GenericConfig;
 import haxe.ui.util.Rectangle;
 import haxe.ui.util.filters.Blur;
 import haxe.ui.util.filters.DropShadow;
@@ -128,7 +126,6 @@ class ComponentBase {
                     element.style.position = "absolute";
                 }
 
-
                 element.scrollTop = 0;
                 element.scrollLeft = 0;
                 element.style.overflow = "hidden";
@@ -162,7 +159,7 @@ class ComponentBase {
         }
     }
 
-    private function remapEvents():Void {
+    private function remapEvents() {
         if (_eventMap == null) {
             return;
         }
@@ -178,7 +175,7 @@ class ComponentBase {
         }
     }
 
-    private function handlePosition(left:Null<Float>, top:Null<Float>, style:Style):Void {
+    private function handlePosition(left:Null<Float>, top:Null<Float>, style:Style) {
         if (element == null) {
             return;
         }
@@ -248,7 +245,7 @@ class ComponentBase {
         }
     }
 
-    private function handleClipRect(value:Rectangle):Void {
+    private function handleClipRect(value:Rectangle) {
         var c:Component = cast(this, Component);
         var parent:Component = c.parentComponent;
         if (parent._nativeElement == null || Std.is(c, Header)) {
@@ -268,13 +265,13 @@ class ComponentBase {
         }
     }
 
-    public function handlePreReposition():Void {
+    public function handlePreReposition() {
     }
 
-    public function handlePostReposition():Void {
+    public function handlePostReposition() {
     }
 
-    private function handleVisibility(show:Bool):Void {
+    private function handleVisibility(show:Bool) {
         element.style.display = (show == true) ? "" : "none";
     }
 
@@ -343,7 +340,7 @@ class ComponentBase {
         return (_imageDisplay != null);
     }
 
-    public function removeImageDisplay():Void {
+    public function removeImageDisplay() {
         if (_imageDisplay != null) {
             /*
             if (contains(_imageDisplay) == true) {
@@ -356,7 +353,6 @@ class ComponentBase {
     }
 
     private function handleSetComponentIndex(child:Component, index:Int) {
-        //HtmlUtils.removeElement(child.element);
         if (index == cast(this, Component).childComponents.length - 1) {
             element.appendChild(child.element);
         } else {
@@ -399,13 +395,14 @@ class ComponentBase {
                 }
             } else if (style.filter[0] == "blur") {
                 var blur:Blur = FilterParser.parseBlur(style.filter);
-                element.style.setProperty("-webkit-filter", 'blur(1px)');
-                element.style.setProperty("-moz-filter", 'blur(1px)');
-                element.style.setProperty("-o-filter", 'blur(1px)');
-                //element.style.setProperty("-ms-filter", 'blur(1px)');
-                element.style.setProperty("filter", 'blur(1px)');
+                element.style.setProperty("-webkit-filter", 'blur(${blur.amount}px)');
+                element.style.setProperty("-moz-filter", 'blur(${blur.amount}px)');
+                element.style.setProperty("-o-filter", 'blur(${blur.amount}px)');
+                //element.style.setProperty("-ms-filter", 'blur(${blur.amount}px)');
+                element.style.setProperty("filter", 'blur(${blur.amount}px)');
             }
         } else {
+            element.style.filter = null;
             element.style.boxShadow = null;
             element.style.removeProperty("box-shadow");
             element.style.removeProperty("-webkit-filter");
@@ -487,8 +484,8 @@ class ComponentBase {
     //***********************************************************************************************************
     private function mapEvent(type:String, listener:UIEvent->Void) {
         switch (type) {
-            case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT
-                | MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
+            case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
+                MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
                 if (_eventMap.exists(type) == false) {
                     _eventMap.set(type, listener);
                     element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
@@ -510,8 +507,8 @@ class ComponentBase {
 
     private function unmapEvent(type:String, listener:UIEvent->Void) {
         switch (type) {
-            case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT
-                | MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
+            case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
+                MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
                 _eventMap.remove(type);
                 element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
             case UIEvent.CHANGE:
@@ -551,7 +548,8 @@ class ComponentBase {
                 } else if (type == MouseEvent.MOUSE_UP) {
                     element.releaseCapture();
                 }
-            } catch (e:Dynamic) { }
+            } catch (e:Dynamic) {
+            }
 
             var fn = _eventMap.get(type);
             if (fn != null) {

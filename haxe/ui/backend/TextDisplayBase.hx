@@ -1,16 +1,12 @@
 package haxe.ui.backend;
 
 import haxe.Timer;
-import haxe.ui.core.Component;
 import haxe.ui.backend.html5.HtmlUtils;
+import haxe.ui.core.Component;
 import js.Browser;
 import js.html.CSSStyleDeclaration;
-import js.html.DivElement;
 import js.html.Element;
 import js.html.InputElement;
-import js.html.Range;
-import js.html.Selection;
-import js.html.Text;
 
 class TextDisplayBase {
     public var element:Element;
@@ -124,7 +120,7 @@ class TextDisplayBase {
         return value;
     }
 
-    public function get_height() {
+    public function get_height():Float {
         return _height;
     }
 
@@ -229,7 +225,7 @@ class TextDisplayBase {
     }
 
     private var _checkSizeTimer:Timer;
-    private var _checkSizeCounter = 0;
+    private var _checkSizeCounter:Int = 0;
     private var _originalSize:Float = 0;
     private function checkSize() {
         if (element.clientWidth != _originalSize) {
@@ -273,7 +269,7 @@ class TextDisplayBase {
         return _textAlign;
     }
     private function set_textAlign(value:Null<String>):Null<String> {
-        if(_textAlign == value) {
+        if (_textAlign == value) {
             return value;
         }
         _textAlign = value;
@@ -302,7 +298,7 @@ class TextDisplayBase {
         return value;
     }
 
-    private function onKeyPress(e) {
+    private function onKeyPress(e):Bool {
         if  (_multiline == false && e.which == 13) {
             e.preventDefault();
             return false;
@@ -340,7 +336,6 @@ class TextDisplayBase {
         style.top = HtmlUtils.px(_top - 1);
     }
 
-
     private function updateSize() {
         var style:CSSStyleDeclaration = element.style;
         if (width > 0) {
@@ -353,7 +348,6 @@ class TextDisplayBase {
         measureText();
     }
 
-    private static var calls:Int = 0;
     private function measureText() {
         if (_dirty == false) {
             return;

@@ -19,7 +19,7 @@ class PlatformBase {
 
     private static var _vscrollWidth:Float = -1;
     private static var _hscrollHeight:Float = -1;
-    private static function calcScrollSize():Void {
+    private static function calcScrollSize() {
         if (_vscrollWidth >= 0 && _hscrollHeight >= 0) {
             return;
         }
