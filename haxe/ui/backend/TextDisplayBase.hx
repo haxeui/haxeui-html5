@@ -1,12 +1,11 @@
 package haxe.ui.backend;
 
 import haxe.Timer;
-import haxe.ui.backend.html5.HtmlUtils;
 import haxe.ui.core.Component;
+import haxe.ui.backend.html5.HtmlUtils;
 import js.Browser;
 import js.html.CSSStyleDeclaration;
 import js.html.Element;
-import js.html.InputElement;
 
 class TextDisplayBase {
     public var element:Element;
@@ -24,13 +23,7 @@ class TextDisplayBase {
     private var _text:String;
     public var text(get, set):String;
     private function get_text():String {
-        var r:String = null;
-        if (Std.is(element, InputElement)) {
-            r = cast(element, InputElement).value;
-        } else {
-            r = element.innerHTML;
-        }
-        return r;
+        return element.innerHTML;
     }
     private var _dirty:Bool = false;
     private function set_text(value:String):String {
@@ -46,17 +39,8 @@ class TextDisplayBase {
         }
         */
 
-        var html:String = value;
-        html = HtmlUtils.escape(html);
-        html = StringTools.replace(html, "\r\n", "<br/>");
-        html = StringTools.replace(html, "\r", "<br/>");
-        html = StringTools.replace(html, "\n", "<br/>");
-
-        if (Std.is(element, InputElement)) {
-            cast(element, InputElement).value = html;
-        } else {
-            element.innerHTML = html;
-        }
+        var html:String = text2Html(value);
+        element.innerHTML = html;
 
         _dirty = true;
         _text = value;
@@ -383,5 +367,14 @@ class TextDisplayBase {
         //div.remove();
         HtmlUtils.removeElement(div);
         _dirty = false;
+    }
+
+    private function text2Html(text:String):String {
+        var html:String = HtmlUtils.escape(text);
+        html = StringTools.replace(html, "\r\n", "<br/>");
+        html = StringTools.replace(html, "\r", "<br/>");
+        html = StringTools.replace(html, "\n", "<br/>");
+
+        return html;
     }
 }
