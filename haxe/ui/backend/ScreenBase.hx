@@ -79,7 +79,6 @@ class ScreenBase {
     }
 
     private function handleSetComponentIndex(child:Component, index:Int) {
-        //HtmlUtils.removeElement(child.element);
         if (index == cast(this, Screen).rootComponents.length - 1) {
             container.appendChild(child.element);
         } else {
