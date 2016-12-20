@@ -124,9 +124,6 @@ class TextDisplayBase {
     private var _textHeight:Float = 0;
     public var textHeight(get, null):Float;
     private function get_textHeight():Float {
-        if (_text == null || _text.length == 0) {
-            return 0;
-        }
         if (_textHeight == 0) {
             _dirty = true;
             measureText();
@@ -349,6 +346,7 @@ class TextDisplayBase {
         html = StringTools.replace(html, "\n", "<br/>");
 
         var div = Browser.document.createElement("div");
+        div.id = "temp";
         div.style.position = "absolute";
         div.style.top = "-99999px"; // position off-screen!
         div.style.left = "-99999px"; // position off-screen!
@@ -364,8 +362,9 @@ class TextDisplayBase {
 
         _textWidth = div.clientWidth + 2;
         _textHeight = div.clientHeight - 1;
+        trace(">>>>>>>>>>>>>>>>>>>>> " + _textHeight);
         //div.remove();
-        HtmlUtils.removeElement(div);
+        //HtmlUtils.removeElement(div);
         _dirty = false;
     }
 
