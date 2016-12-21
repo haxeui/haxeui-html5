@@ -346,7 +346,7 @@ class TextDisplayBase {
         Browser.document.body.appendChild(div);
 
         _textWidth = div.clientWidth + 2;
-        _textHeight = div.clientHeight - 1;
+        _textHeight = div.clientHeight;
         HtmlUtils.removeElement(div);
         _dirty = false;
     }
