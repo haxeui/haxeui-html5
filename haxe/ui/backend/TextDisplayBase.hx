@@ -5,6 +5,7 @@ import haxe.ui.core.Component;
 import haxe.ui.backend.html5.HtmlUtils;
 import js.Browser;
 import js.html.CSSStyleDeclaration;
+import js.html.DivElement;
 import js.html.Element;
 
 class TextDisplayBase {
@@ -314,7 +315,7 @@ class TextDisplayBase {
     private function updatePos() {
         var style:CSSStyleDeclaration = element.style;
         style.left = HtmlUtils.px(_left);
-        style.top = HtmlUtils.px(_top - 1);
+        style.top = HtmlUtils.px(_top);
     }
 
     private function updateSize() {
@@ -339,12 +340,18 @@ class TextDisplayBase {
             t = "|";
         }
 
-        var html:String = t;
-        html = HtmlUtils.escape(html);
-        html = StringTools.replace(html, "\r\n", "<br/>");
-        html = StringTools.replace(html, "\r", "<br/>");
-        html = StringTools.replace(html, "\n", "<br/>");
+        var html:String = text2Html(t);
 
+        var div = createTempDiv(html);
+        Browser.document.body.appendChild(div);
+
+        _textWidth = div.clientWidth + 2;
+        _textHeight = div.clientHeight - 1;
+        HtmlUtils.removeElement(div);
+        _dirty = false;
+    }
+
+    private function createTempDiv(html:String):Element {
         var div = Browser.document.createElement("div");
         div.id = "temp";
         div.style.position = "absolute";
@@ -358,16 +365,9 @@ class TextDisplayBase {
         if (width > 0) {
             div.style.width = '${HtmlUtils.px(width)}';
         }
-        Browser.document.body.appendChild(div);
-
-        _textWidth = div.clientWidth + 2;
-        _textHeight = div.clientHeight - 1;
-        trace(">>>>>>>>>>>>>>>>>>>>> " + _textHeight);
-        //div.remove();
-        //HtmlUtils.removeElement(div);
-        _dirty = false;
+        return div;
     }
-
+    
     private function text2Html(text:String):String {
         var html:String = HtmlUtils.escape(text);
         html = StringTools.replace(html, "\r\n", "<br/>");

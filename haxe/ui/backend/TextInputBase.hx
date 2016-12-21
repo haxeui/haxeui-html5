@@ -1,6 +1,7 @@
 package haxe.ui.backend;
 
 import js.Browser;
+import js.html.Element;
 import js.html.InputElement;
 
 class TextInputBase extends TextDisplayBase {
@@ -30,5 +31,11 @@ class TextInputBase extends TextDisplayBase {
         _text = value;
         measureText();
         return value;
+    }
+    
+    private override function createTempDiv(html:String):Element {
+        var div = super.createTempDiv(html);
+        div.style.width = "";
+        return div;
     }
 }
