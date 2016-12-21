@@ -53,6 +53,7 @@ class ScreenBase {
 
     private var __topLevelComponents:Array<Component> = [];
     public function addComponent(component:Component) {
+        container.appendChild(component.element);
         component.ready();
 
         if (Toolkit.scaleX != 1 || Toolkit.scaleY != 1) {
@@ -70,7 +71,6 @@ class ScreenBase {
         __topLevelComponents.push(component);
         addResizeListener();
         resizeComponent(component);
-        container.appendChild(component.element);
     }
 
     public function removeComponent(component:Component) {
