@@ -428,7 +428,7 @@ class ComponentBase {
     //***********************************************************************************************************
     private function setCursor(cursor:String) {
         if (cursor == null) {
-            cursor = "default";
+            //cursor = "default";
         }
         if (cursor == null) {
             element.style.removeProperty("cursor");
