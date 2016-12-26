@@ -1,5 +1,6 @@
 package haxe.ui.backend;
 
+import haxe.ui.components.TextArea;
 import haxe.ui.core.KeyboardEvent;
 import haxe.ui.components.TextField;
 import haxe.ui.backend.html5.EventMapper;
@@ -497,7 +498,7 @@ class ComponentBase {
                 if (_eventMap.exists(type) == false) {
                     _eventMap.set(type, listener);
 
-                    if (Std.is(this, TextField)) {
+                    if (Std.is(this, TextField) || Std.is(this, TextArea)) {
                         element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(KeyboardEvent.KEY_UP), __onTextFieldChangeEvent);
                     } else {
                         element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onChangeEvent);
