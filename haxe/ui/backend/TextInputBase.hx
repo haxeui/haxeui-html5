@@ -97,6 +97,9 @@ class TextInputBase extends TextDisplayBase {
     }
     
     private override function get_text():String {
+        if (Std.is(element, TextAreaElement)) {
+            return cast(element, TextAreaElement).value;
+        }
         return cast(element, InputElement).value;
     }
 
