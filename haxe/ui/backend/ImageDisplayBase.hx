@@ -1,5 +1,6 @@
 package haxe.ui.backend;
 
+import haxe.ui.util.Rectangle;
 import haxe.ui.assets.ImageInfo;
 import haxe.ui.core.Component;
 import haxe.ui.backend.html5.HtmlUtils;
@@ -90,6 +91,23 @@ class ImageDisplayBase {
             _imageHeight = _imageInfo.height;
             element.src = value.data.src;
         }
+        return value;
+    }
+
+    public var imageClipRect(get, set):Rectangle;
+
+    private var _imageClipRect:Rectangle;
+    public function get_imageClipRect():Rectangle {
+        return _imageClipRect;
+    }
+    private function set_imageClipRect(value:Rectangle):Rectangle {
+        _imageClipRect = value;
+        if(value == null) {
+            element.style.removeProperty("clip");
+        } else {
+            element.style.clip = 'rect(${HtmlUtils.px(-top + value.top)},${HtmlUtils.px(-left + value.left + value.width)},${HtmlUtils.px(-top + value.top + value.height)},${HtmlUtils.px(-left + value.left)})';
+        }
+
         return value;
     }
 
