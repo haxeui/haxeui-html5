@@ -250,7 +250,7 @@ class ComponentBase {
     private function handleClipRect(value:Rectangle) {
         var c:Component = cast(this, Component);
         var parent:Component = c.parentComponent;
-        if (parent._nativeElement == null || Std.is(c, Header)) {
+        if (value != null && (parent._nativeElement == null || Std.is(c, Header))) {
             element.style.clip = 'rect(${HtmlUtils.px(value.top)},${HtmlUtils.px(value.right)},${HtmlUtils.px(value.bottom)},${HtmlUtils.px(value.left)})';
             if (Std.is(this, Header) && parent.native == true) {
                 if (element.style.position != "fixed") {
