@@ -39,7 +39,7 @@ class TextInputBase extends TextDisplayBase {
         }
         return el;
     }
-    
+
     @:access(haxe.ui.components.TextArea)
     private override function set_multiline(value:Bool):Bool {
         if (value == _multiline) {
@@ -52,7 +52,7 @@ class TextInputBase extends TextDisplayBase {
                 element.removeEventListener("keydown", onKeyDown);
                 element.removeEventListener("keyup", onKeyUp);
             }
-            
+
             var newElement:Element = createElement();
             if (element != null && element.parentElement != null) {
                 element.parentElement.appendChild(newElement);
@@ -67,26 +67,26 @@ class TextInputBase extends TextDisplayBase {
 
             element.addEventListener("keydown", onKeyDown);
             element.addEventListener("keyup", onKeyUp);
-            
+
         }
 
         return value;
     }
-    
+
     @:access(haxe.ui.components.TextArea)
     private function onKeyDown(e) {
         if (Std.is(parentComponent, TextArea)) {
             cast(parentComponent, TextArea).checkScrolls();
         }
     }
-    
+
     @:access(haxe.ui.components.TextArea)
     private function onKeyUp(e) {
         if (Std.is(parentComponent, TextArea)) {
             cast(parentComponent, TextArea).checkScrolls();
         }
     }
-    
+
     public var vscrollPos(get, set):Float;
     private function get_vscrollPos():Float {
         return element.scrollTop;
@@ -95,7 +95,7 @@ class TextInputBase extends TextDisplayBase {
         element.scrollTop = Std.int(value);
         return value;
     }
-    
+
     private override function get_text():String {
         if (Std.is(element, TextAreaElement)) {
             return cast(element, TextAreaElement).value;
@@ -109,7 +109,7 @@ class TextInputBase extends TextDisplayBase {
         }
         return super.get_textHeight();
     }
-    
+
     private override function set_text(value:String):String {
         var html:String = normalizeText(value);
         if (Std.is(element, InputElement)) {
@@ -123,13 +123,13 @@ class TextInputBase extends TextDisplayBase {
         measureText();
         return value;
     }
-    
+
     private override function createTempDiv(html:String):Element {
         var div = super.createTempDiv(html);
         div.style.width = "";
         return div;
     }
-    
+
     private override function normalizeText(text:String):String {
         return StringTools.replace(text, "\\n", "\n");
     }
