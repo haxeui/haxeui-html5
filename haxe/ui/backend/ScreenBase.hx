@@ -152,7 +152,7 @@ class ScreenBase {
             case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
                 MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
 
-                // chrome spends a spurious mouse move event even if the mouse hasnt moved, lets consume that first    
+                // chrome sends a spurious mouse move event even if the mouse hasnt moved, lets consume that first    
                 if (type == MouseEvent.MOUSE_MOVE && _mapping.exists(type) == false && UserAgent.instance.chrome == true) {
                     var fn = null;
                     fn = function(e) {
