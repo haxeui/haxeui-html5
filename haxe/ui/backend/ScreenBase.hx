@@ -1,6 +1,7 @@
 package haxe.ui.backend;
 
 import haxe.ui.backend.html5.HtmlUtils;
+import haxe.ui.backend.html5.UserAgent;
 import haxe.ui.containers.dialogs.Dialog;
 import haxe.ui.containers.dialogs.DialogButton;
 import haxe.ui.core.Component;
@@ -150,6 +151,22 @@ class ScreenBase {
         switch (type) {
             case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
                 MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
+
+                // chrome spends a spurious mouse move event even if the mouse hasnt moved, lets consume that first    
+                if (type == MouseEvent.MOUSE_MOVE && _mapping.exists(type) == false && UserAgent.instance.chrome == true) {
+                    var fn = null;
+                    fn = function(e) {
+                        container.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(MouseEvent.MOUSE_MOVE), fn);
+                        if (_mapping.exists(type) == false) {
+                            _mapping.set(type, listener);
+                            container.addEventListener(EventMapper.HAXEUI_TO_DOM.get(MouseEvent.MOUSE_MOVE), __onMouseEvent);
+                        }
+                    }
+                    
+                    container.addEventListener(EventMapper.HAXEUI_TO_DOM.get(MouseEvent.MOUSE_MOVE), fn);
+                    return;
+                }
+                
                 if (_mapping.exists(type) == false) {
                     _mapping.set(type, listener);
                     container.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
