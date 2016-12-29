@@ -1,6 +1,7 @@
 package haxe.ui.backend;
 
 import haxe.ui.components.TextArea;
+import haxe.ui.components.Image;
 import haxe.ui.core.KeyboardEvent;
 import haxe.ui.components.TextField;
 import haxe.ui.backend.html5.EventMapper;
@@ -145,6 +146,10 @@ class ComponentBase {
             newElement.style.setProperty("-ms-user-select", "none");
             newElement.style.setProperty("user-select", "none");
             newElement.style.position = "absolute";
+
+            if (Std.is(this, Image)) {
+                newElement.style.boxSizing = "initial";
+            }
 
             if (element != null) {
                 var p = element.parentElement;

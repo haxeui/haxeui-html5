@@ -353,7 +353,7 @@ class TextDisplayBase {
         }
         return div;
     }
-    
+
     private function normalizeText(text:String):String {
         var html:String = HtmlUtils.escape(text);
         html = StringTools.replace(html, "\\n", "\n");
