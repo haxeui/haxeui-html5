@@ -575,6 +575,7 @@ class ComponentBase {
             if (fn != null) {
                 //event.stopPropagation();
                 var mouseEvent = new MouseEvent(type);
+                mouseEvent.buttonDown = (event.buttons != 0);
                 mouseEvent.screenX = event.pageX / Toolkit.scaleX;
                 mouseEvent.screenY = event.pageY / Toolkit.scaleY;
                 fn(mouseEvent);
