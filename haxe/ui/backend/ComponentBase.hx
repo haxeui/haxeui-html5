@@ -1,5 +1,7 @@
 package haxe.ui.backend;
 
+import haxe.ui.components.TextArea;
+import haxe.ui.components.Image;
 import haxe.ui.core.KeyboardEvent;
 import haxe.ui.components.TextField;
 import haxe.ui.backend.html5.EventMapper;
@@ -145,6 +147,10 @@ class ComponentBase {
             newElement.style.setProperty("user-select", "none");
             newElement.style.position = "absolute";
 
+            if (Std.is(this, Image)) {
+                newElement.style.boxSizing = "initial";
+            }
+
             if (element != null) {
                 var p = element.parentElement;
                 if (p != null) {
@@ -250,7 +256,7 @@ class ComponentBase {
     private function handleClipRect(value:Rectangle) {
         var c:Component = cast(this, Component);
         var parent:Component = c.parentComponent;
-        if (parent._nativeElement == null || Std.is(c, Header)) {
+        if (value != null && (parent._nativeElement == null || Std.is(c, Header))) {
             element.style.clip = 'rect(${HtmlUtils.px(value.top)},${HtmlUtils.px(value.right)},${HtmlUtils.px(value.bottom)},${HtmlUtils.px(value.left)})';
             if (Std.is(this, Header) && parent.native == true) {
                 if (element.style.position != "fixed") {
@@ -497,7 +503,7 @@ class ComponentBase {
                 if (_eventMap.exists(type) == false) {
                     _eventMap.set(type, listener);
 
-                    if (Std.is(this, TextField)) {
+                    if (Std.is(this, TextField) || Std.is(this, TextArea)) {
                         element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(KeyboardEvent.KEY_UP), __onTextFieldChangeEvent);
                     } else {
                         element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onChangeEvent);
