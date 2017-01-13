@@ -14,8 +14,6 @@ class TextInputBase extends TextDisplayBase {
         createElement();
     }
 
-    public var password:Bool;
-    
     private function createElement():Element {
         var el:Element = null;
         if (_multiline == false) {
@@ -42,6 +40,31 @@ class TextInputBase extends TextDisplayBase {
         return el;
     }
 
+    public var password(get, set):Bool;
+    private function get_password():Bool {
+        if (Std.is(element, InputElement) == false) {
+            return false;
+        }
+        
+        var inputElement:InputElement = cast(element, InputElement);
+        return inputElement.type == "password";
+    }
+    private function set_password(value:Bool):Bool {
+        if (Std.is(element, InputElement) == false) {
+            return value;
+        }
+        
+        var inputElement:InputElement = cast(element, InputElement);
+        if (value == false) {
+            inputElement.type = "";
+        } else {
+            inputElement.type = "password";
+        }
+        
+        return value;
+    }
+    
+    
     @:access(haxe.ui.components.TextArea)
     private override function set_multiline(value:Bool):Bool {
         if (value == _multiline) {
