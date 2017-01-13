@@ -14,6 +14,8 @@ class TextInputBase extends TextDisplayBase {
         createElement();
     }
 
+    public var password:Bool;
+    
     private function createElement():Element {
         var el:Element = null;
         if (_multiline == false) {
