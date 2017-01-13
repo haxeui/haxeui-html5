@@ -17,7 +17,7 @@ class TextDisplayBase {
         element = Browser.document.createDivElement();
         //element.style.display = "inline";
         element.style.position = "absolute";
-        element.style.cursor = "default";
+        //element.style.cursor = "default";
         multiline = false;
     }
 

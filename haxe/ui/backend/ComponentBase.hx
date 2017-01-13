@@ -386,12 +386,7 @@ class ComponentBase {
             return;
         }
 
-        var useHandCursor = false;
-        if (style.cursor != null && style.cursor == "pointer") {
-            useHandCursor = true;
-        }
-
-        setCursor(useHandCursor == true ? "pointer" : null);
+        setCursor(style.cursor);
 
         if (style.filter != null) {
             if (style.filter[0] == "drop-shadow") {
@@ -452,7 +447,9 @@ class ComponentBase {
         }
 
         for (c in cast(this, Component).childComponents) {
-            c.setCursor(cursor);
+            if (c.element.style.cursor == null) {
+                c.setCursor("inherit");
+            }
         }
     }
 
