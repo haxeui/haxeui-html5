@@ -3,36 +3,43 @@
     <component id="haxe.ui.components.Button" class="haxe.ui.backend.html5.native.NativeElement" nodeType="button" style="padding:0px; padding-bottom: 1px">
         <behaviour id="text" class="haxe.ui.backend.html5.native.behaviours.SpanText" style="margin-top:-2px;margin-left:-2px;" />
         <behaviour id="icon" class="haxe.ui.backend.html5.native.behaviours.ElementImage" />
+        <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
         <layout class="haxe.ui.backend.html5.native.layouts.ButtonLayout" />
     </component>
     <component id="haxe.ui.components.CheckBox" class="haxe.ui.backend.html5.native.LabeledInputElement" type="checkbox">
         <behaviour id="text" class="haxe.ui.backend.html5.native.behaviours.SpanText" index="last" />
         <behaviour id="selected" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" child="input" name="checked" removeIfNegative="true" />
+        <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
         <size class="haxe.ui.backend.html5.native.size.TextSize" incrementWidthBy="20" incrementHeightBy="0" />
     </component>
     <component id="haxe.ui.components.OptionBox" class="haxe.ui.backend.html5.native.LabeledInputElement" type="radio">
         <behaviour id="text" class="haxe.ui.backend.html5.native.behaviours.SpanText" index="last" />
         <behaviour id="selected" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" child="input" name="checked" removeIfNegative="true" />
+        <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
         <size class="haxe.ui.backend.html5.native.size.TextSize" incrementWidthBy="20" incrementHeightBy="0" />
     </component>
     <component id="haxe.ui.components.TextField" class="haxe.ui.backend.html5.native.NativeElement" nodeType="input" style="padding-left:2px;cursor:pointer;">
         <behaviour id="text" class="haxe.ui.backend.html5.native.behaviours.ElementValue" />
+        <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
         <size class="haxe.ui.backend.html5.native.size.ElementSize" />
     </component>
     <component id="haxe.ui.components.TextArea" class="haxe.ui.backend.html5.native.NativeElement" nodeType="textarea" style="resize:none;line-height:1.4;">
         <behaviour id="text" class="haxe.ui.backend.html5.native.behaviours.ElementValue" />
+        <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
         <size class="haxe.ui.backend.html5.native.size.ElementSize" />
     </component>
     <component id="haxe.ui.components.HSlider" class="haxe.ui.backend.html5.native.NativeElement" nodeType="input" type="range" style="margin: 0;padding:0;">
         <behaviour id="min" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="min" />
         <behaviour id="max" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="max" />
         <behaviour id="pos" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="value" />
+        <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
         <size class="haxe.ui.backend.html5.native.size.ElementSize" />
     </component>
     <component id="haxe.ui.components.VSlider" class="haxe.ui.backend.html5.native.NativeElement" nodeType="input" type="range" style="padding:0;margin: 0;-webkit-appearance: slider-vertical;-moz-orient: vertical;writing-mode: bt-lr;" orient="vertical">
         <behaviour id="min" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="min" />
         <behaviour id="max" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="max" />
         <behaviour id="pos" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="value" />
+        <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
         <size class="haxe.ui.backend.html5.native.size.ElementSize" />
     </component>
     <component id="haxe.ui.components.HProgress" class="haxe.ui.backend.html5.native.NativeElement" nodeType="progress" style="padding:0;">
@@ -40,6 +47,7 @@
         <behaviour id="max" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="max" />
         <behaviour id="pos" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="value" />
         <behaviour id="indeterminate" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="value" remove="true" />
+        <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
         <size class="haxe.ui.backend.html5.native.size.ElementSize" />
     </component>
     <component id="haxe.ui.components.VProgress" class="haxe.ui.backend.html5.native.NativeElement" nodeType="progress" style="padding:0;-webkit-transform: rotate(-90deg) translateY(-1000%);-webkit-transform-origin: 100% 0%;-moz-orient: vertical;writing-mode: bt-lr;" orient="vertical">
@@ -47,17 +55,22 @@
         <behaviour id="max" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="max" />
         <behaviour id="pos" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="value" />
         <behaviour id="indeterminate" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="value" remove="true" />
+        <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
         <size class="haxe.ui.backend.html5.native.size.ElementSize" />
     </component>
     <component id="haxe.ui.containers.ScrollView" class="haxe.ui.backend.html5.native.NativeElement">
+        <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
     </component>
     <component id="haxe.ui.containers.ListView" class="haxe.ui.backend.html5.native.NativeElement">
+        <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
     </component>
     <component id="haxe.ui.containers.TableView" class="haxe.ui.backend.html5.native.NativeElement">
+        <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
     </component>
     <component id="haxe.ui.components.DropDown" class="haxe.ui.backend.html5.native.NativeElement" nodeType="select" style="padding:3px;" allowChildren="false">
         <behaviour id="dataSource" class="haxe.ui.backend.html5.native.behaviours.SelectDataSource" />
         <behaviour id="selectedItem" class="haxe.ui.backend.html5.native.behaviours.SelectedItem" />
+        <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
         <size class="haxe.ui.backend.html5.native.size.ElementSize" />
     </component>
 </native>
