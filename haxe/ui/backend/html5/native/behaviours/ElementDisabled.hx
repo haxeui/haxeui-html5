@@ -10,8 +10,14 @@ class ElementDisabled extends Behaviour {
         var el:Element = _component.element;
         if (value == true) {
             el.setAttribute("disabled", "true");
+            for (child in el.children) {
+                child.setAttribute("disabled", "true");
+            }
         } else {
             el.removeAttribute("disabled");
+            for (child in el.children) {
+                child.removeAttribute("disabled");
+            }
         }
     }
     
