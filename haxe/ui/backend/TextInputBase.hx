@@ -36,6 +36,7 @@ class TextInputBase extends TextDisplayBase {
             el.style.cursor = "initial";
             el.style.position = "absolute";
             el.style.backgroundColor = "inherit";
+            el.style.whiteSpace = "nowrap";
         }
         return el;
     }
@@ -112,6 +113,15 @@ class TextInputBase extends TextDisplayBase {
         }
     }
 
+    public var hscrollPos(get, set):Float;
+    private function get_hscrollPos():Float {
+        return element.scrollLeft;
+    }
+    private function set_hscrollPos(value:Float):Float {
+        element.scrollLeft = Std.int(value);
+        return value;
+    }
+    
     public var vscrollPos(get, set):Float;
     private function get_vscrollPos():Float {
         return element.scrollTop;
@@ -126,6 +136,13 @@ class TextInputBase extends TextDisplayBase {
             return cast(element, TextAreaElement).value;
         }
         return cast(element, InputElement).value;
+    }
+
+    private override function get_textWidth():Float {
+        if (Std.is(element, TextAreaElement)) {
+            return cast(element, TextAreaElement).scrollWidth;
+        }
+        return super.get_textHeight();
     }
 
     private override function get_textHeight():Float {
