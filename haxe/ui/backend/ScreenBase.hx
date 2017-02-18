@@ -1,5 +1,6 @@
 package haxe.ui.backend;
 
+import haxe.ui.core.KeyboardEvent;
 import haxe.ui.backend.html5.HtmlUtils;
 import haxe.ui.backend.html5.UserAgent;
 import haxe.ui.containers.dialogs.Dialog;
@@ -171,6 +172,12 @@ class ScreenBase {
                     _mapping.set(type, listener);
                     container.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
                 }
+
+            case KeyboardEvent.KEY_DOWN | KeyboardEvent.KEY_UP:
+                if (_mapping.exists(type) == false) {
+                    _mapping.set(type, listener);
+                    container.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onKeyEvent);
+                }
         }
     }
 
@@ -180,6 +187,10 @@ class ScreenBase {
                 MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
                 _mapping.remove(type);
                 container.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
+
+            case KeyboardEvent.KEY_DOWN | KeyboardEvent.KEY_UP:
+                _mapping.remove(type);
+                container.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onKeyEvent);
         }
     }
 
@@ -199,6 +210,20 @@ class ScreenBase {
                 mouseEvent.screenX = event.pageX / Toolkit.scaleX;
                 mouseEvent.screenY = event.pageY / Toolkit.scaleY;
                 fn(mouseEvent);
+            }
+        }
+    }
+
+    private function __onKeyEvent(event:js.html.KeyboardEvent) {
+        var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
+        if (type != null) {
+            var fn = _mapping.get(type);
+            if (fn != null) {
+                var keyboardEvent = new KeyboardEvent(type);
+                keyboardEvent._originalEvent = event;
+                keyboardEvent.keyCode = event.keyCode;
+                keyboardEvent.shiftKey = event.shiftKey;
+                fn(keyboardEvent);
             }
         }
     }
