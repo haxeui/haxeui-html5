@@ -1,5 +1,7 @@
 package haxe.ui.backend.html5;
 
+import haxe.ui.core.ValidationEvent;
+import haxe.ui.validation.ValidationManager;
 import haxe.ui.util.Size;
 import js.Browser;
 import js.html.Element;
@@ -29,16 +31,38 @@ class HtmlUtils {
         return s;
     }
 
+    public static var DIV_HELPER:Element;
+
+    public static function __init__():Void {
+        ValidationManager.instance.registerEvent(ValidationEvent.STOP, onValidationStop);
+    }
+
+    private static function onValidationStop(e:ValidationEvent):Void {
+        if (DIV_HELPER != null) {
+            removeElement(DIV_HELPER);
+            DIV_HELPER = null;
+        }
+    }
+
+    public static function createDivHelper():Void
+    {
+        if (DIV_HELPER == null) {
+            DIV_HELPER = Browser.document.createElement("div");
+            DIV_HELPER.style.position = "absolute";
+            DIV_HELPER.style.top = "-99999px"; // position off-screen!
+            DIV_HELPER.style.left = "-99999px"; // position off-screen!
+            Browser.document.body.appendChild(DIV_HELPER);
+        }
+    }
+
     public static function measureText(text:String, addWidth:Float = 0, addHeight:Float = 0):Size {
-        var div = Browser.document.createElement("div");
-        div.innerHTML = text;
-        div.style.position = "absolute";
-        div.style.top = "-99999px"; // position off-screen!
-        div.style.left = "-99999px"; // position off-screen!
-        Browser.document.body.appendChild(div);
-        var size:Size = new Size(div.clientWidth + addWidth, div.clientHeight + addHeight);
-        HtmlUtils.removeElement(div);
-        return size;
+        if (DIV_HELPER == null) {
+            createDivHelper();
+        }
+
+        DIV_HELPER.innerHTML = text;
+
+        return new Size(DIV_HELPER.clientWidth + addWidth, DIV_HELPER.clientHeight + addHeight);
     }
 
     public static function swapElements(el1:Element, el2:Element) {
