@@ -53,7 +53,7 @@ class TextInputBase extends TextDisplayBase {
     // Validation functions
     //***********************************************************************************************************
 
-    private override function validateData():Void {
+    private override function validateData() {
         if (_text != null) {
             var html:String = normalizeText(_text);
             if (Std.is(element, InputElement)) {
@@ -139,7 +139,7 @@ class TextInputBase extends TextDisplayBase {
         return el;
     }
 
-    private override function setTempDivData(div:Element):Void {
+    private override function setTempDivData(div:Element) {
         var t:String = _text;
         if (t == null || t.length == 0) {
             t = "|";

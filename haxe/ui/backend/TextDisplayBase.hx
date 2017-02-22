@@ -61,7 +61,7 @@ class TextDisplayBase {
     // Validation functions
     //***********************************************************************************************************
 
-    private function validateData():Void {
+    private function validateData() {
         var html:String = normalizeText(_text);
         element.innerHTML = html;
     }
@@ -133,13 +133,13 @@ class TextDisplayBase {
         return measureTextRequired;
     }
 
-    private function validatePosition():Void {
+    private function validatePosition() {
         var style:CSSStyleDeclaration = element.style;
         style.left = HtmlUtils.px(_left - 1);
         style.top = HtmlUtils.px(_top - 1);
     }
 
-    private function validateDisplay():Void {
+    private function validateDisplay() {
         var style:CSSStyleDeclaration = element.style;
         if (_width > 0) {
             style.width = HtmlUtils.px(_width);
@@ -174,7 +174,7 @@ class TextDisplayBase {
         return el;
     }
 
-    private function setTempDivData(div:Element):Void {
+    private function setTempDivData(div:Element) {
         var t:String = _text;
         if (t == null || t.length == 0) {
             t = "|";
