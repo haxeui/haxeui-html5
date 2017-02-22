@@ -13,6 +13,8 @@ class TextInputBase extends TextDisplayBase {
     }
 
     private var _password:Bool = false;
+    private var _hscrollPos:Float = 0;
+    private var _vscrollPos:Float = 0;
 
     @:access(haxe.ui.components.TextArea)
     private function onKeyDown(e) {
@@ -29,24 +31,6 @@ class TextInputBase extends TextDisplayBase {
         } else {
             _text = cast(element, InputElement).value;
         }
-    }
-
-    public var hscrollPos(get, set):Float;
-    private function get_hscrollPos():Float {
-        return element.scrollLeft;
-    }
-    private function set_hscrollPos(value:Float):Float {
-        element.scrollLeft = Std.int(value);
-        return value;
-    }
-    
-    public var vscrollPos(get, set):Float;
-    private function get_vscrollPos():Float {
-        return element.scrollTop;
-    }
-    private function set_vscrollPos(value:Float):Float {
-        element.scrollTop = Std.int(value);
-        return value;
     }
 
     //***********************************************************************************************************
@@ -90,6 +74,16 @@ class TextInputBase extends TextDisplayBase {
             } else if (_password == false && inputElement.type != "") {
                 inputElement.type = "";
             }
+        }
+
+        var hscrollValue = Std.int(_hscrollPos);
+        if (element.scrollLeft != hscrollValue) {
+            element.scrollLeft = hscrollValue;
+        }
+
+        var vscrollValue = Std.int(_vscrollPos);
+        if (element.scrollTop != vscrollValue) {
+            element.scrollTop = vscrollValue;
         }
 
         return super.validateStyle() || measureTextRequired;
