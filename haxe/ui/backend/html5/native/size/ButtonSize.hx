@@ -7,7 +7,7 @@ import js.html.ImageElement;
 @:keep
 class ButtonSize extends DelegateLayoutSize {
     public function new() {
-
+        super();
     }
 
     private override function get_width():Float {

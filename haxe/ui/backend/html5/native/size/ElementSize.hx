@@ -7,7 +7,7 @@ import haxe.ui.layouts.DelegateLayout.DelegateLayoutSize;
 @:keep
 class ElementSize extends DelegateLayoutSize {
     public function new() {
-
+        super();
     }
 
     private override function get_width():Float {
