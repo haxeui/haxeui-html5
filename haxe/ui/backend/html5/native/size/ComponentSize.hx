@@ -5,10 +5,6 @@ import haxe.ui.layouts.DelegateLayout.DelegateLayoutSize;
 @:keep
 @:access(haxe.ui.core.Component)
 class ComponentSize extends DelegateLayoutSize {
-    public function new() {
-        super();
-    }
-
     private override function get_width():Float {
         var w = component.componentWidth;
         if (w == null || w <= 0) {
