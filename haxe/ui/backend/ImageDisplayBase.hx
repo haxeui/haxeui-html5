@@ -20,96 +20,11 @@ class ImageDisplayBase {
     }
 
     private var _left:Float = 0;
-    public var left(get, set):Float;
-    private function get_left():Float {
-        return _left;
-    }
-    private function set_left(value:Float):Float {
-        if (value == _left) {
-            //return value;
-        }
-
-        _left = value;
-        updatePos();
-        return value;
-    }
-
     private var _top:Float = 0;
-    public var top(get, set):Float;
-    private function get_top():Float {
-        return _top;
-    }
-    private function set_top(value:Float):Float {
-        if (value == _top) {
-            //return value;
-        }
-
-        _top = value;
-        updatePos();
-        return value;
-    }
-
     private var _imageWidth:Float = 0;
-    public var imageWidth(get, set):Float;
-    public function set_imageWidth(value:Float):Float {
-        if (_imageWidth == value || value <= 0) {
-            return value;
-        }
-        _imageWidth = value;
-        updateSize();
-        return value;
-    }
-
-    public function get_imageWidth():Float {
-        return _imageWidth;
-    }
-
     private var _imageHeight:Float = 0;
-    public var imageHeight(get, set):Float;
-    public function set_imageHeight(value:Float):Float {
-        if (_imageHeight == value || value <= 0) {
-            return value;
-        }
-        _imageHeight = value;
-        updateSize();
-        return value;
-    }
-
-    public function get_imageHeight():Float {
-        return _imageHeight;
-    }
-
     private var _imageInfo:ImageInfo;
-    public var imageInfo(get, set):ImageInfo;
-    private function get_imageInfo():ImageInfo {
-        return _imageInfo;
-    }
-    private function set_imageInfo(value:ImageInfo):ImageInfo {
-        if (element.src != value.data.src) {
-            _imageInfo = value;
-            _imageWidth = _imageInfo.width;
-            _imageHeight = _imageInfo.height;
-            element.src = value.data.src;
-        }
-        return value;
-    }
-
-    public var imageClipRect(get, set):Rectangle;
-
     private var _imageClipRect:Rectangle;
-    public function get_imageClipRect():Rectangle {
-        return _imageClipRect;
-    }
-    private function set_imageClipRect(value:Rectangle):Rectangle {
-        _imageClipRect = value;
-        if(value == null) {
-            element.style.removeProperty("clip");
-        } else {
-            element.style.clip = 'rect(${HtmlUtils.px(-top + value.top)},${HtmlUtils.px(-left + value.left + value.width)},${HtmlUtils.px(-top + value.top + value.height)},${HtmlUtils.px(-left + value.left)})';
-        }
-
-        return value;
-    }
 
     public function dispose() {
         if (element != null) {
@@ -118,17 +33,33 @@ class ImageDisplayBase {
     }
 
     //***********************************************************************************************************
-    // Util functions
+    // Validation functions
     //***********************************************************************************************************
-    private function updatePos() {
+
+    private function validateData() {
+        if (element.src != _imageInfo.data.src) {
+            element.src = _imageInfo.data.src;
+        }
+    }
+
+    private function validatePosition() {
         var style:CSSStyleDeclaration = element.style;
         style.left = HtmlUtils.px(_left);
         style.top = HtmlUtils.px(_top);
     }
 
-    private function updateSize() {
+    private function validateDisplay() {
         var style:CSSStyleDeclaration = element.style;
-        style.width = HtmlUtils.px(imageWidth);
-        style.height = HtmlUtils.px(imageHeight);
+        style.width = HtmlUtils.px(_imageWidth);
+        style.height = HtmlUtils.px(_imageHeight);
+
+        if (_imageClipRect != null) {
+            var clipValue = 'rect(${HtmlUtils.px(-_top + _imageClipRect.top)},${HtmlUtils.px(-_left + _imageClipRect.left + _imageClipRect.width)},${HtmlUtils.px(-_top + _imageClipRect.top + _imageClipRect.height)},${HtmlUtils.px(-_left + _imageClipRect.left)})';
+            if (element.style.clip != clipValue) {
+                element.style.clip = clipValue;
+            }
+        } else if (element.style.clip != null) {
+            element.style.removeProperty("clip");
+        }
     }
 }
