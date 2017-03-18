@@ -1,11 +1,11 @@
 <p align="center">
-  <img src="https://dl.dropboxusercontent.com/u/26678671/haxeui2-warning.png"/>
+  <img src="http://haxeui.org/db/haxeui2-warning.png"/>
 </p>
 
 [![Build Status](https://travis-ci.org/haxeui/haxeui-html5.svg?branch=master)](https://travis-ci.org/haxeui/haxeui-html5)
 [![Code Climate](https://codeclimate.com/github/haxeui/haxeui-html5/badges/gpa.svg)](https://codeclimate.com/github/haxeui/haxeui-html5)
 [![Issue Count](https://codeclimate.com/github/haxeui/haxeui-html5/badges/issue_count.svg)](https://codeclimate.com/github/haxeui/haxeui-html5)
-[![Support this project on Patreon](https://dl.dropboxusercontent.com/u/26678671/patreon_button.png)](https://www.patreon.com/haxeui)
+[![Support this project on Patreon](http://haxeui.org/db/patreon_button.png)](https://www.patreon.com/haxeui)
 
 <h2>haxeui-html5</h2>
 `haxeui-html5` is the pure HTML5 backend for HaxeUI. It has no other framework dependency except `haxeui-core` itself and outputs a DOM tree.
