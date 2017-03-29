@@ -10,7 +10,8 @@ class EventMapper {
         haxe.ui.core.MouseEvent.CLICK => "click",
         haxe.ui.core.UIEvent.CHANGE => "change",
         haxe.ui.core.KeyboardEvent.KEY_DOWN => "keydown",
-        haxe.ui.core.KeyboardEvent.KEY_UP => "keyup"
+        haxe.ui.core.KeyboardEvent.KEY_UP => "keyup",
+        haxe.ui.core.ScrollEvent.CHANGE => "scroll"
     ];
 
     public static var DOM_TO_HAXEUI:Map<String, String> = [
@@ -25,7 +26,8 @@ class EventMapper {
         "click" => haxe.ui.core.MouseEvent.CLICK,
         "change" => haxe.ui.core.UIEvent.CHANGE,
         "keydown" => haxe.ui.core.KeyboardEvent.KEY_DOWN,
-        "keyup" => haxe.ui.core.KeyboardEvent.KEY_UP
+        "keyup" => haxe.ui.core.KeyboardEvent.KEY_UP,
+        "scroll" => haxe.ui.core.ScrollEvent.CHANGE
     ];
     
     public static var MOUSE_TO_TOUCH:Map<String, String> = [

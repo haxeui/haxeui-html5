@@ -17,6 +17,7 @@ import haxe.ui.core.Component;
 import haxe.ui.core.ImageDisplay;
 import haxe.ui.core.MouseEvent;
 import haxe.ui.core.Screen;
+import haxe.ui.core.ScrollEvent;
 import haxe.ui.core.TextDisplay;
 import haxe.ui.core.TextInput;
 import haxe.ui.core.UIEvent;
@@ -508,6 +509,9 @@ class ComponentBase {
                 } else {
                     element.addEventListener("mousewheel", __onMouseWheelEvent);
                 }
+            case ScrollEvent.CHANGE:
+                _eventMap.set(type, listener);
+                element.addEventListener("scroll", __onScrollEvent);
         }
     }
 
@@ -618,5 +622,15 @@ class ComponentBase {
         mouseEvent.screenY = event.pageY;
         mouseEvent.delta = delta;
         fn(mouseEvent);
+    }
+    
+    private function __onScrollEvent(event:js.html.MouseScrollEvent) {
+        trace("OOOO");
+        var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
+        var fn = _eventMap.get(type);
+        if (fn != null) {
+            var scrollEvent:ScrollEvent = new ScrollEvent(ScrollEvent.CHANGE);
+            fn(scrollEvent);
+        }
     }
 }

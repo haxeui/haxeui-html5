@@ -61,6 +61,8 @@
     </component>
     <component id="haxe.ui.containers.ScrollView" class="haxe.ui.backend.html5.native.NativeElement">
         <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
+        <behaviour id="hscrollPos" class="haxe.ui.backend.html5.native.behaviours.ElementScrollLeft" />
+        <behaviour id="vscrollPos" class="haxe.ui.backend.html5.native.behaviours.ElementScrollTop" />
     </component>
     <component id="haxe.ui.containers.ListView" class="haxe.ui.backend.html5.native.NativeElement">
         <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
