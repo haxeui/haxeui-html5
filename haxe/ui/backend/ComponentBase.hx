@@ -625,7 +625,6 @@ class ComponentBase {
     }
     
     private function __onScrollEvent(event:js.html.MouseScrollEvent) {
-        trace("OOOO");
         var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
         var fn = _eventMap.get(type);
         if (fn != null) {
