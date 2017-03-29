@@ -617,6 +617,7 @@ class ComponentBase {
         delta = Math.max(-1, Math.min(1, delta));
 
         var mouseEvent = new MouseEvent(MouseEvent.MOUSE_WHEEL);
+        mouseEvent._originalEvent = event;
         mouseEvent.screenX = event.pageX;
         mouseEvent.screenY = event.pageY;
         mouseEvent.delta = delta;
