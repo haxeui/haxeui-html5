@@ -12,6 +12,7 @@ import haxe.ui.core.UIEvent;
 import haxe.ui.backend.html5.EventMapper;
 import js.Browser;
 import js.html.Element;
+import js.html.TouchEvent;
 
 class ScreenBase {
     private var _mapping:Map<String, UIEvent->Void>;
@@ -158,17 +159,32 @@ class ScreenBase {
                     var fn = null;
                     fn = function(e) {
                         container.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(MouseEvent.MOUSE_MOVE), fn);
+                        if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
+                            container.removeEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), fn);
+                        }
+                        
                         if (_mapping.exists(type) == false) {
+                            if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
+                                container.addEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
+                            }
+                            
                             _mapping.set(type, listener);
                             container.addEventListener(EventMapper.HAXEUI_TO_DOM.get(MouseEvent.MOUSE_MOVE), __onMouseEvent);
                         }
                     }
                     
                     container.addEventListener(EventMapper.HAXEUI_TO_DOM.get(MouseEvent.MOUSE_MOVE), fn);
+                    if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
+                        container.addEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), fn);
+                    }
                     return;
                 }
                 
                 if (_mapping.exists(type) == false) {
+                    if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
+                        container.addEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
+                    }
+                    
                     _mapping.set(type, listener);
                     container.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
                 }
@@ -187,6 +203,9 @@ class ScreenBase {
                 MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
                 _mapping.remove(type);
                 container.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
+                if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
+                    container.removeEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
+                }
 
             case KeyboardEvent.KEY_DOWN | KeyboardEvent.KEY_UP:
                 _mapping.remove(type);
@@ -197,7 +216,7 @@ class ScreenBase {
     //***********************************************************************************************************
     // Event Handlers
     //***********************************************************************************************************
-    private function __onMouseEvent(event:js.html.MouseEvent) {
+    private function __onMouseEvent(event:js.html.Event) {
         event.preventDefault();
 
         var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
@@ -206,9 +225,19 @@ class ScreenBase {
             if (fn != null) {
                 var mouseEvent = new MouseEvent(type);
                 mouseEvent._originalEvent = event;
-                mouseEvent.buttonDown = (event.buttons != 0);
-                mouseEvent.screenX = event.pageX / Toolkit.scaleX;
-                mouseEvent.screenY = event.pageY / Toolkit.scaleY;
+                
+                if (Std.is(event, js.html.TouchEvent)) {
+                    var te:js.html.TouchEvent = cast(event, js.html.TouchEvent);
+                    mouseEvent.screenX = te.changedTouches[0].pageX / Toolkit.scaleX;
+                    mouseEvent.screenY = te.changedTouches[0].pageY / Toolkit.scaleY;
+                    mouseEvent.touchEvent = true;
+                } else if (Std.is(event, js.html.MouseEvent)) {
+                    var me:js.html.MouseEvent = cast(event, js.html.MouseEvent);
+                    mouseEvent.buttonDown = (me.buttons != 0);
+                    mouseEvent.screenX = me.pageX / Toolkit.scaleX;
+                    mouseEvent.screenY = me.pageY / Toolkit.scaleY;
+                }
+                
                 fn(mouseEvent);
             }
         }

@@ -19,9 +19,24 @@ class EventMapper {
         "mouseout" => haxe.ui.core.MouseEvent.MOUSE_OUT,
         "mousedown" => haxe.ui.core.MouseEvent.MOUSE_DOWN,
         "mouseup" => haxe.ui.core.MouseEvent.MOUSE_UP,
+        "touchmove" => haxe.ui.core.MouseEvent.MOUSE_MOVE,
+        "touchstart" => haxe.ui.core.MouseEvent.MOUSE_DOWN,
+        "touchend" => haxe.ui.core.MouseEvent.MOUSE_UP,
         "click" => haxe.ui.core.MouseEvent.CLICK,
         "change" => haxe.ui.core.UIEvent.CHANGE,
         "keydown" => haxe.ui.core.KeyboardEvent.KEY_DOWN,
         "keyup" => haxe.ui.core.KeyboardEvent.KEY_UP
+    ];
+    
+    public static var MOUSE_TO_TOUCH:Map<String, String> = [
+        haxe.ui.core.MouseEvent.MOUSE_MOVE => "touchmove",
+        haxe.ui.core.MouseEvent.MOUSE_DOWN => "touchstart",
+        haxe.ui.core.MouseEvent.MOUSE_UP => "touchend"
+    ];
+    
+    public static var TOUCH_TO_MOUSE:Map<String, String> = [
+        "touchmove" => haxe.ui.core.MouseEvent.MOUSE_MOVE,
+        "touchstart" => haxe.ui.core.MouseEvent.MOUSE_OUT,
+        "touchend" => haxe.ui.core.MouseEvent.MOUSE_DOWN
     ];
 }

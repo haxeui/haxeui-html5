@@ -483,6 +483,10 @@ class ComponentBase {
             case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
                 MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
                 if (_eventMap.exists(type) == false) {
+                    if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
+                        element.addEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
+                    }
+                    
                     _eventMap.set(type, listener);
                     element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
                 }
@@ -513,6 +517,10 @@ class ComponentBase {
                 MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
                 _eventMap.remove(type);
                 element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
+                if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
+                    element.removeEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
+                }
+                
             case UIEvent.CHANGE:
                 _eventMap.remove(type);
 
@@ -553,7 +561,7 @@ class ComponentBase {
         }
     }
 
-    private function __onMouseEvent(event:js.html.MouseEvent) {
+    private function __onMouseEvent(event:js.html.Event) {
         var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
         if (type != null) {
             try { // set/releaseCapture isnt currently supported in chrome
@@ -569,9 +577,20 @@ class ComponentBase {
             if (fn != null) {
                 var mouseEvent = new MouseEvent(type);
                 mouseEvent._originalEvent = event;
-                mouseEvent.buttonDown = (event.buttons != 0);
-                mouseEvent.screenX = event.pageX / Toolkit.scaleX;
-                mouseEvent.screenY = event.pageY / Toolkit.scaleY;
+                
+                if (Std.is(event, js.html.TouchEvent)) {
+                    var te:js.html.TouchEvent = cast(event, js.html.TouchEvent);
+                    mouseEvent.screenX = te.changedTouches[0].pageX / Toolkit.scaleX;
+                    mouseEvent.screenY = te.changedTouches[0].pageY / Toolkit.scaleY;
+                    mouseEvent.touchEvent = true;
+                    event.preventDefault();
+                } else if (Std.is(event, js.html.MouseEvent)) {
+                    var me:js.html.MouseEvent = cast(event, js.html.MouseEvent);
+                    mouseEvent.buttonDown = (me.buttons != 0);
+                    mouseEvent.screenX = me.pageX / Toolkit.scaleX;
+                    mouseEvent.screenY = me.pageY / Toolkit.scaleY;
+                }
+                
                 fn(mouseEvent);
             }
         }
