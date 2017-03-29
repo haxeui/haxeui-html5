@@ -41,6 +41,31 @@ class HtmlUtils {
         return size;
     }
 
+    private static var _dpi:Float = 0;
+    public static var dpi(get, null):Float;
+    public static function get_dpi():Float {
+        if (_dpi != 0) {
+            return _dpi;
+        }
+
+        var div = Browser.document.createElement("div");
+        div.style.width = "1in";
+        div.style.height = "1in";
+        div.style.position = "absolute";
+        div.style.top = "-99999px"; // position off-screen!
+        div.style.left = "-99999px"; // position off-screen!
+        Browser.document.body.appendChild(div);
+        
+        var devicePixelRatio:Null<Float> = Browser.window.devicePixelRatio;
+        if (devicePixelRatio == null) {
+            devicePixelRatio = 1;
+        }
+        
+        _dpi = div.offsetWidth * devicePixelRatio;
+        HtmlUtils.removeElement(div);
+        return _dpi;
+    }
+    
     public static function swapElements(el1:Element, el2:Element) {
         el2.parentElement.insertBefore(el2, el1);
     }

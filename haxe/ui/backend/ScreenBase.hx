@@ -51,7 +51,7 @@ class ScreenBase {
 
     public var dpi(get, null):Float;
     private function get_dpi():Float {
-        return 72;
+        return HtmlUtils.dpi;
     }
 
     private var __topLevelComponents:Array<Component> = [];
