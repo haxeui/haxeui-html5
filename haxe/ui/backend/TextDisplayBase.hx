@@ -182,9 +182,7 @@ class TextDisplayBase {
 
         div.style.fontFamily = element.style.fontFamily;
         div.style.fontSize = element.style.fontSize;
-        if (_width > 0) {
-            div.style.width = '${HtmlUtils.px(_width)}';
-        }
+        div.style.width = (_width > 0) ? '${HtmlUtils.px(_width)}' : "";
         div.innerHTML = normalizeText(t);
     }
 
