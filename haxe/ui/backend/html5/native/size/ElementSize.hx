@@ -6,10 +6,6 @@ import haxe.ui.layouts.DelegateLayout.DelegateLayoutSize;
 
 @:keep
 class ElementSize extends DelegateLayoutSize {
-    public function new() {
-
-    }
-
     private override function get_width():Float {
         var w:Float = component.element.offsetWidth;
         if (Std.is(component, VSlider)) {

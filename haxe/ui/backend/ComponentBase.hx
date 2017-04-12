@@ -17,6 +17,7 @@ import haxe.ui.core.Component;
 import haxe.ui.core.ImageDisplay;
 import haxe.ui.core.MouseEvent;
 import haxe.ui.core.Screen;
+import haxe.ui.core.ScrollEvent;
 import haxe.ui.core.TextDisplay;
 import haxe.ui.core.TextInput;
 import haxe.ui.core.UIEvent;
@@ -256,7 +257,7 @@ class ComponentBase {
     private function handleClipRect(value:Rectangle) {
         var c:Component = cast(this, Component);
         var parent:Component = c.parentComponent;
-        if (value != null && (parent._nativeElement == null || Std.is(c, Header))) {
+        if (value != null && parent != null && (parent._nativeElement == null || Std.is(c, Header))) {
             element.style.clip = 'rect(${HtmlUtils.px(value.top)},${HtmlUtils.px(value.right)},${HtmlUtils.px(value.bottom)},${HtmlUtils.px(value.left)})';
             if (Std.is(this, Header) && parent.native == true) {
                 if (element.style.position != "fixed") {
@@ -483,6 +484,10 @@ class ComponentBase {
             case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
                 MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
                 if (_eventMap.exists(type) == false) {
+                    if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
+                        element.addEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
+                    }
+                    
                     _eventMap.set(type, listener);
                     element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
                 }
@@ -504,6 +509,9 @@ class ComponentBase {
                 } else {
                     element.addEventListener("mousewheel", __onMouseWheelEvent);
                 }
+            case ScrollEvent.CHANGE:
+                _eventMap.set(type, listener);
+                element.addEventListener("scroll", __onScrollEvent);
         }
     }
 
@@ -513,6 +521,10 @@ class ComponentBase {
                 MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
                 _eventMap.remove(type);
                 element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
+                if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
+                    element.removeEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
+                }
+                
             case UIEvent.CHANGE:
                 _eventMap.remove(type);
 
@@ -553,7 +565,7 @@ class ComponentBase {
         }
     }
 
-    private function __onMouseEvent(event:js.html.MouseEvent) {
+    private function __onMouseEvent(event:js.html.Event) {
         var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
         if (type != null) {
             try { // set/releaseCapture isnt currently supported in chrome
@@ -569,9 +581,24 @@ class ComponentBase {
             if (fn != null) {
                 var mouseEvent = new MouseEvent(type);
                 mouseEvent._originalEvent = event;
-                mouseEvent.buttonDown = (event.buttons != 0);
-                mouseEvent.screenX = event.pageX / Toolkit.scaleX;
-                mouseEvent.screenY = event.pageY / Toolkit.scaleY;
+                
+                var touchEvent = false;
+                try {
+                    touchEvent = Std.is(event, js.html.TouchEvent);
+                } catch (e:Dynamic) { }
+                
+                if (touchEvent == true) {
+                    //var te:js.html.TouchEvent = cast(event, js.html.TouchEvent);
+                    //mouseEvent.screenX = te.changedTouches[0].pageX / Toolkit.scaleX;
+                    //mouseEvent.screenY = te.changedTouches[0].pageY / Toolkit.scaleY;
+                    //mouseEvent.touchEvent = true;
+                } else if (Std.is(event, js.html.MouseEvent)) {
+                    var me:js.html.MouseEvent = cast(event, js.html.MouseEvent);
+                    mouseEvent.buttonDown = (me.buttons != 0);
+                    mouseEvent.screenX = me.pageX / Toolkit.scaleX;
+                    mouseEvent.screenY = me.pageY / Toolkit.scaleY;
+                }
+                
                 fn(mouseEvent);
             }
         }
@@ -595,9 +622,19 @@ class ComponentBase {
         delta = Math.max(-1, Math.min(1, delta));
 
         var mouseEvent = new MouseEvent(MouseEvent.MOUSE_WHEEL);
+        mouseEvent._originalEvent = event;
         mouseEvent.screenX = event.pageX;
         mouseEvent.screenY = event.pageY;
         mouseEvent.delta = delta;
         fn(mouseEvent);
+    }
+    
+    private function __onScrollEvent(event:js.html.MouseScrollEvent) {
+        var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
+        var fn = _eventMap.get(type);
+        if (fn != null) {
+            var scrollEvent:ScrollEvent = new ScrollEvent(ScrollEvent.CHANGE);
+            fn(scrollEvent);
+        }
     }
 }

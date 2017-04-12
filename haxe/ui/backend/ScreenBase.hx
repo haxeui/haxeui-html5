@@ -1,5 +1,6 @@
 package haxe.ui.backend;
 
+import haxe.ui.core.KeyboardEvent;
 import haxe.ui.backend.html5.HtmlUtils;
 import haxe.ui.backend.html5.UserAgent;
 import haxe.ui.containers.dialogs.Dialog;
@@ -11,6 +12,7 @@ import haxe.ui.core.UIEvent;
 import haxe.ui.backend.html5.EventMapper;
 import js.Browser;
 import js.html.Element;
+import js.html.TouchEvent;
 
 class ScreenBase {
     private var _mapping:Map<String, UIEvent->Void>;
@@ -49,7 +51,7 @@ class ScreenBase {
 
     public var dpi(get, null):Float;
     private function get_dpi():Float {
-        return 72;
+        return HtmlUtils.dpi;
     }
 
     private var __topLevelComponents:Array<Component> = [];
@@ -157,19 +159,40 @@ class ScreenBase {
                     var fn = null;
                     fn = function(e) {
                         container.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(MouseEvent.MOUSE_MOVE), fn);
+                        if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
+                            container.removeEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), fn);
+                        }
+                        
                         if (_mapping.exists(type) == false) {
+                            if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
+                                container.addEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
+                            }
+                            
                             _mapping.set(type, listener);
                             container.addEventListener(EventMapper.HAXEUI_TO_DOM.get(MouseEvent.MOUSE_MOVE), __onMouseEvent);
                         }
                     }
                     
                     container.addEventListener(EventMapper.HAXEUI_TO_DOM.get(MouseEvent.MOUSE_MOVE), fn);
+                    if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
+                        container.addEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), fn);
+                    }
                     return;
                 }
                 
                 if (_mapping.exists(type) == false) {
+                    if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
+                        container.addEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
+                    }
+                    
                     _mapping.set(type, listener);
                     container.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
+                }
+
+            case KeyboardEvent.KEY_DOWN | KeyboardEvent.KEY_UP:
+                if (_mapping.exists(type) == false) {
+                    _mapping.set(type, listener);
+                    container.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onKeyEvent);
                 }
         }
     }
@@ -180,13 +203,20 @@ class ScreenBase {
                 MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
                 _mapping.remove(type);
                 container.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
+                if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
+                    container.removeEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
+                }
+
+            case KeyboardEvent.KEY_DOWN | KeyboardEvent.KEY_UP:
+                _mapping.remove(type);
+                container.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onKeyEvent);
         }
     }
 
     //***********************************************************************************************************
     // Event Handlers
     //***********************************************************************************************************
-    private function __onMouseEvent(event:js.html.MouseEvent) {
+    private function __onMouseEvent(event:js.html.Event) {
         event.preventDefault();
 
         var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
@@ -195,10 +225,39 @@ class ScreenBase {
             if (fn != null) {
                 var mouseEvent = new MouseEvent(type);
                 mouseEvent._originalEvent = event;
-                mouseEvent.buttonDown = (event.buttons != 0);
-                mouseEvent.screenX = event.pageX / Toolkit.scaleX;
-                mouseEvent.screenY = event.pageY / Toolkit.scaleY;
+                
+                var touchEvent = false;
+                try {
+                    touchEvent = Std.is(event, js.html.TouchEvent);
+                } catch (e:Dynamic) { }
+                
+                if (touchEvent == true) {
+                    var te:js.html.TouchEvent = cast(event, js.html.TouchEvent);
+                    mouseEvent.screenX = te.changedTouches[0].pageX / Toolkit.scaleX;
+                    mouseEvent.screenY = te.changedTouches[0].pageY / Toolkit.scaleY;
+                    mouseEvent.touchEvent = true;
+                } else if (Std.is(event, js.html.MouseEvent)) {
+                    var me:js.html.MouseEvent = cast(event, js.html.MouseEvent);
+                    mouseEvent.buttonDown = (me.buttons != 0);
+                    mouseEvent.screenX = me.pageX / Toolkit.scaleX;
+                    mouseEvent.screenY = me.pageY / Toolkit.scaleY;
+                }
+                
                 fn(mouseEvent);
+            }
+        }
+    }
+
+    private function __onKeyEvent(event:js.html.KeyboardEvent) {
+        var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
+        if (type != null) {
+            var fn = _mapping.get(type);
+            if (fn != null) {
+                var keyboardEvent = new KeyboardEvent(type);
+                keyboardEvent._originalEvent = event;
+                keyboardEvent.keyCode = event.keyCode;
+                keyboardEvent.shiftKey = event.shiftKey;
+                fn(keyboardEvent);
             }
         }
     }
