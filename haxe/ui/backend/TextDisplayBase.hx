@@ -3,6 +3,7 @@ package haxe.ui.backend;
 import haxe.Timer;
 import haxe.ui.core.Component;
 import haxe.ui.backend.html5.HtmlUtils;
+import haxe.ui.styles.Style;
 import js.Browser;
 import js.html.CSSStyleDeclaration;
 import js.html.DivElement;
@@ -132,31 +133,33 @@ class TextDisplayBase {
         return _textHeight;
     }
 
-    private var _color:Int;
-    public var color(get, set):Int;
-    private function get_color():Int {
-        return _color;
-    }
-    private function set_color(value:Int):Int {
-        if (_color == value) {
-            return value;
+    public function applyStyle(style:Style) {
+        if (style.color != null) {
+            element.style.color = HtmlUtils.color(style.color);
         }
-
-        _color = value;
-        element.style.color = HtmlUtils.color(_color);
-
-        return value;
+        if (style.fontName != null) {
+            applyFontName(style.fontName);
+        }
+        if (style.fontSize != null) {
+            element.style.fontSize = HtmlUtils.px(style.fontSize);
+            _dirty = true;
+            measureText();
+        }
+        if (style.fontBold != null) {
+            element.style.fontWeight = style.fontBold == true ? "bold" : "normal";
+            _dirty = true;
+            measureText();
+        }
+        if (style.textAlign != null) {
+            element.style.textAlign = style.textAlign;
+        }
     }
-
+    
     private static var ADDED_FONTS:Map<String, String> = new Map<String, String>();
 
     private var _rawFontName:String;
     private var _fontName:String;
-    public var fontName(get, set):String;
-    private function get_fontName():String {
-        return _fontName;
-    }
-    private function set_fontName(value:String):String {
+    private function applyFontName(value:String) {
         if (_rawFontName == value) {
             measureText();
             return value;
@@ -227,37 +230,6 @@ class TextDisplayBase {
             return;
         }
 
-    }
-
-    private var _fontSize:Float;
-    public var fontSize(get, set):Null<Float>;
-    private function get_fontSize():Null<Float> {
-        return _fontSize;
-    }
-    private function set_fontSize(value:Null<Float>):Null<Float> {
-        if (_fontSize == value) {
-            return value;
-        }
-        _fontSize = value;
-        element.style.fontSize = value + "px";
-        _dirty = true;
-        measureText();
-        return value;
-    }
-
-    private var _textAlign:String;
-    public var textAlign(get, set):Null<String>;
-    private function get_textAlign():Null<String> {
-        return _textAlign;
-    }
-    private function set_textAlign(value:Null<String>):Null<String> {
-        if (_textAlign == value) {
-            return value;
-        }
-        _textAlign = value;
-        element.style.textAlign = value;
-
-        return value;
     }
 
     private var _multiline:Bool = true;
@@ -347,6 +319,7 @@ class TextDisplayBase {
         //div.style.display = "none";
         div.style.fontFamily = element.style.fontFamily;
         div.style.fontSize = element.style.fontSize;
+        div.style.fontWeight = element.style.fontWeight;
         div.innerHTML = html;
         if (width > 0) {
             div.style.width = '${HtmlUtils.px(width)}';
