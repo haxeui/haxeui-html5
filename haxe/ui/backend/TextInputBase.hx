@@ -37,6 +37,23 @@ class TextInputBase extends TextDisplayBase {
             el.style.position = "absolute";
             el.style.backgroundColor = "inherit";
             el.style.whiteSpace = "nowrap";
+            el.onkeydown = function(e) {
+                if (e.keyCode == 9 || e.which == 9) {
+                    trace("here");
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    e.stopPropagation();
+                    
+                    var ta:TextAreaElement = cast(el, TextAreaElement);
+                    var s = ta.selectionStart;
+                    ta.value = ta.value.substring(0, ta.selectionStart) + "\t" + ta.value.substring(ta.selectionEnd);
+                    ta.selectionEnd = s + 1; 
+                    
+                    
+                    return false;
+                }
+                return true;
+            }
         }
         return el;
     }
