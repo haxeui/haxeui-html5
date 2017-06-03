@@ -54,6 +54,8 @@ class ScreenBase {
         return HtmlUtils.dpi;
     }
 
+    public var title:String;
+
     private var __topLevelComponents:Array<Component> = [];
     public function addComponent(component:Component) {
         container.appendChild(component.element);
@@ -154,7 +156,7 @@ class ScreenBase {
             case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
                 MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
 
-                // chrome sends a spurious mouse move event even if the mouse hasnt moved, lets consume that first    
+                // chrome sends a spurious mouse move event even if the mouse hasnt moved, lets consume that first
                 if (type == MouseEvent.MOUSE_MOVE && _mapping.exists(type) == false && UserAgent.instance.chrome == true) {
                     var fn = null;
                     fn = function(e) {
@@ -162,29 +164,29 @@ class ScreenBase {
                         if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
                             container.removeEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), fn);
                         }
-                        
+
                         if (_mapping.exists(type) == false) {
                             if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
                                 container.addEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
                             }
-                            
+
                             _mapping.set(type, listener);
                             container.addEventListener(EventMapper.HAXEUI_TO_DOM.get(MouseEvent.MOUSE_MOVE), __onMouseEvent);
                         }
                     }
-                    
+
                     container.addEventListener(EventMapper.HAXEUI_TO_DOM.get(MouseEvent.MOUSE_MOVE), fn);
                     if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
                         container.addEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), fn);
                     }
                     return;
                 }
-                
+
                 if (_mapping.exists(type) == false) {
                     if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
                         container.addEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
                     }
-                    
+
                     _mapping.set(type, listener);
                     container.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
                 }
@@ -225,12 +227,12 @@ class ScreenBase {
             if (fn != null) {
                 var mouseEvent = new MouseEvent(type);
                 mouseEvent._originalEvent = event;
-                
+
                 var touchEvent = false;
                 try {
                     touchEvent = Std.is(event, js.html.TouchEvent);
                 } catch (e:Dynamic) { }
-                
+
                 if (touchEvent == true) {
                     var te:js.html.TouchEvent = cast(event, js.html.TouchEvent);
                     mouseEvent.screenX = te.changedTouches[0].pageX / Toolkit.scaleX;
@@ -242,7 +244,7 @@ class ScreenBase {
                     mouseEvent.screenX = me.pageX / Toolkit.scaleX;
                     mouseEvent.screenY = me.pageY / Toolkit.scaleY;
                 }
-                
+
                 fn(mouseEvent);
             }
         }
