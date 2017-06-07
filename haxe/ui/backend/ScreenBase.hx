@@ -54,7 +54,14 @@ class ScreenBase {
         return HtmlUtils.dpi;
     }
 
-    public var title:String;
+    public var title(get,set):String;
+    private inline function get_title():String {
+        return js.Browser.document.title;
+    }
+    private inline function set_title(s:String):String {
+        js.Browser.document.title = s;
+        return s;
+    }
 
     private var __topLevelComponents:Array<Component> = [];
     public function addComponent(component:Component) {
