@@ -3,6 +3,7 @@ package haxe.ui.backend;
 import haxe.Timer;
 import haxe.ui.core.Component;
 import haxe.ui.backend.html5.HtmlUtils;
+import haxe.ui.styles.Style;
 import js.Browser;
 import js.html.CSSStyleDeclaration;
 import js.html.Element;
@@ -27,11 +28,8 @@ class TextDisplayBase {
     private var _height:Float = -1;
     private var _textWidth:Float = 0;
     private var _textHeight:Float = 0;
-    private var _color:Int;
     private var _rawFontName:String;
-    private var _fontName:String;
-    private var _fontSize:Float;
-    private var _textAlign:String;
+    private var _style:Style;
     private var _multiline:Bool = true;
     private var _wordWrap:Bool = false;
 
@@ -68,7 +66,6 @@ class TextDisplayBase {
 
     private function validateStyle():Bool {
         var measureTextRequired:Bool = false;
-
         if (_wordWrap == true && element.style.whiteSpace != null) {
             element.style.removeProperty("white-space");
             measureTextRequired = true;
@@ -77,43 +74,44 @@ class TextDisplayBase {
             measureTextRequired = true;
         }
 
-        if (element.style.textAlign != _textAlign) {
-            element.style.textAlign = _textAlign;
+        if (element.style.textAlign != _style.textAlign) {
+            element.style.textAlign = _style.textAlign;
         }
 
-        var fontSizeValue = HtmlUtils.px(_fontSize);
+        var fontSizeValue = HtmlUtils.px(_style.fontSize);
         if (element.style.fontSize != fontSizeValue) {
             element.style.fontSize = fontSizeValue;
             measureTextRequired = true;
         }
 
-        var colorValue = HtmlUtils.color(_color);
+        var colorValue = HtmlUtils.color(_style.color);
         if (element.style.color != colorValue) {
             element.style.color = colorValue;
         }
 
-        if (_fontName != _rawFontName) {
+        var fontName:String = _style.fontName;
+        if (fontName != _rawFontName) {
             var customFont:Bool = false;
-            if (_fontName.indexOf(".") != -1) {
+            if (fontName.indexOf(".") != -1) {
                 customFont = true;
-                var cssName = _fontName.split("/").pop();
+                var cssName = fontName.split("/").pop();
                 var n = cssName.lastIndexOf(".");
                 if (n != -1) {
                     cssName = cssName.substring(0, n);
                 }
-                if (ADDED_FONTS.exists(_fontName) == false) {
+                if (ADDED_FONTS.exists(fontName) == false) {
                     var css = '@font-face { font-family: "${cssName}"; src: url("${_fontName}"); }';
                     var style = Browser.document.createElement("style");
                     Browser.document.head.appendChild(style);
                     style.innerHTML = css;
-                    ADDED_FONTS.set(_fontName, cssName);
+                    ADDED_FONTS.set(fontName, cssName);
                 }
 
-                _fontName = cssName;
+                fontName = cssName;
             }
 
-            if (_rawFontName != _fontName) {
-                _rawFontName = _fontName;
+            if (_rawFontName != fontName) {
+                _rawFontName = fontName;
 
                 element.style.fontFamily = _rawFontName;
                 parentComponent.invalidateLayout();
