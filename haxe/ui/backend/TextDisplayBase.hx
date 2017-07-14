@@ -29,7 +29,7 @@ class TextDisplayBase {
     private var _textWidth:Float = 0;
     private var _textHeight:Float = 0;
     private var _rawFontName:String;
-    private var _style:Style;
+    private var _textStyle:Style;
     private var _multiline:Bool = true;
     private var _wordWrap:Bool = false;
 
@@ -74,22 +74,22 @@ class TextDisplayBase {
             measureTextRequired = true;
         }
 
-        if (element.style.textAlign != _style.textAlign) {
-            element.style.textAlign = _style.textAlign;
+        if (element.style.textAlign != _textStyle.textAlign) {
+            element.style.textAlign = _textStyle.textAlign;
         }
 
-        var fontSizeValue = HtmlUtils.px(_style.fontSize);
+        var fontSizeValue = HtmlUtils.px(_textStyle.fontSize);
         if (element.style.fontSize != fontSizeValue) {
             element.style.fontSize = fontSizeValue;
             measureTextRequired = true;
         }
 
-        var colorValue = HtmlUtils.color(_style.color);
+        var colorValue = HtmlUtils.color(_textStyle.color);
         if (element.style.color != colorValue) {
             element.style.color = colorValue;
         }
 
-        var fontName:String = _style.fontName;
+        var fontName:String = _textStyle.fontName;
         if (fontName != _rawFontName) {
             var customFont:Bool = false;
             if (fontName.indexOf(".") != -1) {
@@ -100,7 +100,7 @@ class TextDisplayBase {
                     cssName = cssName.substring(0, n);
                 }
                 if (ADDED_FONTS.exists(fontName) == false) {
-                    var css = '@font-face { font-family: "${cssName}"; src: url("${_fontName}"); }';
+                    var css = '@font-face { font-family: "${cssName}"; src: url("${fontName}"); }';
                     var style = Browser.document.createElement("style");
                     Browser.document.head.appendChild(style);
                     style.innerHTML = css;
