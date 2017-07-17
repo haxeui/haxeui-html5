@@ -74,58 +74,60 @@ class TextDisplayBase {
             measureTextRequired = true;
         }
 
-        if (element.style.textAlign != _textStyle.textAlign) {
-            element.style.textAlign = _textStyle.textAlign;
-        }
-
-        var fontSizeValue = HtmlUtils.px(_textStyle.fontSize);
-        if (element.style.fontSize != fontSizeValue) {
-            element.style.fontSize = fontSizeValue;
-            measureTextRequired = true;
-        }
-
-        var colorValue = HtmlUtils.color(_textStyle.color);
-        if (element.style.color != colorValue) {
-            element.style.color = colorValue;
-        }
-
-        var fontName:String = _textStyle.fontName;
-        if (fontName != _rawFontName) {
-            var customFont:Bool = false;
-            if (fontName.indexOf(".") != -1) {
-                customFont = true;
-                var cssName = fontName.split("/").pop();
-                var n = cssName.lastIndexOf(".");
-                if (n != -1) {
-                    cssName = cssName.substring(0, n);
-                }
-                if (ADDED_FONTS.exists(fontName) == false) {
-                    var css = '@font-face { font-family: "${cssName}"; src: url("${fontName}"); }';
-                    var style = Browser.document.createElement("style");
-                    Browser.document.head.appendChild(style);
-                    style.innerHTML = css;
-                    ADDED_FONTS.set(fontName, cssName);
-                }
-
-                fontName = cssName;
+        if (_textStyle != null) {
+            if (element.style.textAlign != _textStyle.textAlign) {
+                element.style.textAlign = _textStyle.textAlign;
             }
 
-            if (_rawFontName != fontName) {
-                _rawFontName = fontName;
+            var fontSizeValue = HtmlUtils.px(_textStyle.fontSize);
+            if (element.style.fontSize != fontSizeValue) {
+                element.style.fontSize = fontSizeValue;
+                measureTextRequired = true;
+            }
 
-                element.style.fontFamily = _rawFontName;
-                parentComponent.invalidateLayout();
+            var colorValue = HtmlUtils.color(_textStyle.color);
+            if (element.style.color != colorValue) {
+                element.style.color = colorValue;
+            }
 
-                if (customFont == true) {
-                    if (_checkSizeTimer == null) {
-                        _originalSize = element.clientWidth;
-                        _checkSizeTimer = new Timer(10);
-                        _checkSizeTimer.run = checkSize;
+            var fontName:String = _textStyle.fontName;
+            if (fontName != _rawFontName) {
+                var customFont:Bool = false;
+                if (fontName.indexOf(".") != -1) {
+                    customFont = true;
+                    var cssName = fontName.split("/").pop();
+                    var n = cssName.lastIndexOf(".");
+                    if (n != -1) {
+                        cssName = cssName.substring(0, n);
+                    }
+                    if (ADDED_FONTS.exists(fontName) == false) {
+                        var css = '@font-face { font-family: "${cssName}"; src: url("${fontName}"); }';
+                        var style = Browser.document.createElement("style");
+                        Browser.document.head.appendChild(style);
+                        style.innerHTML = css;
+                        ADDED_FONTS.set(fontName, cssName);
+                    }
+
+                    fontName = cssName;
+                }
+
+                if (_rawFontName != fontName) {
+                    _rawFontName = fontName;
+
+                    element.style.fontFamily = _rawFontName;
+                    parentComponent.invalidateLayout();
+
+                    if (customFont == true) {
+                        if (_checkSizeTimer == null) {
+                            _originalSize = element.clientWidth;
+                            _checkSizeTimer = new Timer(10);
+                            _checkSizeTimer.run = checkSize;
+                        }
                     }
                 }
-            }
 
-            measureTextRequired = true;
+                measureTextRequired = true;
+            }
         }
 
         return measureTextRequired;
