@@ -5,6 +5,8 @@ import haxe.ui.backend.html5.HtmlUtils;
 import js.Browser;
 
 class PlatformBase {
+    private var _systemLocale:String = Browser.navigator.language;
+
     public function getMetric(id:String):Float {
         switch (id) {
             case Platform.METRIC_VSCROLL_WIDTH:
