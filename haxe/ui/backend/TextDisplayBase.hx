@@ -135,8 +135,8 @@ class TextDisplayBase {
 
     private function validatePosition() {
         var style:CSSStyleDeclaration = element.style;
-        style.left = HtmlUtils.px(_left - 1);
-        style.top = HtmlUtils.px(_top - 1);
+        style.left = HtmlUtils.px(_left);
+        style.top = HtmlUtils.px(_top);
     }
 
     private function validateDisplay() {
