@@ -55,12 +55,18 @@ class HtmlUtils {
         }
     }
 
-    public static function measureText(text:String, addWidth:Float = 0, addHeight:Float = 0):Size {
+    public static function measureText(text:String, addWidth:Float = 0, addHeight:Float = 0, fontSize:Float = -1, fontName:String = null):Size {
         if (DIV_HELPER == null) {
             createDivHelper();
         }
 
         DIV_HELPER.innerHTML = text;
+        if (fontSize > 0) {
+            DIV_HELPER.style.fontSize = px(fontSize);
+        }
+        if (fontName != null) {
+            DIV_HELPER.style.fontFamily = fontName;
+        }
 
         return new Size(DIV_HELPER.clientWidth + addWidth, DIV_HELPER.clientHeight + addHeight);
     }
