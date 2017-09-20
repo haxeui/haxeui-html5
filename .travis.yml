@@ -1,5 +1,6 @@
 sudo: false
 language: haxe
+dist: trusty
 
 notifications:
   webhooks:
@@ -13,7 +14,7 @@ os:
   - linux
 
 haxe:
-  - "3.2.1"
+  - "3.4.2"
   - development
 
 before_install:
