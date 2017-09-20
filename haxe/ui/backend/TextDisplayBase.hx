@@ -31,7 +31,7 @@ class TextDisplayBase {
     private var _rawFontName:String;
     private var _textStyle:Style;
     private var _multiline:Bool = true;
-    private var _wordWrap:Bool = false;
+    private var _wordWrap:Bool = true;
 
     private var _checkSizeTimer:Timer;
     private var _checkSizeCounter:Int = 0;
