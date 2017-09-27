@@ -13,7 +13,9 @@ class AppBase {
     }
 
     private function init(onReady:Void->Void, onEnd:Void->Void = null) {
-        onReady();
+        Browser.window.onload = function(e) {
+            onReady();
+        }
     }
 
     private function getToolkitInit():Dynamic {
