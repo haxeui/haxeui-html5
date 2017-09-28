@@ -16,7 +16,6 @@ class TextInputBase extends TextDisplayBase {
     private var _hscrollPos:Float = 0;
     private var _vscrollPos:Float = 0;
 
-    @:access(haxe.ui.components.TextArea)
     private function onKeyUp(e) {
         if (Std.is(parentComponent, TextArea)) {
             _text = cast(element, TextAreaElement).value;
