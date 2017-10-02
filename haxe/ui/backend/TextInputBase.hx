@@ -16,17 +16,8 @@ class TextInputBase extends TextDisplayBase {
     private var _hscrollPos:Float = 0;
     private var _vscrollPos:Float = 0;
 
-    @:access(haxe.ui.components.TextArea)
-    private function onKeyDown(e) {
-        if (Std.is(parentComponent, TextArea)) {
-            cast(parentComponent, TextArea).checkScrolls();
-        }
-    }
-
-    @:access(haxe.ui.components.TextArea)
     private function onKeyUp(e) {
         if (Std.is(parentComponent, TextArea)) {
-            cast(parentComponent, TextArea).checkScrolls();
             _text = cast(element, TextAreaElement).value;
         } else {
             _text = cast(element, InputElement).value;
@@ -58,7 +49,6 @@ class TextInputBase extends TextDisplayBase {
             element.parentElement.appendChild(newElement);
             HtmlUtils.removeElement(element);
 
-            element.removeEventListener("keydown", onKeyDown);
             element.removeEventListener("keyup", onKeyUp);
 
             element = newElement;
@@ -142,7 +132,6 @@ class TextInputBase extends TextDisplayBase {
             }
         }
 
-        el.addEventListener("keydown", onKeyDown);
         el.addEventListener("keyup", onKeyUp);
 
         return el;
