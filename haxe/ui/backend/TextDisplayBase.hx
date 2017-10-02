@@ -1,6 +1,7 @@
 package haxe.ui.backend;
 
 import haxe.Timer;
+import haxe.ui.backend.html5.util.FontDetect;
 import haxe.ui.core.Component;
 import haxe.ui.backend.html5.HtmlUtils;
 import haxe.ui.styles.Style;
@@ -32,28 +33,6 @@ class TextDisplayBase {
     private var _textStyle:Style;
     private var _multiline:Bool = true;
     private var _wordWrap:Bool = true;
-
-    private var _checkSizeTimer:Timer;
-    private var _checkSizeCounter:Int = 0;
-    private var _originalSize:Float = 0;
-    private function checkSize() {
-        if (element.clientWidth != _originalSize) {
-            _checkSizeCounter = 0;
-            //parentComponent.invalidate();
-            _checkSizeTimer.stop();
-            _checkSizeTimer = null;
-            return;
-        }
-
-        _checkSizeCounter++;
-        if (_checkSizeCounter >= 50) {
-            _checkSizeCounter = 0;
-            //parentComponent.invalidate();
-            _checkSizeTimer.stop();
-            _checkSizeTimer = null;
-            return;
-        }
-    }
 
     //***********************************************************************************************************
     // Validation functions
@@ -113,17 +92,10 @@ class TextDisplayBase {
 
                 if (_rawFontName != fontName) {
                     _rawFontName = fontName;
-
-                    element.style.fontFamily = _rawFontName;
-                    parentComponent.invalidateLayout();
-
-                    if (customFont == true) {
-                        if (_checkSizeTimer == null) {
-                            _originalSize = element.clientWidth;
-                            _checkSizeTimer = new Timer(10);
-                            _checkSizeTimer.run = checkSize;
-                        }
-                    }
+                    FontDetect.onFontLoaded(fontName, function(f) {
+                        element.style.fontFamily = _rawFontName;
+                        parentComponent.invalidateLayout();
+                    });
                 }
 
                 measureTextRequired = true;

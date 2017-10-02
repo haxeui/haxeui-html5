@@ -13,7 +13,7 @@ class AppBase {
     }
 
     private function init(onReady:Void->Void, onEnd:Void->Void = null) {
-        Browser.window.onload = function(e) {
+        Browser.document.body.onload = function(e) {
             onReady();
         }
     }
