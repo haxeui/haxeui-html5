@@ -1,9 +1,8 @@
 package haxe.ui.backend;
 
-import haxe.Timer;
-import haxe.ui.backend.html5.util.FontDetect;
-import haxe.ui.core.Component;
+import haxe.ui.assets.FontInfo;
 import haxe.ui.backend.html5.HtmlUtils;
+import haxe.ui.core.Component;
 import haxe.ui.styles.Style;
 import js.Browser;
 import js.html.CSSStyleDeclaration;
@@ -34,6 +33,8 @@ class TextDisplayBase {
     private var _multiline:Bool = true;
     private var _wordWrap:Bool = true;
 
+    private var _fontInfo:FontInfo;
+    
     //***********************************************************************************************************
     // Validation functions
     //***********************************************************************************************************
@@ -69,36 +70,11 @@ class TextDisplayBase {
                 element.style.color = colorValue;
             }
 
-            var fontName:String = _textStyle.fontName;
-            if (fontName != _rawFontName) {
-                var customFont:Bool = false;
-                if (fontName.indexOf(".") != -1) {
-                    customFont = true;
-                    var cssName = fontName.split("/").pop();
-                    var n = cssName.lastIndexOf(".");
-                    if (n != -1) {
-                        cssName = cssName.substring(0, n);
-                    }
-                    if (ADDED_FONTS.exists(fontName) == false) {
-                        var css = '@font-face { font-family: "${cssName}"; src: url("${fontName}"); }';
-                        var style = Browser.document.createElement("style");
-                        Browser.document.head.appendChild(style);
-                        style.innerHTML = css;
-                        ADDED_FONTS.set(fontName, cssName);
-                    }
-
-                    fontName = cssName;
-                }
-
-                if (_rawFontName != fontName) {
-                    _rawFontName = fontName;
-                    FontDetect.onFontLoaded(fontName, function(f) {
-                        element.style.fontFamily = _rawFontName;
-                        parentComponent.invalidateLayout();
-                    });
-                }
-
+            if (_fontInfo != null && _fontInfo.data != _rawFontName) {
+                element.style.fontFamily = _fontInfo.data;
+                _rawFontName = _fontInfo.data;
                 measureTextRequired = true;
+                parentComponent.invalidateLayout();
             }
         }
 
