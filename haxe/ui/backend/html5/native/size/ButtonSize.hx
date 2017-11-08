@@ -7,7 +7,7 @@ import js.html.ImageElement;
 @:keep
 class ButtonSize extends DelegateLayoutSize {
     private override function get_width():Float {
-        var size = HtmlUtils.measureText(component.text);
+        var size = HtmlUtils.measureText(component.text, 0, 0, component.style.fontSize, component.style.fontName);
 
         var iconCX:Float = getIconWidth();
         var cx:Float = size.width;
@@ -24,7 +24,7 @@ class ButtonSize extends DelegateLayoutSize {
     }
 
     private override function get_height():Float {
-        var size = HtmlUtils.measureText(component.text);
+        var size = HtmlUtils.measureText(component.text, 0, 0, component.style.fontSize, component.style.fontName);
 
         var iconCY:Float = getIconHeight();
         var cy:Float = size.height;

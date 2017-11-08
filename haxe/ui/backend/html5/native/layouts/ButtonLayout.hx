@@ -16,7 +16,7 @@ class ButtonLayout extends DefaultLayout {
     public override function calcAutoSize(exclusions:Array<Component> = null):Size {
         //var size:Size = super.calcAutoSize();
 
-        var textSize:Size = HtmlUtils.measureText(component.text);
+        var textSize:Size = HtmlUtils.measureText(component.text, 0, 0, component.style.fontSize, component.style.fontName);
 
         var iconCX:Float = getIconWidth();
         var iconCY:Float = getIconHeight();
