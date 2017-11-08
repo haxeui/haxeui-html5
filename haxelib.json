@@ -1,0 +1,13 @@
+{
+    "name": "haxeui-core",
+    "url": "https://github.com/haxeui/haxeui-html5",
+    "license": "MIT",
+    "tags": ["ui", "gui", "html5"],
+    "description": "The HTML5 backend of the HaxeUI framework",
+    "version": "0.0.1",
+    "releasenote": "Initial release",
+    "contributors": ["haxeui", "ianharrigan", "aW4KeNiNG", "ibilon"],
+    "dependencies": {
+        "haxeui-core": ""
+    }
+}
