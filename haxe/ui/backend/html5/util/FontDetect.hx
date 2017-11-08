@@ -75,7 +75,7 @@ class FontDetect {
         // it closes the interval & calls onFail if there is one.
         
         var utStart = Date.now().getTime();
-        var idInterval;
+        var idInterval = 0;
         idInterval = Browser.window.setInterval(function() {
             if (isFontLoaded(cssFontName)) {
                 Browser.window.clearInterval(idInterval);
