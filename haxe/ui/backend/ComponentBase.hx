@@ -1,5 +1,6 @@
 package haxe.ui.backend;
 
+import haxe.ui.components.Button;
 import haxe.ui.components.TextArea;
 import haxe.ui.components.Image;
 import haxe.ui.core.KeyboardEvent;
@@ -422,6 +423,10 @@ class ComponentBase {
 
         if (style.fontSize != null) {
             element.style.fontSize = HtmlUtils.px(style.fontSize);
+        }
+        
+        if (style.color != null) {
+            element.style.color = HtmlUtils.color(style.color);
         }
     }
 

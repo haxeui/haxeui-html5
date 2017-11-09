@@ -1,4 +1,4 @@
-.button, .label {
+.button, .label, .textarea, .textfield {
     font-name: "Arial";
     font-size: 13px;
 }
