@@ -391,15 +391,15 @@ class ComponentBase {
         setCursor(style.cursor);
 
         if (style.filter != null) {
-            if (style.filter[0] == "drop-shadow") {
-                var dropShadow:DropShadow = FilterParser.parseDropShadow(style.filter);
+            if (Std.is(style.filter[0], DropShadow)) {
+                var dropShadow:DropShadow = cast style.filter[0];
                 if (dropShadow.inner == false) {
                     element.style.boxShadow = '${dropShadow.distance}px ${dropShadow.distance}px ${dropShadow.blurX}px 0px ${HtmlUtils.rgba(dropShadow.color, dropShadow.alpha)}';
                 } else {
                     element.style.boxShadow = 'inset ${dropShadow.distance}px ${dropShadow.distance}px ${dropShadow.blurX}px 0px ${HtmlUtils.rgba(dropShadow.color, dropShadow.alpha)}';
                 }
-            } else if (style.filter[0] == "blur") {
-                var blur:Blur = FilterParser.parseBlur(style.filter);
+            } else if (Std.is(style.filter[0], Blur)) {
+                var blur:Blur = cast style.filter[0];
                 element.style.setProperty("-webkit-filter", 'blur(${blur.amount}px)');
                 element.style.setProperty("-moz-filter", 'blur(${blur.amount}px)');
                 element.style.setProperty("-o-filter", 'blur(${blur.amount}px)');
