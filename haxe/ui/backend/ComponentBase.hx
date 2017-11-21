@@ -1,6 +1,7 @@
 package haxe.ui.backend;
 
 import haxe.ui.components.Button;
+import haxe.ui.components.Label;
 import haxe.ui.components.TextArea;
 import haxe.ui.components.Image;
 import haxe.ui.core.KeyboardEvent;
@@ -252,6 +253,9 @@ class ComponentBase {
     private function handleReady() {
         if (cast(this, Component).id != null) {
             element.id = cast(this, Component).id;
+        }
+        if (Std.is(this, Label)) { // TODO: is this hacky?? 
+            element.style.setProperty("pointer-events", "none");
         }
     }
 
@@ -586,7 +590,7 @@ class ComponentBase {
             if (fn != null) {
                 var mouseEvent = new MouseEvent(type);
                 mouseEvent._originalEvent = event;
-                
+trace(type);                
                 var touchEvent = false;
                 try {
                     touchEvent = Std.is(event, js.html.TouchEvent);
