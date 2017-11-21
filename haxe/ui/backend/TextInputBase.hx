@@ -52,6 +52,7 @@ class TextInputBase extends TextDisplayBase {
             element.removeEventListener("keyup", onKeyUp);
 
             element = newElement;
+            validateData();
 
             measureTextRequired = true;
         }
