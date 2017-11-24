@@ -19,6 +19,7 @@ class NativeElement {
     public function create():Element {
         var nodeType:String = getConfigValue("nodeType", "div");
         var el:Element = Browser.document.createElement(nodeType);
+        el.style.boxSizing = "border-box";
 
         var type:String = getConfigValue("type");
         if (type != null) {

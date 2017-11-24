@@ -129,6 +129,7 @@ class ComponentBase {
                     element.style.setProperty("-moz-user-select", "none");
                     element.style.setProperty("-ms-user-select", "none");
                     element.style.setProperty("user-select", "none");
+                    element.style.boxSizing = "border-box";
                     element.style.position = "absolute";
                 }
 
@@ -147,6 +148,7 @@ class ComponentBase {
             newElement.style.setProperty("-moz-user-select", "none");
             newElement.style.setProperty("-ms-user-select", "none");
             newElement.style.setProperty("user-select", "none");
+            newElement.style.boxSizing = "border-box";
             newElement.style.position = "absolute";
 
             if (Std.is(this, Image)) {

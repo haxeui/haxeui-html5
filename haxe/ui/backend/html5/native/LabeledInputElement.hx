@@ -27,7 +27,11 @@ class LabeledInputElement extends NativeElement {
         label.appendChild(input);
 
         if (type == "checkbox" || type == "radio") {
-            input.addEventListener("change", onChange);
+            input.addEventListener("change", function(e) {
+                e.preventDefault();
+                onChange(e);
+                return false;
+            });
         }
 
         return label;
