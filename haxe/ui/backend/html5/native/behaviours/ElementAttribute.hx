@@ -42,9 +42,7 @@ class ElementAttribute extends Behaviour {
             } else if (name == "value") {
                 input.value = value.toString();
             }
-        }
-
-        if (el.nodeName == "PROGRESS" && value != null) {
+        } else if (el.nodeName == "PROGRESS" && value != null) {
             var progress:ProgressElement = cast el;
             if (name == "min") {
                 //progress.min = value;
@@ -53,6 +51,8 @@ class ElementAttribute extends Behaviour {
             } else if (name == "value") {
                 progress.value = value;
             }
+        } else {
+            el.setAttribute(name, value);
         }
 
         var removeIfNegative:Bool = getConfigValueBool("removeIfNegative", false);
@@ -60,9 +60,50 @@ class ElementAttribute extends Behaviour {
             el.removeAttribute(name);
             return;
         }
-
-        if (value != null) {
-            el.setAttribute(name, value);
+    }
+    
+    public override function get():Variant {
+        var el:Element = _component.element;
+        var name:String = getConfigValue("name");
+        if (name == null) {
+            return null;
         }
+
+        var child:String = getConfigValue("child");
+        if (child != null) {
+            var list = el.getElementsByTagName(child);
+            if (list.length == 0) {
+                return null;
+            }
+            el = list.item(0);
+        }
+        
+        var value:Variant = null;
+        
+        if (el.nodeName == "INPUT") {
+            var input:InputElement = cast el;
+            if (name == "checked") {
+                value = input.checked;
+            } else if (name == "min") {
+                value = input.min;
+            } else if (name == "max") {
+                value = input.max;
+            } else if (name == "value") {
+                value = input.value;
+            }
+        } else if (el.nodeName == "PROGRESS") {
+            var progress:ProgressElement = cast el;
+            if (name == "min") {
+                //value = progress.min;
+            } else if (name == "max") {
+                value = progress.max;
+            } else if (name == "value") {
+                value = progress.value;
+            }
+        } else {
+            value = el.getAttribute(name);
+        }
+        
+        return value;
     }
 }
