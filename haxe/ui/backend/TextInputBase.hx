@@ -2,19 +2,18 @@ package haxe.ui.backend;
 
 import haxe.ui.backend.html5.HtmlUtils;
 import haxe.ui.components.TextArea;
+import haxe.ui.core.TextInput.TextInputData;
 import js.Browser;
 import js.html.Element;
 import js.html.InputElement;
 import js.html.TextAreaElement;
 
 class TextInputBase extends TextDisplayBase {
+    private var _inputData:TextInputData = new TextInputData();
+    
     public function new() {
         super();
     }
-
-    private var _password:Bool = false;
-    private var _hscrollPos:Float = 0;
-    private var _vscrollPos:Float = 0;
 
     private function onKeyUp(e) {
         if (Std.is(parentComponent, TextArea)) {
@@ -24,6 +23,14 @@ class TextInputBase extends TextDisplayBase {
         }
     }
 
+    private function onScroll(e) {
+        _inputData.hscrollPos = element.scrollLeft;
+        _inputData.vscrollPos = element.scrollTop;
+        if (_inputData.onScrollCallback != null) {
+            _inputData.onScrollCallback();
+        }
+    }
+    
     //***********************************************************************************************************
     // Validation functions
     //***********************************************************************************************************
@@ -37,13 +44,23 @@ class TextInputBase extends TextDisplayBase {
                 cast(element, TextAreaElement).value = html;
             }
         }
+        
+        var hscrollValue = Std.int(_inputData.hscrollPos);
+        if (element.scrollLeft != hscrollValue) {
+            element.scrollLeft = hscrollValue;
+        }
+
+        var vscrollValue = Std.int(_inputData.vscrollPos);
+        if (element.scrollTop != vscrollValue) {
+            element.scrollTop = vscrollValue;
+        }
     }
 
     private override function validateStyle():Bool {
         var measureTextRequired:Bool = false;
 
-        if ((_multiline == false && Std.is(element, InputElement) == false)
-            || (_multiline == true && Std.is(element, TextAreaElement) == false)) {
+        if ((_displayData.multiline == false && Std.is(element, InputElement) == false)
+            || (_displayData.multiline == true && Std.is(element, TextAreaElement) == false)) {
 
             var newElement:Element = createElement();
             element.parentElement.appendChild(newElement);
@@ -59,22 +76,11 @@ class TextInputBase extends TextDisplayBase {
 
         if (Std.is(element, InputElement)) {
             var inputElement:InputElement = cast element;
-
-            if (_password == true && inputElement.type != "password") {
+            if (_inputData.password == true && inputElement.type != "password") {
                 inputElement.type = "password";
-            } else if (_password == false && inputElement.type != "") {
+            } else if (_inputData.password == false && inputElement.type != "") {
                 inputElement.type = "";
             }
-        }
-
-        var hscrollValue = Std.int(_hscrollPos);
-        if (element.scrollLeft != hscrollValue) {
-            element.scrollLeft = hscrollValue;
-        }
-
-        var vscrollValue = Std.int(_vscrollPos);
-        if (element.scrollTop != vscrollValue) {
-            element.scrollTop = vscrollValue;
         }
 
         return super.validateStyle() || measureTextRequired;
@@ -87,6 +93,12 @@ class TextInputBase extends TextDisplayBase {
         } else {
             super.measureText();
         }
+        
+        _inputData.hscrollMax = _textWidth - _width;
+        _inputData.hscrollPageSize = (_width * _inputData.hscrollMax) / _textWidth;
+        
+        _inputData.vscrollMax = _textHeight - _height;
+        _inputData.vscrollPageSize = (_height * _inputData.vscrollMax) / _textHeight;
     }
 
     //***********************************************************************************************************
@@ -95,7 +107,7 @@ class TextInputBase extends TextDisplayBase {
 
     private override function createElement():Element {
         var el:Element = null;
-        if (_multiline == false) {
+        if (_displayData.multiline == false) {
             el = Browser.document.createInputElement();
             el.style.border = "none";
             el.style.outline = "none";
@@ -110,7 +122,7 @@ class TextInputBase extends TextDisplayBase {
             el.style.resize = "none";
             el.style.outline = "none";
             el.style.lineHeight = "1.4";
-            el.style.padding = "5px";
+            //el.style.padding = "5px";
             el.style.overflow = "hidden";
             el.style.cursor = "initial";
             el.style.position = "absolute";
@@ -134,6 +146,7 @@ class TextInputBase extends TextDisplayBase {
         }
 
         el.addEventListener("keyup", onKeyUp);
+        el.addEventListener("scroll", onScroll);
 
         return el;
     }

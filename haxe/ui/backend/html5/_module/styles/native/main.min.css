@@ -1,3 +1,4 @@
+.textfield:native{background-color:red!important;}
 .button{}
 .tabbar-button{native:false;}
 .tabbar-button{border-radius:0px;background:#EDEDED #E6E6E6;padding:6px;vertical-align:bottom;border:1px solid #ABABAB;}
