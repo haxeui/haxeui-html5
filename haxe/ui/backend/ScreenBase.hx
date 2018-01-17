@@ -29,12 +29,12 @@ class ScreenBase {
         */
     }
 
-    private var _options:Dynamic;
-    public var options(get, set):Dynamic;
-    private function get_options():Dynamic {
+    private var _options:ToolkitOptions;
+    public var options(get, set):ToolkitOptions;
+    private function get_options():ToolkitOptions {
         return _options;
     }
-    private function set_options(value:Dynamic):Dynamic {
+    private function set_options(value:ToolkitOptions):ToolkitOptions {
         _options = value;
         return value;
     }
@@ -109,7 +109,7 @@ class ScreenBase {
 
     private var container(get, null):Element;
     private function get_container():Element {
-        var c = null;
+        var c : Element = null;
         if (options == null || options.container == null) {
             c = Browser.document.body;
         } else {
