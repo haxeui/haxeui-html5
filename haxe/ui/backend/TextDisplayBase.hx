@@ -3,20 +3,21 @@ package haxe.ui.backend;
 import haxe.ui.assets.FontInfo;
 import haxe.ui.backend.html5.HtmlUtils;
 import haxe.ui.core.Component;
+import haxe.ui.core.TextDisplay.TextDisplayData;
 import haxe.ui.styles.Style;
 import js.Browser;
 import js.html.CSSStyleDeclaration;
 import js.html.Element;
 
 class TextDisplayBase {
-    private static var ADDED_FONTS:Map<String, String> = new Map<String, String>();
+    private var _displayData:TextDisplayData = new TextDisplayData();
 
     public var element:Element;
 
     public var parentComponent:Component;
 
     public function new() {
-        _multiline = false;
+        _displayData.multiline = false;
 
         element = createElement();
     }
@@ -30,8 +31,6 @@ class TextDisplayBase {
     private var _textHeight:Float = 0;
     private var _rawFontName:String;
     private var _textStyle:Style;
-    private var _multiline:Bool = true;
-    private var _wordWrap:Bool = true;
 
     private var _fontInfo:FontInfo;
     
@@ -46,10 +45,11 @@ class TextDisplayBase {
 
     private function validateStyle():Bool {
         var measureTextRequired:Bool = false;
-        if (_wordWrap == true && element.style.whiteSpace != null) {
-            element.style.removeProperty("white-space");
+        
+        if (_displayData.wordWrap == true && element.style.whiteSpace != null) {
+            element.style.whiteSpace = "normal";
             measureTextRequired = true;
-        } else if (_wordWrap == false && element.style.whiteSpace != "nowrap") {
+        } else if (_displayData.wordWrap == false && element.style.whiteSpace != "nowrap") {
             element.style.whiteSpace = "nowrap";
             measureTextRequired = true;
         }

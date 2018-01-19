@@ -380,7 +380,19 @@ class ComponentBase {
         return child;
     }
 
+    private function handleAddComponentAt(child:Component, index:Int):Component {
+        handleAddComponent(child);
+        handleSetComponentIndex(child, index);
+        return child;
+    }
+
     private function handleRemoveComponent(child:Component, dispose:Bool = true):Component {
+        HtmlUtils.removeElement(child.element);
+        return child;
+    }
+
+    private function handleRemoveComponentAt(index:Int, dispose:Bool = true):Component {
+        var child = cast(this, Component)._children[index];
         HtmlUtils.removeElement(child.element);
         return child;
     }
