@@ -589,9 +589,9 @@ class ComponentBase {
         if (type != null) {
             try { // set/releaseCapture isnt currently supported in chrome
                 if (type == MouseEvent.MOUSE_DOWN) {
-                    element.setCapture();
+                    //element.setCapture();
                 } else if (type == MouseEvent.MOUSE_UP) {
-                    element.releaseCapture();
+                    //element.releaseCapture();
                 }
             } catch (e:Dynamic) {
             }
