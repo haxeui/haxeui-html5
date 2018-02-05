@@ -17,12 +17,14 @@ class SelectDataSource extends Behaviour {
             el.removeChild(el.children[0]);
         }
 
-        for (n in 0...ds.size) {
-            var item = ds.get(n);
-            if (item.value != null) {
-                var option:OptionElement = Browser.document.createOptionElement();
-                option.text = item.value;
-                el.appendChild(option);
+        if (ds != null) {
+            for (n in 0...ds.size) {
+                var item = ds.get(n);
+                if (item.value != null) {
+                    var option:OptionElement = Browser.document.createOptionElement();
+                    option.text = item.value;
+                    el.appendChild(option);
+                }
             }
         }
 

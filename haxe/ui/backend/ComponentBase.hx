@@ -384,7 +384,19 @@ class ComponentBase {
         return child;
     }
 
+    private function handleAddComponentAt(child:Component, index:Int):Component {
+        handleAddComponent(child);
+        handleSetComponentIndex(child, index);
+        return child;
+    }
+
     private function handleRemoveComponent(child:Component, dispose:Bool = true):Component {
+        HtmlUtils.removeElement(child.element);
+        return child;
+    }
+
+    private function handleRemoveComponentAt(index:Int, dispose:Bool = true):Component {
+        var child = cast(this, Component)._children[index];
         HtmlUtils.removeElement(child.element);
         return child;
     }
@@ -581,9 +593,9 @@ class ComponentBase {
         if (type != null) {
             try { // set/releaseCapture isnt currently supported in chrome
                 if (type == MouseEvent.MOUSE_DOWN) {
-                    element.setCapture();
+                    //element.setCapture();
                 } else if (type == MouseEvent.MOUSE_UP) {
-                    element.releaseCapture();
+                    //element.releaseCapture();
                 }
             } catch (e:Dynamic) {
             }
