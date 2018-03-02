@@ -226,7 +226,7 @@ class ScreenBase {
     // Event Handlers
     //***********************************************************************************************************
     private function __onMouseEvent(event:js.html.Event) {
-        event.preventDefault();
+        //event.preventDefault();
 
         var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
         if (type != null) {
