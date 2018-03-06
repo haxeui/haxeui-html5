@@ -65,6 +65,16 @@ class TextDisplayBase {
                 measureTextRequired = true;
             }
 
+            if (_textStyle.fontBold == true && element.style.fontWeight != "bold") {
+                element.style.fontWeight = "bold";
+                measureTextRequired = true;
+            }
+            
+            if (_textStyle.fontItalic == true && element.style.fontStyle != "italic") {
+                element.style.fontStyle = "italic";
+                measureTextRequired = true;
+            }
+            
             var colorValue = HtmlUtils.color(_textStyle.color);
             if (element.style.color != colorValue) {
                 element.style.color = colorValue;

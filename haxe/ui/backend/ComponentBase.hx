@@ -1,6 +1,7 @@
 package haxe.ui.backend;
 
 import haxe.ui.components.Button;
+import haxe.ui.components.Label;
 import haxe.ui.components.TextArea;
 import haxe.ui.components.Image;
 import haxe.ui.components.VerticalProgress2;
@@ -256,6 +257,9 @@ class ComponentBase {
         if (cast(this, Component).id != null) {
             element.id = cast(this, Component).id;
         }
+        if (Std.is(this, Label)) { // TODO: is this hacky?? 
+            element.style.setProperty("pointer-events", "none");
+        }
     }
 
     private function handleClipRect(value:Rectangle) {
@@ -406,15 +410,15 @@ class ComponentBase {
         setCursor(style.cursor);
 
         if (style.filter != null) {
-            if (style.filter[0] == "drop-shadow") {
-                var dropShadow:DropShadow = FilterParser.parseDropShadow(style.filter);
+            if (Std.is(style.filter[0], DropShadow)) {
+                var dropShadow:DropShadow = cast style.filter[0];
                 if (dropShadow.inner == false) {
                     element.style.boxShadow = '${dropShadow.distance}px ${dropShadow.distance}px ${dropShadow.blurX}px 0px ${HtmlUtils.rgba(dropShadow.color, dropShadow.alpha)}';
                 } else {
                     element.style.boxShadow = 'inset ${dropShadow.distance}px ${dropShadow.distance}px ${dropShadow.blurX}px 0px ${HtmlUtils.rgba(dropShadow.color, dropShadow.alpha)}';
                 }
-            } else if (style.filter[0] == "blur") {
-                var blur:Blur = FilterParser.parseBlur(style.filter);
+            } else if (Std.is(style.filter[0], Blur)) {
+                var blur:Blur = cast style.filter[0];
                 element.style.setProperty("-webkit-filter", 'blur(${blur.amount}px)');
                 element.style.setProperty("-moz-filter", 'blur(${blur.amount}px)');
                 element.style.setProperty("-o-filter", 'blur(${blur.amount}px)');
@@ -601,7 +605,6 @@ class ComponentBase {
             if (fn != null) {
                 var mouseEvent = new MouseEvent(type);
                 mouseEvent._originalEvent = event;
-                
                 var touchEvent = false;
                 try {
                     touchEvent = Std.is(event, js.html.TouchEvent);
