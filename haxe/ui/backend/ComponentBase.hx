@@ -607,10 +607,10 @@ class ComponentBase {
                 } catch (e:Dynamic) { }
                 
                 if (touchEvent == true) {
-                    //var te:js.html.TouchEvent = cast(event, js.html.TouchEvent);
-                    //mouseEvent.screenX = te.changedTouches[0].pageX / Toolkit.scaleX;
-                    //mouseEvent.screenY = te.changedTouches[0].pageY / Toolkit.scaleY;
-                    //mouseEvent.touchEvent = true;
+                    var te:js.html.TouchEvent = cast(event, js.html.TouchEvent);
+                    mouseEvent.screenX = te.changedTouches[0].pageX / Toolkit.scaleX;
+                    mouseEvent.screenY = te.changedTouches[0].pageY / Toolkit.scaleY;
+                    mouseEvent.touchEvent = true;
                 } else if (Std.is(event, js.html.MouseEvent)) {
                     var me:js.html.MouseEvent = cast(event, js.html.MouseEvent);
                     mouseEvent.buttonDown = (me.buttons != 0);
