@@ -3,6 +3,7 @@ package haxe.ui.backend;
 import haxe.ui.components.Button;
 import haxe.ui.components.TextArea;
 import haxe.ui.components.Image;
+import haxe.ui.components.VerticalProgress2;
 import haxe.ui.core.KeyboardEvent;
 import haxe.ui.components.TextField;
 import haxe.ui.backend.html5.EventMapper;
@@ -217,7 +218,7 @@ class ComponentBase {
             return;
         }
 
-        if (Std.is(this, VProgress)) { // this is a hack for chrome
+        if (Std.is(this, VerticalProgress2)) { // this is a hack for chrome
             if (element.style.getPropertyValue("transform-origin") != null && element.style.getPropertyValue("transform-origin").length > 0) {
                 var tw = width;
                 var th = height;
