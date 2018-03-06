@@ -40,6 +40,10 @@ class NativeElement {
                     continue;
                 }
                 var parts = s.split(":");
+                if (StringTools.startsWith(StringTools.trim(parts[0]), "-webkit") && UserAgent.instance.chrome == false) {
+                    // skip manually as firefox supports webkit css extensions
+                    continue;
+                }
                 el.style.setProperty(StringTools.trim(parts[0]), StringTools.trim(parts[1]));
             }
         }
