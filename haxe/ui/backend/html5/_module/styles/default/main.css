@@ -9,6 +9,27 @@
     border-radius: none;
 }
 
+.hprogress:native {
+    background: none;
+    border: none;
+    border-radius: none;
+    filter: none;
+    color: none;
+    height: auto;
+}
+
+.progress2:native {
+}
+
+.horizontal-progress2:native {
+    background: none;
+    border: none;
+    border-radius: none;
+    filter: none;
+    color: none;
+    height: auto;
+}
+
 .textfield:native {
     border: none;
     border-radius: none;
