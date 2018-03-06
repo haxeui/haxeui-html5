@@ -30,6 +30,16 @@
     height: auto;
 }
 
+.vertical-progress2:native {
+    background: none;
+    border: none;
+    border-radius: none;
+    filter: none;
+    color: none;
+    width: auto;
+    height: auto;
+}
+
 .textfield:native {
     border: none;
     border-radius: none;

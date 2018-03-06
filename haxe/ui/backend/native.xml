@@ -76,16 +76,15 @@
     
     
     
+    <component id="haxe.ui.components.HorizontalProgress2" class="haxe.ui.backend.html5.native.NativeElement" nodeType="progress">
+        <behaviour id="max" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="max" />
+        <behaviour id="end" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="value" />
+        <behaviour id="indeterminate" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="value" remove="true" />
+        <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
+        <size class="haxe.ui.backend.html5.native.size.ElementSize" />
+    </component>
     
-    
-    
-    
-    
-    
-    
-    
-    
-    <component id="haxe.ui.components.HorizontalProgress2" class="haxe.ui.backend.html5.native.NativeElement" nodeType="progress" style="padding:0;">
+    <component id="haxe.ui.components.VerticalProgress2" class="haxe.ui.backend.html5.native.NativeElement" nodeType="progress" style="-webkit-transform: rotate(-90deg) translateY(-1000%);-webkit-transform-origin: 100% 0%;-moz-orient: vertical;writing-mode: bt-lr;" orient="vertical">
         <behaviour id="max" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="max" />
         <behaviour id="end" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="value" />
         <behaviour id="indeterminate" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="value" remove="true" />
