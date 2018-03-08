@@ -25,7 +25,7 @@ class ElementAttribute extends Behaviour {
         }
 
         if (getConfigValueBool("remove", false) == true) {
-            if (value != null && (value.isBool == true && value == true)) {
+            if (value == true) {
                 el.removeAttribute(name);
             }
             return;

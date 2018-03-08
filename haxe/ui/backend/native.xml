@@ -91,4 +91,22 @@
         <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
         <size class="haxe.ui.backend.html5.native.size.ElementSize" />
     </component>
+    
+    <component id="haxe.ui.components.HorizontalSlider2" class="haxe.ui.backend.html5.native.NativeElement" nodeType="input" type="range" style="margin: 0;padding:0;">
+        <behaviour id="min" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="min" />
+        <behaviour id="max" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="max" />
+        <behaviour id="start" class="haxe.ui.core.Behaviour" />
+        <behaviour id="end" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="value" />
+        <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
+        <size class="haxe.ui.backend.html5.native.size.ElementSize" />
+    </component>
+    
+    <component id="haxe.ui.components.VerticalSlider2" class="haxe.ui.backend.html5.native.NativeElement" nodeType="input" type="range" style="padding:0;margin: 0;-webkit-appearance: slider-vertical;-moz-orient: vertical;writing-mode: bt-lr;" orient="vertical">
+        <behaviour id="min" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="min" />
+        <behaviour id="max" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="max" />
+        <behaviour id="start" class="haxe.ui.core.Behaviour" />
+        <behaviour id="end" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="value" />
+        <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
+        <size class="haxe.ui.backend.html5.native.size.ElementSize" />
+    </component>
 </native>

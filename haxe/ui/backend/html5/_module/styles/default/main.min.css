@@ -4,6 +4,8 @@
 .progress2:native{}
 .horizontal-progress2:native{background:none;border:none;border-radius:none;filter:none;color:none;width:auto;height:auto;}
 .vertical-progress2:native{background:none;border:none;border-radius:none;filter:none;color:none;width:auto;height:auto;}
+.horizontal-slider2:native{background:none;border:none;border-radius:none;filter:none;color:none;width:auto;height:auto;}
+.vertical-slider2:native{background:none;border:none;border-radius:none;filter:none;color:none;width:auto;height:auto;}
 .textfield:native{border:none;border-radius:none;filter:none;color:none;background-color:none;}
 .textarea:native{border:none;border-radius:none;filter:none;color:none;background-color:none;}
 
