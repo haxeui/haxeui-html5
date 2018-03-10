@@ -26,6 +26,7 @@ class LabeledInputElement extends NativeElement {
         var label:LabelElement = Browser.document.createLabelElement();
         label.appendChild(input);
 
+        /*
         if (type == "checkbox" || type == "radio") {
             input.addEventListener("change", function(e) {
                 e.preventDefault();
@@ -33,10 +34,12 @@ class LabeledInputElement extends NativeElement {
                 return false;
             });
         }
+        */
 
         return label;
     }
 
+    /*
     private override function onChange(e) {
         var type:String = getConfigValue("type", "button");
         if (type == "checkbox" || type == "radio") {
@@ -51,4 +54,5 @@ class LabeledInputElement extends NativeElement {
             }
         }
     }
+    */
 }

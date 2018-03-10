@@ -9,19 +9,7 @@
     border-radius: none;
 }
 
-.hprogress:native {
-    background: none;
-    border: none;
-    border-radius: none;
-    filter: none;
-    color: none;
-    height: auto;
-}
-
-.progress2:native {
-}
-
-.horizontal-progress2:native {
+.progress:native, .slider:native {
     background: none;
     border: none;
     border-radius: none;
@@ -30,37 +18,6 @@
     width: auto;
     height: auto;
 }
-
-.vertical-progress2:native {
-    background: none;
-    border: none;
-    border-radius: none;
-    filter: none;
-    color: none;
-    width: auto;
-    height: auto;
-}
-
-.horizontal-slider2:native {
-    background: none;
-    border: none;
-    border-radius: none;
-    filter: none;
-    color: none;
-    width: auto;
-    height: auto;
-}
-
-.vertical-slider2:native {
-    background: none;
-    border: none;
-    border-radius: none;
-    filter: none;
-    color: none;
-    width: auto;
-    height: auto;
-}
-
 
 .textfield:native {
     border: none;

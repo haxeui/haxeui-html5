@@ -29,28 +29,6 @@
         <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
         <size class="haxe.ui.backend.html5.native.size.ElementSize" />
     </component>
-    <component id="haxe.ui.components.HSlider" class="haxe.ui.backend.html5.native.NativeElement" nodeType="input" type="range" style="margin: 0;padding:0;">
-        <behaviour id="min" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="min" />
-        <behaviour id="max" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="max" />
-        <behaviour id="pos" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="value" />
-        <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
-        <size class="haxe.ui.backend.html5.native.size.ElementSize" />
-    </component>
-    <component id="haxe.ui.components.VSlider" class="haxe.ui.backend.html5.native.NativeElement" nodeType="input" type="range" style="padding:0;margin: 0;-webkit-appearance: slider-vertical;-moz-orient: vertical;writing-mode: bt-lr;" orient="vertical">
-        <behaviour id="min" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="min" />
-        <behaviour id="max" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="max" />
-        <behaviour id="pos" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="value" />
-        <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
-        <size class="haxe.ui.backend.html5.native.size.ElementSize" />
-    </component>
-    <component id="haxe.ui.components.VProgress" class="haxe.ui.backend.html5.native.NativeElement" nodeType="progress" style="padding:0;-webkit-transform: rotate(-90deg) translateY(-1000%);-webkit-transform-origin: 100% 0%;-moz-orient: vertical;writing-mode: bt-lr;" orient="vertical">
-        <behaviour id="min" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="min" />
-        <behaviour id="max" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="max" />
-        <behaviour id="pos" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="value" />
-        <behaviour id="indeterminate" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="value" remove="true" />
-        <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
-        <size class="haxe.ui.backend.html5.native.size.ElementSize" />
-    </component>
     <component id="haxe.ui.containers.ScrollView" class="haxe.ui.backend.html5.native.NativeElement">
         <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
         <behaviour id="hscrollPos" class="haxe.ui.backend.html5.native.behaviours.ElementScrollLeft" />
@@ -76,7 +54,7 @@
     
     
     
-    <component id="haxe.ui.components.HorizontalProgress2" class="haxe.ui.backend.html5.native.NativeElement" nodeType="progress">
+    <component id="haxe.ui.components.HorizontalProgress" class="haxe.ui.backend.html5.native.NativeElement" nodeType="progress">
         <behaviour id="max" class="haxe.ui.backend.html5.native.behaviours.ElementProperty" name="max" />
         <behaviour id="end" class="haxe.ui.backend.html5.native.behaviours.ElementProperty" name="value" />
         <behaviour id="indeterminate" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="value" remove="true" />
@@ -84,7 +62,7 @@
         <size class="haxe.ui.backend.html5.native.size.ElementSize" />
     </component>
     
-    <component id="haxe.ui.components.VerticalProgress2" class="haxe.ui.backend.html5.native.NativeElement" nodeType="progress" style="-webkit-transform: rotate(-90deg) translateY(-1000%);-webkit-transform-origin: 100% 0%;-moz-orient: vertical;writing-mode: bt-lr;" orient="vertical">
+    <component id="haxe.ui.components.VerticalProgress" class="haxe.ui.backend.html5.native.NativeElement" nodeType="progress" style="-webkit-transform: rotate(-90deg) translateY(-1000%);-webkit-transform-origin: 100% 0%;-moz-orient: vertical;writing-mode: bt-lr;" orient="vertical">
         <behaviour id="max" class="haxe.ui.backend.html5.native.behaviours.ElementProperty" name="max" />
         <behaviour id="end" class="haxe.ui.backend.html5.native.behaviours.ElementProperty" name="value" />
         <behaviour id="indeterminate" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="value" remove="true" />
@@ -92,7 +70,7 @@
         <size class="haxe.ui.backend.html5.native.size.ElementSize" />
     </component>
     
-    <component id="haxe.ui.components.HorizontalSlider2" class="haxe.ui.backend.html5.native.NativeElement" allowChildren="false" nodeType="input" type="range" style="margin: 0;padding:0;">
+    <component id="haxe.ui.components.HorizontalSlider" class="haxe.ui.backend.html5.native.NativeElement" allowChildren="false" nodeType="input" type="range" style="margin: 0;padding:0;">
         <behaviour id="min" class="haxe.ui.backend.html5.native.behaviours.ElementProperty" name="min" />
         <behaviour id="max" class="haxe.ui.backend.html5.native.behaviours.ElementProperty" name="max" />
         <behaviour id="pos" class="haxe.ui.backend.html5.native.behaviours.ElementProperty" name="value" />
@@ -100,7 +78,7 @@
         <size class="haxe.ui.backend.html5.native.size.ElementSize" />
     </component>
     
-    <component id="haxe.ui.components.VerticalSlider2" class="haxe.ui.backend.html5.native.NativeElement" allowChildren="false" nodeType="input" type="range" style="padding:0;margin: 0;-webkit-appearance: slider-vertical;-moz-orient: vertical;writing-mode: bt-lr;" orient="vertical">
+    <component id="haxe.ui.components.VerticalSlider" class="haxe.ui.backend.html5.native.NativeElement" allowChildren="false" nodeType="input" type="range" style="padding:0;margin: 0;-webkit-appearance: slider-vertical;-moz-orient: vertical;writing-mode: bt-lr;" orient="vertical">
         <behaviour id="min" class="haxe.ui.backend.html5.native.behaviours.ElementProperty" name="min" />
         <behaviour id="max" class="haxe.ui.backend.html5.native.behaviours.ElementProperty" name="max" />
         <behaviour id="pos" class="haxe.ui.backend.html5.native.behaviours.ElementProperty" name="value" />

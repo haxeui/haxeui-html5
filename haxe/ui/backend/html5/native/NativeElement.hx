@@ -1,6 +1,5 @@
 package haxe.ui.backend.html5.native;
 
-import haxe.ui.components.Slider;
 import haxe.ui.core.Component;
 import js.Browser;
 import js.html.Element;
@@ -48,19 +47,23 @@ class NativeElement {
             }
         }
 
+        /*
         if (nodeType == "input" && type == "range") {
             el.addEventListener("change", onChange);
         }
+        */
 
         return el;
     }
 
+    /*
     private function onChange(e) {
         if (Std.is(_component, Slider)) {
             var input:InputElement = cast _component.element;
             cast(_component, Slider).pos = Std.parseFloat(input.value);
         }
     }
+    */
 
     public function getConfigValue(name:String, defaultValue:String = null):String {
         if (config == null) {

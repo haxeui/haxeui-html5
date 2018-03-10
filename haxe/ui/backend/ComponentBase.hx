@@ -4,7 +4,7 @@ import haxe.ui.components.Button;
 import haxe.ui.components.Label;
 import haxe.ui.components.TextArea;
 import haxe.ui.components.Image;
-import haxe.ui.components.VerticalProgress2;
+import haxe.ui.components.VerticalProgress;
 import haxe.ui.core.KeyboardEvent;
 import haxe.ui.components.TextField;
 import haxe.ui.backend.html5.EventMapper;
@@ -12,7 +12,6 @@ import haxe.ui.backend.html5.HtmlUtils;
 import haxe.ui.backend.html5.StyleHelper;
 import haxe.ui.backend.html5.UserAgent;
 import haxe.ui.backend.html5.native.NativeElement;
-import haxe.ui.components.VProgress;
 import haxe.ui.containers.Header;
 import haxe.ui.containers.ScrollView;
 import haxe.ui.containers.TableView;
@@ -219,7 +218,7 @@ class ComponentBase {
             return;
         }
 
-        if (Std.is(this, VerticalProgress2)) { // this is a hack for chrome
+        if (Std.is(this, VerticalProgress)) { // this is a hack for chrome
             if (element.style.getPropertyValue("transform-origin") != null && element.style.getPropertyValue("transform-origin").length > 0) {
                 var tw = width;
                 var th = height;
