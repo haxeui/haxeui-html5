@@ -31,6 +31,18 @@ class HtmlUtils {
         return s;
     }
 
+    public static function namedChild(el:Element, child:String, index:Int = 0):Element {
+        if (child != null) {
+            var list = el.getElementsByTagName(child);
+            if (list.length == 0) {
+                return null;
+            }
+            el = list.item(index);
+        }
+        
+        return el;
+    }
+    
     public static var DIV_HELPER:Element;
 
     public static function __init__():Void {

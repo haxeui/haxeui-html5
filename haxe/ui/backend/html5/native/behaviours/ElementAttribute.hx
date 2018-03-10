@@ -15,14 +15,7 @@ class ElementAttribute extends Behaviour {
             return;
         }
 
-        var child:String = getConfigValue("child");
-        if (child != null) {
-            var list = el.getElementsByTagName(child);
-            if (list.length == 0) {
-                return;
-            }
-            el = list.item(0);
-        }
+        el = HtmlUtils.namedChild(el, getConfigValue("child"));
 
         if (getConfigValueBool("remove", false) == true) {
             if (value == true) {
@@ -31,6 +24,7 @@ class ElementAttribute extends Behaviour {
             return;
         }
 
+        /*
         if (el.nodeName == "INPUT" && value != null) {
             var input:InputElement = cast el;
             if (value.isBool == true && name == "checked") {
@@ -40,7 +34,9 @@ class ElementAttribute extends Behaviour {
             } else if (name == "max") {
                 input.max = value;
             } else if (name == "value") {
-                input.value = value.toString();
+                //input.value = value.toString();
+                Reflect.setProperty(input, "value", value.toString());
+                
             }
         } else if (el.nodeName == "PROGRESS" && value != null) {
             var progress:ProgressElement = cast el;
@@ -54,7 +50,10 @@ class ElementAttribute extends Behaviour {
         } else {
             el.setAttribute(name, value);
         }
-
+        */
+        
+        el.setAttribute(name, value);
+        
         var removeIfNegative:Bool = getConfigValueBool("removeIfNegative", false);
         if ((value == null || (value.isBool == true && value == false)) && removeIfNegative == true) {
             el.removeAttribute(name);
@@ -69,17 +68,11 @@ class ElementAttribute extends Behaviour {
             return null;
         }
 
-        var child:String = getConfigValue("child");
-        if (child != null) {
-            var list = el.getElementsByTagName(child);
-            if (list.length == 0) {
-                return null;
-            }
-            el = list.item(0);
-        }
+        el = HtmlUtils.namedChild(el, getConfigValue("child"));
         
         var value:Variant = null;
         
+        /*
         if (el.nodeName == "INPUT") {
             var input:InputElement = cast el;
             if (name == "checked") {
@@ -103,7 +96,8 @@ class ElementAttribute extends Behaviour {
         } else {
             value = el.getAttribute(name);
         }
-        
+        */
+        value = el.getAttribute(name);
         return value;
     }
 }
