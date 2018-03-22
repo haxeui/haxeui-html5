@@ -75,6 +75,11 @@ class TextDisplayBase {
                 measureTextRequired = true;
             }
             
+            if (_textStyle.fontUnderline == true && element.style.textDecoration != "underline") {
+                element.style.textDecoration = "underline";
+                measureTextRequired = true;
+            }
+            
             var colorValue = HtmlUtils.color(_textStyle.color);
             if (element.style.color != colorValue) {
                 element.style.color = colorValue;
