@@ -1,5 +1,6 @@
 package haxe.ui.backend;
 
+import haxe.io.Bytes;
 import haxe.ui.assets.FontInfo;
 import haxe.ui.assets.ImageInfo;
 import haxe.ui.backend.html5.util.FontDetect;
@@ -38,21 +39,36 @@ class AssetsBase {
     }
 
     private function getImageFromHaxeResource(resourceId:String, callback:String->ImageInfo->Void) {
-        var image = Browser.document.createImageElement();
         var bytes = Resource.getBytes(resourceId);
+        imageFromBytes(bytes, function(imageInfo) {
+            callback(resourceId, imageInfo);
+        });
+    }
+
+    public function imageFromBytes(bytes:Bytes, callback:ImageInfo->Void) {
+        if (bytes == null) {
+            callback(null);
+            return;
+        }
+
+        var image = Browser.document.createImageElement();
         image.onload = function(e) {
             var imageInfo:ImageInfo = {
                 width: image.width,
                 height: image.height,
                 data: cast image
             }
-            callback(resourceId, imageInfo);
+            callback(imageInfo);
         }
-
+        image.onerror = function(e) {
+            Browser.window.console.log(e);
+            callback(null);
+        }
+        
         var base64:String = haxe.crypto.Base64.encode(bytes);
-        image.src = "data:image/png;base64," + base64;
+        image.src = "data:;base64," + base64;
     }
-
+    
     private function getFontInternal(resourceId:String, callback:FontInfo->Void) {
         FontDetect.onFontLoaded(resourceId, function(f) {
             var fontInfo = {
