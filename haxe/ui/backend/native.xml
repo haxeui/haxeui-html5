@@ -6,6 +6,13 @@
         <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
         <layout class="haxe.ui.backend.html5.native.layouts.ButtonLayout" />
     </component>
+    
+    
+    
+    
+    
+    
+    
     <component id="haxe.ui.components.CheckBox" class="haxe.ui.backend.html5.native.LabeledInputElement" type="checkbox">
         <behaviour id="text" class="haxe.ui.backend.html5.native.behaviours.SpanText" index="last" />
         <behaviour id="selected" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" child="input" name="checked" removeIfNegative="true" />

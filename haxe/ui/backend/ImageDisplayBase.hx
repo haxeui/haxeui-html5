@@ -17,6 +17,7 @@ class ImageDisplayBase {
     public function new() {
         element = Browser.document.createImageElement();
         element.style.position = "absolute";
+        element.style.setProperty("pointer-events", "none");
     }
 
     private var _left:Float = 0;

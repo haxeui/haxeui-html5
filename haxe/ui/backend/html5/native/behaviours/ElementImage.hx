@@ -3,15 +3,17 @@ package haxe.ui.backend.html5.native.behaviours;
 import haxe.ui.ToolkitAssets;
 import haxe.ui.assets.ImageInfo;
 import haxe.ui.core.Behaviour;
+import haxe.ui.core.DataBehaviour;
+import haxe.ui.util.ImageLoader;
 import haxe.ui.util.Variant;
 import js.Browser;
 import js.html.Element;
 import js.html.ImageElement;
 
 @:keep
-class ElementImage extends Behaviour {
-    public override function set(value:Variant) {
-        if (value.isNull) {
+class ElementImage extends DataBehaviour {
+    public override function validateData() {
+        if (_value.isNull) {
             return;
         }
 
@@ -28,15 +30,17 @@ class ElementImage extends Behaviour {
             el.appendChild(img);
         }
 
-        ToolkitAssets.instance.getImage(value, function(image:ImageInfo) {
-            if (image != null && image.data != null) {
-               img.src = image.data.src;
+        var imageLoader:ImageLoader = new ImageLoader(_value);
+        imageLoader.load(function(imageInfo) {
+            if (imageInfo != null) {
+               img.src = imageInfo.data.src;
                _component.invalidateLayout();
             }
         });
-    }
-
-    public override function get():Variant {
-        return null;
+        
+        ToolkitAssets.instance.getImage(_value, function(image:ImageInfo) {
+            if (image != null && image.data != null) {
+            }
+        });
     }
 }
