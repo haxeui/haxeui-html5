@@ -246,10 +246,6 @@ class ComponentBase {
                 child.element.style.marginTop = '-${style.borderTopSize}px';
             }
         }
-
-        if (style.clip == true) {
-            handleClipRect(new Rectangle(0, 0, width, height));
-        }
     }
 
     private function handleReady() {
