@@ -25,6 +25,8 @@
     filter: none;
     color: none;
     background-color: none;
+    width: auto;
+    height: auto;
 }
 
 .textarea:native {

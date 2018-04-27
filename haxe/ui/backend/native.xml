@@ -19,18 +19,15 @@
         <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
         <size class="haxe.ui.backend.html5.native.size.TextSize" incrementWidthBy="20" incrementHeightBy="0" />
     </component>
-    
-    
-    
-    
-    
-    
     <component id="haxe.ui.components.TextField" class="haxe.ui.backend.html5.native.NativeElement" nodeType="input" style="padding-left:2px;cursor:pointer;">
         <behaviour id="text" class="haxe.ui.backend.html5.native.behaviours.ElementValue" />
         <behaviour id="placeholder" class="haxe.ui.backend.html5.native.behaviours.ElementPlaceholder" />
         <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
         <size class="haxe.ui.backend.html5.native.size.ElementSize" />
     </component>
+    
+    
+    
     <component id="haxe.ui.components.TextArea" class="haxe.ui.backend.html5.native.NativeElement" nodeType="textarea" style="resize:none;line-height:1.4;">
         <behaviour id="text" class="haxe.ui.backend.html5.native.behaviours.ElementValue" />
         <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />

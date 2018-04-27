@@ -120,7 +120,7 @@ class TextDisplayBase {
         var div = HtmlUtils.DIV_HELPER;
         setTempDivData(div);
 
-        _textWidth = div.clientWidth + 2;
+        _textWidth = div.clientWidth;
         _textHeight = div.clientHeight;
     }
 
