@@ -89,7 +89,7 @@ class TextDisplayBase {
                 element.style.fontFamily = _fontInfo.data;
                 _rawFontName = _fontInfo.data;
                 measureTextRequired = true;
-                parentComponent.invalidateLayout();
+                parentComponent.invalidateComponentLayout();
             }
         }
 

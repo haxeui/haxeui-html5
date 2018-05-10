@@ -56,7 +56,7 @@ class SpanText extends DataBehaviour {
 
         span.textContent = _value;
         if (invalidate == true) {
-            _component.invalidateLayout();
+            _component.invalidateComponentLayout();
         }
     }
 

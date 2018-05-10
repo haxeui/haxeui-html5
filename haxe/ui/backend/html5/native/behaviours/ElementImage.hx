@@ -34,7 +34,7 @@ class ElementImage extends DataBehaviour {
         imageLoader.load(function(imageInfo) {
             if (imageInfo != null) {
                img.src = imageInfo.data.src;
-               _component.invalidateLayout();
+               _component.invalidateComponentLayout();
             }
         });
         
