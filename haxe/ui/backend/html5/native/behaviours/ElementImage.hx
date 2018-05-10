@@ -31,7 +31,7 @@ class ElementImage extends Behaviour {
         ToolkitAssets.instance.getImage(value, function(image:ImageInfo) {
             if (image != null && image.data != null) {
                img.src = image.data.src;
-               _component.invalidateLayout();
+               _component.invalidateComponentLayout();
             }
         });
     }
