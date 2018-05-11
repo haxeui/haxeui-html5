@@ -57,7 +57,7 @@ class SpanText extends Behaviour {
 
         span.textContent = value;
         if (invalidate == true) {
-            _component.invalidateLayout();
+            _component.invalidateComponentLayout();
         }
     }
 
