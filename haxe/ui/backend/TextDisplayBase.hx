@@ -45,7 +45,6 @@ class TextDisplayBase {
 
     private function validateStyle():Bool {
         var measureTextRequired:Bool = false;
-        
         if (_displayData.wordWrap == true && element.style.whiteSpace != null) {
             element.style.whiteSpace = "normal";
             measureTextRequired = true;

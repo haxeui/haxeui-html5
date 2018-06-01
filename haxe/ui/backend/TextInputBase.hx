@@ -2,6 +2,7 @@ package haxe.ui.backend;
 
 import haxe.ui.backend.html5.HtmlUtils;
 import haxe.ui.components.TextArea;
+import haxe.ui.components.TextArea2;
 import haxe.ui.core.TextInput.TextInputData;
 import js.Browser;
 import js.html.Element;
@@ -17,11 +18,13 @@ class TextInputBase extends TextDisplayBase {
 
     private function onChangeEvent(e) {
         var newText = null;
-        if (Std.is(parentComponent, TextArea)) {
+        if (Std.is(parentComponent, TextArea2)) {
             newText = cast(element, TextAreaElement).value;
         } else {
             newText = cast(element, InputElement).value;
         }
+
+        measureText();
         
         if (newText != _text) {
             _text = newText;
@@ -29,12 +32,18 @@ class TextInputBase extends TextDisplayBase {
                 _inputData.onChangedCallback();
             }
         }
-        
     }
 
     private function onScroll(e) {
         _inputData.hscrollPos = element.scrollLeft;
         _inputData.vscrollPos = element.scrollTop;
+        
+        _inputData.hscrollMax = _textWidth - _width;
+        _inputData.hscrollPageSize = (_width * _inputData.hscrollMax) / _textWidth;
+        
+        _inputData.vscrollMax = _textHeight - _height;
+        _inputData.vscrollPageSize = (_height * _inputData.vscrollMax) / _textHeight;
+        
         if (_inputData.onScrollCallback != null) {
             _inputData.onScrollCallback();
         }
@@ -70,15 +79,13 @@ class TextInputBase extends TextDisplayBase {
 
         if ((_displayData.multiline == false && Std.is(element, InputElement) == false)
             || (_displayData.multiline == true && Std.is(element, TextAreaElement) == false)) {
-
             var newElement:Element = createElement();
             element.parentElement.appendChild(newElement);
             HtmlUtils.removeElement(element);
 
-            element.removeEventListener("change", onChangeEvent);
-            element.removeEventListener("keydown", onChangeEvent);
-            element.removeEventListener("keypress", onChangeEvent);
-            element.removeEventListener("keyup", onChangeEvent);
+            element.removeEventListener("input", onChangeEvent);
+            element.removeEventListener("propertychange", onChangeEvent);
+            element.removeEventListener("scroll", onScroll);
 
             element = newElement;
             validateData();
@@ -118,6 +125,12 @@ class TextInputBase extends TextDisplayBase {
     //***********************************************************************************************************
 
     private override function createElement():Element {
+        if (element != null) {
+            element.removeEventListener("input", onChangeEvent);
+            element.removeEventListener("propertychange", onChangeEvent);
+            element.removeEventListener("scroll", onScroll);
+        }
+        
         var el:Element = null;
         if (_displayData.multiline == false) {
             el = Browser.document.createInputElement();
@@ -137,12 +150,16 @@ class TextInputBase extends TextDisplayBase {
             el.style.resize = "none";
             el.style.outline = "none";
             el.style.lineHeight = "1.4";
-            //el.style.padding = "5px";
+            el.style.padding = "0px";
+            el.style.margin = "0px";
+            el.style.bottom = "0px"; // chrome only?
+            el.style.right = "0px"; // chrome only?
             el.style.overflow = "hidden";
             el.style.cursor = "initial";
             el.style.position = "absolute";
             el.style.backgroundColor = "inherit";
-            el.style.whiteSpace = "nowrap";
+            el.style.whiteSpace = "normal";
+            el.id = "textArea";
             el.onkeydown = function(e) {
                 if (e.keyCode == 9 || e.which == 9) {
                     e.preventDefault();
@@ -160,10 +177,8 @@ class TextInputBase extends TextDisplayBase {
             }
         }
 
-        el.addEventListener("onchange", onChangeEvent);
-        el.addEventListener("keydown", onChangeEvent);
-        el.addEventListener("keypress", onChangeEvent);
-        el.addEventListener("keyup", onChangeEvent);
+        el.addEventListener("input", onChangeEvent);
+        el.addEventListener("propertychange", onChangeEvent);
         el.addEventListener("scroll", onScroll);
 
         return el;
