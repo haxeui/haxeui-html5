@@ -2,7 +2,6 @@ package haxe.ui.backend;
 
 import haxe.ui.backend.html5.HtmlUtils;
 import haxe.ui.components.TextArea;
-import haxe.ui.components.TextArea2;
 import haxe.ui.core.TextInput.TextInputData;
 import js.Browser;
 import js.html.Element;
@@ -18,16 +17,15 @@ class TextInputBase extends TextDisplayBase {
 
     private function onChangeEvent(e) {
         var newText = null;
-        if (Std.is(parentComponent, TextArea2)) {
+        if (Std.is(parentComponent, TextArea)) {
             newText = cast(element, TextAreaElement).value;
         } else {
             newText = cast(element, InputElement).value;
         }
-
-        measureText();
         
         if (newText != _text) {
             _text = newText;
+            measureText();
             if (_inputData.onChangedCallback != null) {
                 _inputData.onChangedCallback();
             }
