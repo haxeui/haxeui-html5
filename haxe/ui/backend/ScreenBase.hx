@@ -128,11 +128,11 @@ class ScreenBase {
         }
 
         _hasListener = true;
-        Browser.window.onresize = function(e) {
+        Browser.window.addEventListener("resize", function(e) {
            for (c in __topLevelComponents) {
                resizeComponent(c);
            }
-        }
+        });
 
     }
 
