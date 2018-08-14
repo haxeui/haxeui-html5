@@ -619,6 +619,8 @@ class ComponentBase {
                     mouseEvent.buttonDown = (me.buttons != 0);
                     mouseEvent.screenX = me.pageX / Toolkit.scaleX;
                     mouseEvent.screenY = me.pageY / Toolkit.scaleY;
+                    mouseEvent.ctrlKey = me.ctrlKey;
+                    mouseEvent.shiftKey = me.shiftKey;
                 }
                 
                 fn(mouseEvent);
@@ -647,6 +649,8 @@ class ComponentBase {
         mouseEvent._originalEvent = event;
         mouseEvent.screenX = event.pageX;
         mouseEvent.screenY = event.pageY;
+        mouseEvent.ctrlKey = event.ctrlKey;
+        mouseEvent.shiftKey = event.shiftKey;
         mouseEvent.delta = delta;
         fn(mouseEvent);
     }

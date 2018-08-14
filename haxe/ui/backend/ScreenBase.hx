@@ -250,6 +250,8 @@ class ScreenBase {
                     mouseEvent.buttonDown = (me.buttons != 0);
                     mouseEvent.screenX = me.pageX / Toolkit.scaleX;
                     mouseEvent.screenY = me.pageY / Toolkit.scaleY;
+                    mouseEvent.ctrlKey = me.ctrlKey;
+                    mouseEvent.shiftKey = me.shiftKey;
                 }
 
                 fn(mouseEvent);
@@ -265,6 +267,7 @@ class ScreenBase {
                 var keyboardEvent = new KeyboardEvent(type);
                 keyboardEvent._originalEvent = event;
                 keyboardEvent.keyCode = event.keyCode;
+                keyboardEvent.ctrlKey = event.ctrlKey;
                 keyboardEvent.shiftKey = event.shiftKey;
                 fn(keyboardEvent);
             }
