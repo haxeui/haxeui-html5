@@ -25,3 +25,6 @@
     background-color: none;
 }
 
+.component:disabled {
+    cursor: not-allowed;
+}

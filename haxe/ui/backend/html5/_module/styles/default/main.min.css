@@ -2,4 +2,5 @@
 .button:native{background:none;border:none;border-radius:none;}
 .textfield:native{border:none;border-radius:none;filter:none;color:none;background-color:none;}
 .textarea:native{border:none;border-radius:none;filter:none;color:none;background-color:none;}
+.component:disabled{cursor:not-allowed;}
 

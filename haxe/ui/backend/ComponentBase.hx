@@ -456,6 +456,12 @@ class ComponentBase {
             if (hasImageDisplay()) {
                 getImageDisplay().element.style.removeProperty("cursor");
             }
+            if (hasTextDisplay()) {
+                getTextDisplay().element.style.removeProperty("cursor");
+            }
+            if (hasTextInput()) {
+                getTextInput().element.style.removeProperty("cursor");
+            }
         } else {
             element.style.cursor = cursor;
             if (hasImageDisplay()) {
@@ -463,6 +469,9 @@ class ComponentBase {
             }
             if (hasTextDisplay()) {
                 getTextDisplay().element.style.cursor = cursor;
+            }
+            if (hasTextInput()) {
+                getTextInput().element.style.cursor = cursor;
             }
         }
 

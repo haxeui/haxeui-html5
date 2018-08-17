@@ -116,6 +116,24 @@ class TextInputBase extends TextDisplayBase {
             el.style.cursor = "initial";
             el.style.position = "absolute";
             el.style.backgroundColor = "inherit";
+            el.onkeydown = function(e) {
+                if (parentComponent.disabled == true) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    e.stopPropagation();
+                    return false;
+                }
+                return true;
+            }
+            el.onmousedown = function(e) {
+                if (parentComponent.disabled == true) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    e.stopPropagation();
+                    return false;
+                }
+                return true;
+            }
         } else {
             el = Browser.document.createTextAreaElement();
             el.style.border = "none";
@@ -129,6 +147,12 @@ class TextInputBase extends TextDisplayBase {
             el.style.backgroundColor = "inherit";
             el.style.whiteSpace = "nowrap";
             el.onkeydown = function(e) {
+                if (parentComponent.disabled == true) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    e.stopPropagation();
+                    return false;
+                }
                 if (e.keyCode == 9 || e.which == 9) {
                     e.preventDefault();
                     e.stopImmediatePropagation();
@@ -139,6 +163,15 @@ class TextInputBase extends TextDisplayBase {
                     ta.value = ta.value.substring(0, ta.selectionStart) + "\t" + ta.value.substring(ta.selectionEnd);
                     ta.selectionEnd = s + 1;
 
+                    return false;
+                }
+                return true;
+            }
+            el.onmousedown = function(e) {
+                if (parentComponent.disabled == true) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    e.stopPropagation();
                     return false;
                 }
                 return true;
