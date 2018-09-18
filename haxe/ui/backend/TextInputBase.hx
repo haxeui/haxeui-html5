@@ -83,16 +83,18 @@ class TextInputBase extends TextDisplayBase {
             }
         }
 
-        if (_textStyle.borderLeftSize != null) {
-            element.style.marginLeft = '-${_textStyle.borderLeftSize}px';
-        } else {
-            element.style.marginLeft = null;
-        }
-        
-        if (_textStyle.borderTopSize != null) {
-            element.style.marginTop = '-${_textStyle.borderTopSize}px';
-        } else {
-            element.style.marginTop = null;
+        if (_textStyle != null) {
+            if (_textStyle.borderLeftSize != null) {
+                element.style.marginLeft = '-${_textStyle.borderLeftSize}px';
+            } else {
+                element.style.marginLeft = null;
+            }
+            
+            if (_textStyle.borderTopSize != null) {
+                element.style.marginTop = '-${_textStyle.borderTopSize}px';
+            } else {
+                element.style.marginTop = null;
+            }
         }
         
         return super.validateStyle() || measureTextRequired;
