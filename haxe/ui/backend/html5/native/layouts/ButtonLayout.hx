@@ -57,6 +57,7 @@ class ButtonLayout extends DefaultLayout {
                     if (Std.is(last, ImageElement) == false) {
                         HtmlUtils.swapElements(first, last);
                     }
+                default : 
             }
 
             var img:ImageElement = getIcon();
@@ -82,6 +83,7 @@ class ButtonLayout extends DefaultLayout {
                         text.style.display = "inline-block";
                     case "top" | "bottom":
                         text.style.display = "block";
+                    default :
                 }
             }
         }
