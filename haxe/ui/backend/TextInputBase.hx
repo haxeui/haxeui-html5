@@ -15,6 +15,14 @@ class TextInputBase extends TextDisplayBase {
         super();
     }
 
+    public function focus() {
+        element.focus();
+    }
+    
+    public function blur() {
+        element.blur();
+    }
+    
     private function onChangeEvent(e) {
         var newText = null;
         if (Std.is(parentComponent, TextArea)) {
