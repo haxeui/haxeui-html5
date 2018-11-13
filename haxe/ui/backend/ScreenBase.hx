@@ -3,7 +3,6 @@ package haxe.ui.backend;
 import haxe.ui.core.KeyboardEvent;
 import haxe.ui.backend.html5.HtmlUtils;
 import haxe.ui.backend.html5.UserAgent;
-import haxe.ui.containers.dialogs.Dialog;
 import haxe.ui.containers.dialogs.DialogButton;
 import haxe.ui.core.Component;
 import haxe.ui.core.MouseEvent;
@@ -139,6 +138,7 @@ class ScreenBase {
     //***********************************************************************************************************
     // Dialogs
     //***********************************************************************************************************
+    /*
     public function messageDialog(message:String, title:String = null, options:Dynamic = null, callback:DialogButton->Void = null):Dialog {
         return null;
     }
@@ -150,7 +150,7 @@ class ScreenBase {
     public function hideDialog(dialog:Dialog):Bool {
         return false;
     }
-
+    */
     //***********************************************************************************************************
     // Events
     //***********************************************************************************************************
