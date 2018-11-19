@@ -80,6 +80,7 @@ class TextInputBase extends TextDisplayBase {
         }
     }
 
+    @:access(haxe.ui.core.Component)
     private override function validateStyle():Bool {
         var measureTextRequired:Bool = false;
 
@@ -108,8 +109,10 @@ class TextInputBase extends TextDisplayBase {
             }
         }
         
-        if (parentComponent.disabled) {
+        if (parentComponent.disabled || parentComponent._disabledInteractivityCounter > 0) { // TODO: bit of a haxeui builder hack here, not ideal, but for now its fine
+            #if !haxeui_builder
             element.style.cursor = "not-allowed";
+            #end
             if (Std.is(element, InputElement)) {
                 cast(element, InputElement).disabled = true;
             } else if (Std.is(element, TextAreaElement)) {
