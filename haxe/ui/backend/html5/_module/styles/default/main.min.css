@@ -3,4 +3,4 @@
 .progress:native,.slider:native{background:none;border:none;border-radius:none;filter:none;color:none;width:auto;height:auto;}
 .textfield:native{border:none;border-radius:none;filter:none;color:none;background-color:none;width:auto;height:auto;}
 .textarea:native{border:none;border-radius:none;filter:none;color:none;background-color:none;font-name:"Arial";font-size:13px;}
-
+.component:disabled{cursor:not-allowed;}

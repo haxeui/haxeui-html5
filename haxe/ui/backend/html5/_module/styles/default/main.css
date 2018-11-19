@@ -39,3 +39,6 @@
     font-size: 13px;
 }
 
+.component:disabled {
+    cursor: not-allowed;
+}

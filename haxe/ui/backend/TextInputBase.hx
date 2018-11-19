@@ -107,7 +107,23 @@ class TextInputBase extends TextDisplayBase {
                 inputElement.type = "";
             }
         }
-
+        
+        if (parentComponent.disabled) {
+            element.style.cursor = "not-allowed";
+            if (Std.is(element, InputElement)) {
+                cast(element, InputElement).disabled = true;
+            } else if (Std.is(element, TextAreaElement)) {
+                cast(element, TextAreaElement).disabled = true;
+            }
+        } else {
+            element.style.cursor = null;
+            if (Std.is(element, InputElement)) {
+                cast(element, InputElement).disabled = false;
+            } else if (Std.is(element, TextAreaElement)) {
+                cast(element, TextAreaElement).disabled = false;
+            }
+        }
+        
         return super.validateStyle() || measureTextRequired;
     }
 
