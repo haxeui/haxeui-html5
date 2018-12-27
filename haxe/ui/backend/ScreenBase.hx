@@ -40,12 +40,28 @@ class ScreenBase {
 
     public var width(get, null):Float;
     private function get_width():Float {
-        return container.offsetWidth;
+        var cx:Float = container.offsetWidth;
+        if (cx <= 0) {
+            for (c in __topLevelComponents) {
+                if (c.width > cx) {
+                    cx = c.width;
+                }
+            }
+        }
+        return cx;
     }
 
     public var height(get, null):Float;
     private function get_height():Float {
-        return container.offsetHeight;
+        var cy:Float = container.offsetHeight;
+        if (cy <= 0) {
+            for (c in __topLevelComponents) {
+                if (c.height > cy) {
+                    cy = c.height;
+                }
+            }
+        }
+        return cy;
     }
 
     public var dpi(get, null):Float;
