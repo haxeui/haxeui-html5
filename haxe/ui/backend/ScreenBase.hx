@@ -35,6 +35,15 @@ class ScreenBase {
     }
     private function set_options(value:ToolkitOptions):ToolkitOptions {
         _options = value;
+        var cx:String = Toolkit.backendProperties.getProp("haxe.ui.html5.container.width", null);
+        var cy:String = Toolkit.backendProperties.getProp("haxe.ui.html5.container.height", null);
+        var c = container;
+        if (cx != null) {
+            c.style.width = cx;
+        }
+        if (cy != null) {
+            c.style.height = cy;
+        }
         return value;
     }
 
