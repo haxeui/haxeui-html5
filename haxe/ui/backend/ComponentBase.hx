@@ -5,7 +5,6 @@ import haxe.ui.components.Label;
 import haxe.ui.components.TextArea;
 import haxe.ui.components.Image;
 import haxe.ui.components.VerticalProgress;
-import haxe.ui.core.KeyboardEvent;
 import haxe.ui.components.TextField;
 import haxe.ui.backend.html5.EventMapper;
 import haxe.ui.backend.html5.HtmlUtils;
@@ -17,6 +16,7 @@ import haxe.ui.containers.ScrollView;
 import haxe.ui.containers.TableView;
 import haxe.ui.core.Component;
 import haxe.ui.core.ImageDisplay;
+import haxe.ui.core.KeyboardEvent;
 import haxe.ui.core.MouseEvent;
 import haxe.ui.core.Screen;
 import haxe.ui.core.ScrollEvent;
@@ -514,23 +514,26 @@ class ComponentBase {
                     _eventMap.set(type, listener);
                     element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
                 }
-            case UIEvent.CHANGE:
-
-                if (_eventMap.exists(type) == false) {
-                    _eventMap.set(type, listener);
-
-                    if (Std.is(this, TextField) || Std.is(this, TextArea)) {
-                        element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(KeyboardEvent.KEY_UP), __onTextFieldChangeEvent);
-                    } else {
-                        element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onChangeEvent);
-                    }
-                }
             case MouseEvent.MOUSE_WHEEL:
                 _eventMap.set(type, listener);
                 if (UserAgent.instance.firefox == true) {
                     element.addEventListener("DOMMouseScroll", __onMouseWheelEvent);
                 } else {
                     element.addEventListener("mousewheel", __onMouseWheelEvent);
+                }
+			case KeyboardEvent.KEY_DOWN | KeyboardEvent.KEY_UP:
+				if (_eventMap.exists(type) == false) {
+					_eventMap.set(type, listener);
+					element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onKeyboardEvent);
+				}
+            case UIEvent.CHANGE:
+                if (_eventMap.exists(type) == false) {
+                    _eventMap.set(type, listener);
+                    if (Std.is(this, TextField) || Std.is(this, TextArea)) {
+                        element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(KeyboardEvent.KEY_UP), __onTextFieldChangeEvent);
+                    } else {
+                        element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onChangeEvent);
+                    }
                 }
             case ScrollEvent.CHANGE:
                 _eventMap.set(type, listener);
@@ -547,21 +550,22 @@ class ComponentBase {
                 if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
                     element.removeEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
                 }
-                
-            case UIEvent.CHANGE:
-                _eventMap.remove(type);
-
-                if (Std.is(this, TextField)) {
-                    element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(KeyboardEvent.KEY_UP), __onTextFieldChangeEvent);
-                } else {
-                    element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onChangeEvent);
-                }
             case MouseEvent.MOUSE_WHEEL:
                 _eventMap.remove(type);
                 if (UserAgent.instance.firefox == true) {
                     element.removeEventListener("DOMMouseScroll", __onMouseWheelEvent);
                 } else {
                     element.removeEventListener("mousewheel", __onMouseWheelEvent);
+                }
+			case KeyboardEvent.KEY_DOWN | KeyboardEvent.KEY_UP:
+				_eventMap.remove(type);
+                element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onKeyboardEvent);
+            case UIEvent.CHANGE:
+                _eventMap.remove(type);
+                if (Std.is(this, TextField)) {
+                    element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(KeyboardEvent.KEY_UP), __onTextFieldChangeEvent);
+                } else {
+                    element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onChangeEvent);
                 }
         }
     }
@@ -654,6 +658,27 @@ class ComponentBase {
         mouseEvent.delta = delta;
         fn(mouseEvent);
     }
+	
+	private function __onKeyboardEvent(event:js.html.Event) {
+		var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
+        if (type != null) {
+            var fn = _eventMap.get(type);
+            if (fn != null) {
+                var keyboardEvent = new KeyboardEvent(type);
+                keyboardEvent._originalEvent = event;
+                
+                if (Std.is(event, js.html.KeyboardEvent)) {
+                    var me:js.html.KeyboardEvent = cast(event, js.html.KeyboardEvent);
+					keyboardEvent.keyCode = me.keyCode;
+					keyboardEvent.altKey = me.altKey;
+					keyboardEvent.ctrlKey = me.ctrlKey;
+					keyboardEvent.shiftKey = me.shiftKey;
+                }
+                
+                fn(keyboardEvent);
+            }
+        }
+	}
     
     private function __onScrollEvent(event:js.html.MouseScrollEvent) {
         var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
