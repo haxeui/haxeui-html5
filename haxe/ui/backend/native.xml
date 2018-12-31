@@ -88,6 +88,8 @@
         <behaviour id="min" class="haxe.ui.backend.html5.native.behaviours.ElementProperty" name="min" />
         <behaviour id="max" class="haxe.ui.backend.html5.native.behaviours.ElementProperty" name="max" />
         <behaviour id="pos" class="haxe.ui.backend.html5.native.behaviours.ElementProperty" name="value" />
+        <behaviour id="start" class="haxe.ui.backend.html5.native.behaviours.ElementProperty" name="value" />
+        <behaviour id="end" class="haxe.ui.backend.html5.native.behaviours.ElementProperty" name="value" />
         <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
         <size class="haxe.ui.backend.html5.native.size.ElementSize" />
     </component>
