@@ -15,7 +15,7 @@
     <component id="haxe.ui.components.OptionBox" class="haxe.ui.backend.html5.native.LabeledInputElement" type="radio">
         <behaviour id="text" class="haxe.ui.backend.html5.native.behaviours.SpanText" index="last" />
         <behaviour id="selected" class="haxe.ui.backend.html5.native.behaviours.ElementProperty" child="input" name="checked" removeIfNegative="true" />
-        <behaviour id="group" class="haxe.ui.backend.html5.native.behaviours.RadioGroup" child="input" name="name" removeIfNegative="true" />
+        <behaviour id="componentGroup" class="haxe.ui.backend.html5.native.behaviours.RadioGroup" child="input" name="name" removeIfNegative="true" />
         <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
         <size class="haxe.ui.backend.html5.native.size.TextSize" incrementWidthBy="20" incrementHeightBy="0" />
     </component>
