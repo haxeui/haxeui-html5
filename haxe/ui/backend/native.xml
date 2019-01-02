@@ -26,6 +26,13 @@
         <size class="haxe.ui.backend.html5.native.size.ElementSize" />
     </component>
     
+    <component id="haxe.ui.components.NumberStepper" class="haxe.ui.backend.html5.native.NativeElement" type="number" nodeType="input" style="padding-left:2px;cursor:pointer;">
+        <behaviour id="text" class="haxe.ui.backend.html5.native.behaviours.ElementValue" />
+        <behaviour id="step" class="haxe.ui.backend.html5.native.behaviours.ElementProperty" name="step" />
+        <behaviour id="pos" class="haxe.ui.core.DefaultBehaviour" />
+        <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
+        <size class="haxe.ui.backend.html5.native.size.ElementSize" />
+    </component>
     
     
     <component id="haxe.ui.components.TextArea" class="haxe.ui.backend.html5.native.NativeElement" nodeType="textarea" style="resize:none;line-height:1.4;">
