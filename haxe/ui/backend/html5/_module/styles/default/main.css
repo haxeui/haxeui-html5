@@ -29,6 +29,16 @@
     height: auto;
 }
 
+.numberstepper:native {
+    border: none;
+    border-radius: none;
+    filter: none;
+    color: none;
+    background-color: none;
+    width: 70px;
+    height: 20px;
+}
+
 .textarea:native {
     border: none;
     border-radius: none;
