@@ -1,13 +1,13 @@
 package haxe.ui.backend;
 
-import haxe.ui.core.KeyboardEvent;
+import haxe.ui.events.KeyboardEvent;
 import haxe.ui.backend.html5.HtmlUtils;
 import haxe.ui.backend.html5.UserAgent;
 import haxe.ui.containers.dialogs.DialogButton;
 import haxe.ui.core.Component;
-import haxe.ui.core.MouseEvent;
+import haxe.ui.events.MouseEvent;
 import haxe.ui.core.Screen;
-import haxe.ui.core.UIEvent;
+import haxe.ui.events.UIEvent;
 import haxe.ui.backend.html5.EventMapper;
 import js.Browser;
 import js.html.Element;

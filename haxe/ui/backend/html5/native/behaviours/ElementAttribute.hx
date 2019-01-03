@@ -1,6 +1,6 @@
 package haxe.ui.backend.html5.native.behaviours;
 
-import haxe.ui.core.DataBehaviour;
+import haxe.ui.behaviours.DataBehaviour;
 import js.html.Element;
 
 @:keep

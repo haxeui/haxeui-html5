@@ -1,5 +1,5 @@
 package haxe.ui.backend;
-import haxe.ui.core.UIEvent;
+import haxe.ui.events.UIEvent;
 
 @:allow(haxe.ui.backend.ScreenBase)
 @:allow(haxe.ui.backend.ComponentBase)
