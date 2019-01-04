@@ -1,8 +1,8 @@
 package haxe.ui.backend.html5;
 
-import haxe.ui.core.ValidationEvent;
+import haxe.ui.events.ValidationEvent;
 import haxe.ui.validation.ValidationManager;
-import haxe.ui.util.Size;
+import haxe.ui.geom.Size;
 import js.Browser;
 import js.html.Element;
 

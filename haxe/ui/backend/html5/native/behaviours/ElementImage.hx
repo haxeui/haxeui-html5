@@ -2,8 +2,7 @@ package haxe.ui.backend.html5.native.behaviours;
 
 import haxe.ui.ToolkitAssets;
 import haxe.ui.assets.ImageInfo;
-import haxe.ui.core.Behaviour;
-import haxe.ui.core.DataBehaviour;
+import haxe.ui.behaviours.DataBehaviour;
 import haxe.ui.util.ImageLoader;
 import haxe.ui.util.Variant;
 import js.Browser;

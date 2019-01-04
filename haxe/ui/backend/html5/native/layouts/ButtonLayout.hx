@@ -2,7 +2,7 @@ package haxe.ui.backend.html5.native.layouts;
 
 import haxe.ui.core.Component;
 import haxe.ui.layouts.DefaultLayout;
-import haxe.ui.util.Size;
+import haxe.ui.geom.Size;
 import js.html.Element;
 import js.html.ImageElement;
 import js.html.SpanElement;

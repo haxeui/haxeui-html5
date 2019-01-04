@@ -1,7 +1,7 @@
 package haxe.ui.backend.html5.native.behaviours;
 
+import haxe.ui.behaviours.Behaviour;
 import js.html.InputElement;
-import haxe.ui.core.Behaviour;
 import haxe.ui.util.Variant;
 import js.html.Element;
 import js.html.TextAreaElement;
