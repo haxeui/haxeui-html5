@@ -1,22 +1,20 @@
 package haxe.ui.backend;
 
-import haxe.ui.events.KeyboardEvent;
+import haxe.ui.backend.html5.EventMapper;
 import haxe.ui.backend.html5.HtmlUtils;
 import haxe.ui.backend.html5.UserAgent;
-import haxe.ui.containers.dialogs.DialogButton;
 import haxe.ui.core.Component;
-import haxe.ui.events.MouseEvent;
 import haxe.ui.core.Screen;
+import haxe.ui.events.KeyboardEvent;
+import haxe.ui.events.MouseEvent;
 import haxe.ui.events.UIEvent;
-import haxe.ui.backend.html5.EventMapper;
 import js.Browser;
 import js.html.Element;
 import js.html.TouchEvent;
 
-class ScreenBase {
+class ScreenImpl extends ScreenBase {
     private var _mapping:Map<String, UIEvent->Void>;
 
-    public var focus:Component;
     public function new() {
         _mapping = new Map<String, UIEvent->Void>();
         /* might need this later
@@ -28,13 +26,8 @@ class ScreenBase {
         */
     }
 
-    private var _options:ToolkitOptions;
-    public var options(get, set):ToolkitOptions;
-    private function get_options():ToolkitOptions {
-        return _options;
-    }
-    private function set_options(value:ToolkitOptions):ToolkitOptions {
-        _options = value;
+    private override function set_options(value:ToolkitOptions):ToolkitOptions {
+        super.set_options(value);
         var cx:String = Toolkit.backendProperties.getProp("haxe.ui.html5.container.width", null);
         var cy:String = Toolkit.backendProperties.getProp("haxe.ui.html5.container.height", null);
         var c = container;
@@ -47,11 +40,22 @@ class ScreenBase {
         return value;
     }
 
-    public var width(get, null):Float;
-    private function get_width():Float {
+    private override function get_dpi():Float {
+        return HtmlUtils.dpi;
+    }
+
+    private override function get_title():String {
+        return js.Browser.document.title;
+    }
+    private override function set_title(s:String):String {
+        js.Browser.document.title = s;
+        return s;
+    }
+    
+    private override function get_width():Float {
         var cx:Float = container.offsetWidth;
         if (cx <= 0) {
-            for (c in __topLevelComponents) {
+            for (c in _topLevelComponents) {
                 if (c.width > cx) {
                     cx = c.width;
                 }
@@ -60,11 +64,10 @@ class ScreenBase {
         return cx;
     }
 
-    public var height(get, null):Float;
-    private function get_height():Float {
+    private override function get_height():Float {
         var cy:Float = container.offsetHeight;
         if (cy <= 0) {
-            for (c in __topLevelComponents) {
+            for (c in _topLevelComponents) {
                 if (c.height > cy) {
                     cy = c.height;
                 }
@@ -73,22 +76,7 @@ class ScreenBase {
         return cy;
     }
 
-    public var dpi(get, null):Float;
-    private function get_dpi():Float {
-        return HtmlUtils.dpi;
-    }
-
-    public var title(get,set):String;
-    private inline function get_title():String {
-        return js.Browser.document.title;
-    }
-    private inline function set_title(s:String):String {
-        js.Browser.document.title = s;
-        return s;
-    }
-
-    private var __topLevelComponents:Array<Component> = [];
-    public function addComponent(component:Component) {
+    public override function addComponent(component:Component) {
         container.appendChild(component.element);
         component.ready();
 
@@ -104,30 +92,21 @@ class ScreenBase {
             component.element.style.transformOrigin = "top left";
         }
 
-        __topLevelComponents.push(component);
+        _topLevelComponents.push(component);
         addResizeListener();
         resizeComponent(component);
     }
 
-    public function removeComponent(component:Component) {
-        __topLevelComponents.remove(component);
+    public override function removeComponent(component:Component) {
+        _topLevelComponents.remove(component);
         container.removeChild(component.element);
     }
 
-    private function handleSetComponentIndex(child:Component, index:Int) {
+    private override function handleSetComponentIndex(child:Component, index:Int) {
         if (index == cast(this, Screen).rootComponents.length - 1) {
             container.appendChild(child.element);
         } else {
             HtmlUtils.insertBefore(cast(this, Screen).rootComponents[index + 1].element, child.element);
-        }
-    }
-
-    private function resizeComponent(c:Component) {
-        if (c.percentWidth > 0) {
-            c.width = (this.width * c.percentWidth) / 100;
-        }
-        if (c.percentHeight > 0) {
-            c.height = (this.height * c.percentHeight) / 100;
         }
     }
 
@@ -153,7 +132,7 @@ class ScreenBase {
 
         _hasListener = true;
         Browser.window.addEventListener("resize", function(e) {
-           for (c in __topLevelComponents) {
+           for (c in _topLevelComponents) {
                resizeComponent(c);
            }
         });
@@ -161,29 +140,13 @@ class ScreenBase {
     }
 
     //***********************************************************************************************************
-    // Dialogs
-    //***********************************************************************************************************
-    /*
-    public function messageDialog(message:String, title:String = null, options:Dynamic = null, callback:DialogButton->Void = null):Dialog {
-        return null;
-    }
-
-    public function showDialog(content:Component, options:Dynamic = null, callback:DialogButton->Void = null):Dialog {
-        return null;
-    }
-
-    public function hideDialog(dialog:Dialog):Bool {
-        return false;
-    }
-    */
-    //***********************************************************************************************************
     // Events
     //***********************************************************************************************************
-    private function supportsEvent(type:String):Bool {
+    private override function supportsEvent(type:String):Bool {
         return EventMapper.HAXEUI_TO_DOM.get(type) != null;
     }
 
-    private function mapEvent(type:String, listener:UIEvent->Void) {
+    private override function mapEvent(type:String, listener:UIEvent->Void) {
         switch (type) {
             case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
                 MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
@@ -231,7 +194,7 @@ class ScreenBase {
         }
     }
 
-    private function unmapEvent(type:String, listener:UIEvent->Void) {
+    private override function unmapEvent(type:String, listener:UIEvent->Void) {
         switch (type) {
             case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
                 MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:

@@ -1,52 +1,34 @@
 package haxe.ui.backend;
 
-import haxe.ui.assets.FontInfo;
 import haxe.ui.backend.html5.HtmlUtils;
-import haxe.ui.core.Component;
-import haxe.ui.core.TextDisplay.TextDisplayData;
-import haxe.ui.styles.Style;
 import js.Browser;
 import js.html.CSSStyleDeclaration;
 import js.html.Element;
 
-class TextDisplayBase {
-    private var _displayData:TextDisplayData = new TextDisplayData();
-
+class TextDisplayImpl extends TextBase {
     public var element:Element;
 
-    public var parentComponent:Component;
-
     public function new() {
+        super();
         _displayData.multiline = false;
-
         element = createElement();
     }
 
-    private var _text:String;
-    private var _left:Float = 0;
-    private var _top:Float = 0;
-    private var _width:Float = -1;
-    private var _height:Float = -1;
-    private var _textWidth:Float = 0;
-    private var _textHeight:Float = 0;
-    private var _rawFontName:String;
-    private var _textStyle:Style;
-
-    private var _fontInfo:FontInfo;
-    
     //***********************************************************************************************************
     // Validation functions
     //***********************************************************************************************************
 
-    private function validateData() {
+    private override function validateData() {
         var html:String = normalizeText(_text);
         element.innerHTML = html;
     }
 
-    private function validateStyle():Bool {
+    private var _rawFontName:String;
+    private override function validateStyle():Bool {
         var measureTextRequired:Bool = false;
         if (_displayData.wordWrap == true && element.style.whiteSpace != null) {
             element.style.whiteSpace = "normal";
+            element.style.wordBreak = "break-word";
             measureTextRequired = true;
         } else if (_displayData.wordWrap == false && element.style.whiteSpace != "nowrap") {
             element.style.whiteSpace = "nowrap";
@@ -95,13 +77,13 @@ class TextDisplayBase {
         return measureTextRequired;
     }
 
-    private function validatePosition() {
+    private override function validatePosition() {
         var style:CSSStyleDeclaration = element.style;
         style.left = HtmlUtils.px(_left);
         style.top = HtmlUtils.px(_top);
     }
 
-    private function validateDisplay() {
+    private override function validateDisplay() {
         var style:CSSStyleDeclaration = element.style;
         if (_width > 0) {
             style.width = HtmlUtils.px(_width);
@@ -111,7 +93,7 @@ class TextDisplayBase {
         }
     }
 
-    private function measureText() {
+    private override function measureText() {
         if (HtmlUtils.DIV_HELPER == null) {
             HtmlUtils.createDivHelper();
         }
@@ -144,6 +126,8 @@ class TextDisplayBase {
 
         div.style.fontFamily = element.style.fontFamily;
         div.style.fontSize = element.style.fontSize;
+        div.style.whiteSpace = element.style.whiteSpace;
+        div.style.wordBreak = element.style.wordBreak;
         div.style.width = (_width > 0) ? '${HtmlUtils.px(_width)}' : "";
         div.innerHTML = normalizeText(t);
     }

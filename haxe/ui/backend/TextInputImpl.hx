@@ -2,24 +2,17 @@ package haxe.ui.backend;
 
 import haxe.ui.backend.html5.HtmlUtils;
 import haxe.ui.components.TextArea;
-import haxe.ui.core.TextInput.TextInputData;
 import js.Browser;
 import js.html.Element;
 import js.html.InputElement;
 import js.html.TextAreaElement;
 
-class TextInputBase extends TextDisplayBase {
-    private var _inputData:TextInputData = new TextInputData();
-    
-    public function new() {
-        super();
-    }
-
-    public function focus() {
+class TextInputImpl extends TextDisplayImpl {
+    public override function focus() {
         element.focus();
     }
     
-    public function blur() {
+    public override function blur() {
         element.blur();
     }
     

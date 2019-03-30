@@ -1,7 +1,7 @@
 package haxe.ui.backend.html5;
 
 import haxe.ui.assets.ImageInfo;
-import haxe.ui.backend.ComponentBase;
+import haxe.ui.backend.ComponentImpl;
 import haxe.ui.styles.Style;
 import haxe.ui.geom.Rectangle;
 import haxe.ui.geom.Slice9;
@@ -13,8 +13,8 @@ import js.html.Element;
 import js.html.Image;
 
 class StyleHelper {
-    @:access(haxe.ui.core.ComponentBase)
-    public static function apply(component:ComponentBase, width:Float, height:Float, style:Style) {
+    @:access(haxe.ui.core.ComponentImpl)
+    public static function apply(component:ComponentImpl, width:Float, height:Float, style:Style) {
         var element:Element = component.element;
         var css:CSSStyleDeclaration = element.style;
 

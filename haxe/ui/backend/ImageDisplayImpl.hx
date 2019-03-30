@@ -1,33 +1,21 @@
 package haxe.ui.backend;
 
-import haxe.ui.geom.Rectangle;
-import haxe.ui.assets.ImageInfo;
-import haxe.ui.core.Component;
 import haxe.ui.backend.html5.HtmlUtils;
 import js.Browser;
 import js.html.CSSStyleDeclaration;
 import js.html.ImageElement;
 
-class ImageDisplayBase {
-    public var parentComponent:Component;
-    public var aspectRatio:Float = 1; // width x height
-
+class ImageDisplayImpl extends ImageBase {
     public var element:ImageElement;
 
     public function new() {
+        super();
         element = Browser.document.createImageElement();
         element.style.position = "absolute";
         element.style.setProperty("pointer-events", "none");
     }
 
-    private var _left:Float = 0;
-    private var _top:Float = 0;
-    private var _imageWidth:Float = 0;
-    private var _imageHeight:Float = 0;
-    private var _imageInfo:ImageInfo;
-    private var _imageClipRect:Rectangle;
-
-    public function dispose() {
+    public override function dispose() {
         if (element != null) {
             HtmlUtils.removeElement(element);
         }
@@ -37,19 +25,19 @@ class ImageDisplayBase {
     // Validation functions
     //***********************************************************************************************************
 
-    private function validateData() {
+    private override function validateData() {
         if (element.src != _imageInfo.data.src) {
             element.src = _imageInfo.data.src;
         }
     }
 
-    private function validatePosition() {
+    private override function validatePosition() {
         var style:CSSStyleDeclaration = element.style;
         style.left = HtmlUtils.px(_left);
         style.top = HtmlUtils.px(_top);
     }
 
-    private function validateDisplay() {
+    private override function validateDisplay() {
         var style:CSSStyleDeclaration = element.style;
         style.width = HtmlUtils.px(_imageWidth);
         style.height = HtmlUtils.px(_imageHeight);

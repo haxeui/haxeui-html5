@@ -5,7 +5,7 @@ import haxe.ui.data.DataSource;
 import js.html.SelectElement;
 
 @:keep
-@:access(haxe.ui.backend.ComponentBase)
+@:access(haxe.ui.backend.ComponentImpl)
 class SelectedItem extends Behaviour {
     public override function getDynamic():Dynamic {
         var data:Dynamic = null;

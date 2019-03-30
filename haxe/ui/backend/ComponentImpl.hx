@@ -1,33 +1,31 @@
 package haxe.ui.backend;
 
-import haxe.ui.components.Button;
-import haxe.ui.components.Label;
-import haxe.ui.components.TextArea;
-import haxe.ui.components.Image;
-import haxe.ui.components.VerticalProgress;
-import haxe.ui.events.KeyboardEvent;
-import haxe.ui.components.TextField;
 import haxe.ui.backend.html5.EventMapper;
 import haxe.ui.backend.html5.HtmlUtils;
 import haxe.ui.backend.html5.StyleHelper;
 import haxe.ui.backend.html5.UserAgent;
 import haxe.ui.backend.html5.native.NativeElement;
+import haxe.ui.components.Image;
+import haxe.ui.components.Label;
+import haxe.ui.components.TextArea;
+import haxe.ui.components.TextField;
+import haxe.ui.components.VerticalProgress;
 import haxe.ui.containers.Header;
 import haxe.ui.containers.ScrollView;
 import haxe.ui.containers.TableView;
 import haxe.ui.core.Component;
 import haxe.ui.core.ImageDisplay;
-import haxe.ui.events.MouseEvent;
 import haxe.ui.core.Screen;
-import haxe.ui.events.ScrollEvent;
 import haxe.ui.core.TextDisplay;
 import haxe.ui.core.TextInput;
+import haxe.ui.events.KeyboardEvent;
+import haxe.ui.events.MouseEvent;
+import haxe.ui.events.ScrollEvent;
 import haxe.ui.events.UIEvent;
-import haxe.ui.styles.Style;
-import haxe.ui.geom.Rectangle;
 import haxe.ui.filters.Blur;
 import haxe.ui.filters.DropShadow;
-import haxe.ui.filters.FilterParser;
+import haxe.ui.geom.Rectangle;
+import haxe.ui.styles.Style;
 import js.Browser;
 import js.html.CSSStyleDeclaration;
 import js.html.Element;
@@ -36,7 +34,7 @@ import js.html.MutationRecord;
 import js.html.Node;
 import js.html.WheelEvent;
 
-class ComponentBase {
+class ComponentImpl extends ComponentBase {
     public var element:Element;
     private var _eventMap:Map<String, UIEvent->Void>;
 
@@ -45,8 +43,9 @@ class ComponentBase {
     private static var _mutationObserver:MutationObserver;
     private static var elementToComponent:Map<Node, Component> = new Map<Node, Component>();
 
-    @:access(haxe.ui.backend.ScreenBase)
+    @:access(haxe.ui.backend.ScreenImpl)
     public function new() {
+        super();
         _eventMap = new Map<String, UIEvent->Void>();
         if (_mutationObserver == null) {
             _mutationObserver = new MutationObserver(onMutationEvent);
@@ -80,7 +79,7 @@ class ComponentBase {
         }
     }
 
-    public function handleCreate(native:Bool) {
+    private override function handleCreate(native:Bool) {
         var newElement = null;
         if (native == true) {
             if (Std.is(this, ScrollView)) { // special case for scrollview
@@ -176,7 +175,7 @@ class ComponentBase {
         if (_eventMap == null) {
             return;
         }
-        var copy:Map <String, UIEvent->Void> = new Map<String, UIEvent->Void>();
+        var copy:Map<String, UIEvent->Void> = new Map<String, UIEvent->Void>();
         for (k in _eventMap.keys()) {
             var fn = _eventMap.get(k);
             copy.set(k, fn);
@@ -188,7 +187,7 @@ class ComponentBase {
         }
     }
 
-    private function handlePosition(left:Null<Float>, top:Null<Float>, style:Style) {
+    private override function handlePosition(left:Null<Float>, top:Null<Float>, style:Style) {
         if (element == null) {
             return;
         }
@@ -209,7 +208,7 @@ class ComponentBase {
         }
     }
 
-    private function handleSize(width:Null<Float>, height:Null<Float>, style:Style) {
+    private override function handleSize(width:Null<Float>, height:Null<Float>, style:Style) {
         if (width == null || height == null || width <= 0 || height <= 0) {
             return;
         }
@@ -231,7 +230,7 @@ class ComponentBase {
         var c:Component = cast(this, Component);
         var css:CSSStyleDeclaration = element.style;
         StyleHelper.apply(this, width, height, style);
-        var parent:ComponentBase = c.parentComponent;
+        var parent:ComponentImpl = c.parentComponent;
         if (parent != null && parent.element.style.borderWidth != null) {
             css.marginTop = '-${parent.element.style.borderWidth}';
             css.marginLeft = '-${parent.element.style.borderWidth}';
@@ -248,7 +247,7 @@ class ComponentBase {
         }
     }
 
-    private function handleReady() {
+    private override function handleReady() {
         if (cast(this, Component).id != null) {
             element.id = cast(this, Component).id;
         }
@@ -257,7 +256,7 @@ class ComponentBase {
         }
     }
 
-    private function handleClipRect(value:Rectangle) {
+    private override function handleClipRect(value:Rectangle) {
         var c:Component = cast(this, Component);
         var parent:Component = c.parentComponent;
         if (value != null && parent != null && (parent._nativeElement == null || Std.is(c, Header))) {
@@ -277,94 +276,42 @@ class ComponentBase {
         }
     }
 
-    public function handlePreReposition() {
-    }
-
-    public function handlePostReposition() {
-    }
-
-    private function handleVisibility(show:Bool) {
+    private override function handleVisibility(show:Bool) {
         element.style.display = (show == true) ? "" : "none";
     }
 
     //***********************************************************************************************************
     // Text related
     //***********************************************************************************************************
-    private var _textDisplay:TextDisplay;
-    public function createTextDisplay(text:String = null):TextDisplay {
+    public override function createTextDisplay(text:String = null):TextDisplay {
         if (_textDisplay == null) {
-            _textDisplay = new TextDisplay();
-            _textDisplay.parentComponent = cast this;
+            super.createTextDisplay(text);
             element.appendChild(_textDisplay.element);
         }
-        if (text != null) {
-            _textDisplay.text = text;
-        }
+        
         return _textDisplay;
     }
 
-    public function getTextDisplay():TextDisplay {
-        return createTextDisplay();
-    }
-
-    public function hasTextDisplay():Bool {
-        return (_textDisplay != null);
-    }
-
-    private var _textInput:TextInput;
-    public function createTextInput(text:String = null):TextInput {
+    public override function createTextInput(text:String = null):TextInput {
         if (_textInput == null) {
-            _textInput = new TextInput();
-            _textInput.parentComponent = cast this;
+            super.createTextInput(text);
             element.appendChild(_textInput.element);
         }
-        if (text != null) {
-            _textInput.text = text;
-        }
         return _textInput;
-    }
-
-    public function getTextInput():TextInput {
-        return createTextInput();
-    }
-
-    public function hasTextInput():Bool {
-        return (_textInput != null);
     }
 
     //***********************************************************************************************************
     // Image related
     //***********************************************************************************************************
-    private var _imageDisplay:ImageDisplay;
-    public function createImageDisplay():ImageDisplay {
+    public override function createImageDisplay():ImageDisplay {
         if (_imageDisplay == null) {
-            _imageDisplay = new ImageDisplay();
+            super.createImageDisplay();
             element.appendChild(_imageDisplay.element);
         }
         return _imageDisplay;
     }
 
-    public function getImageDisplay():ImageDisplay {
-        return createImageDisplay();
-    }
-
-    public function hasImageDisplay():Bool {
-        return (_imageDisplay != null);
-    }
-
-    public function removeImageDisplay() {
-        if (_imageDisplay != null) {
-            /*
-            if (contains(_imageDisplay) == true) {
-                removeChild(_imageDisplay);
-            }
-            */
-            _imageDisplay.dispose();
-            _imageDisplay = null;
-        }
-    }
-
-    private function handleSetComponentIndex(child:Component, index:Int) {
+    private override function handleSetComponentIndex(child:Component, index:Int) {
         if (index == cast(this, Component).childComponents.length - 1) {
             element.appendChild(child.element);
         } else {
@@ -375,29 +322,29 @@ class ComponentBase {
     //***********************************************************************************************************
     // Display tree
     //***********************************************************************************************************
-    private function handleAddComponent(child:Component):Component {
+    private override function handleAddComponent(child:Component):Component {
         element.appendChild(child.element);
         return child;
     }
 
-    private function handleAddComponentAt(child:Component, index:Int):Component {
+    private override function handleAddComponentAt(child:Component, index:Int):Component {
         handleAddComponent(child);
         handleSetComponentIndex(child, index);
         return child;
     }
 
-    private function handleRemoveComponent(child:Component, dispose:Bool = true):Component {
+    private override function handleRemoveComponent(child:Component, dispose:Bool = true):Component {
         HtmlUtils.removeElement(child.element);
         return child;
     }
 
-    private function handleRemoveComponentAt(index:Int, dispose:Bool = true):Component {
+    private override function handleRemoveComponentAt(index:Int, dispose:Bool = true):Component {
         var child = cast(this, Component)._children[index];
         HtmlUtils.removeElement(child.element);
         return child;
     }
 
-    private function applyStyle(style:Style) {
+    private override function applyStyle(style:Style) {
         if (element == null) {
             return;
         }
@@ -502,7 +449,7 @@ class ComponentBase {
     //***********************************************************************************************************
     // Events
     //***********************************************************************************************************
-    private function mapEvent(type:String, listener:UIEvent->Void) {
+    private override function mapEvent(type:String, listener:UIEvent->Void) {
         switch (type) {
             case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
                 MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
@@ -541,7 +488,7 @@ class ComponentBase {
         }
     }
 
-    private function unmapEvent(type:String, listener:UIEvent->Void) {
+    private override function unmapEvent(type:String, listener:UIEvent->Void) {
         switch (type) {
             case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
                 MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
