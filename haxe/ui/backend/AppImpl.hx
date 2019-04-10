@@ -1,5 +1,6 @@
 package haxe.ui.backend;
 
+import haxe.ui.core.Screen;
 import js.Browser;
 import js.html.Element;
 
@@ -8,6 +9,10 @@ class AppImpl extends AppBase {
     }
     
     private override function init(onReady:Void->Void, onEnd:Void->Void = null) {
+        var title = Toolkit.backendProperties.getProp("haxe.ui.html5.title");
+        if (title != null) {
+            Screen.instance.title = title;
+        }
         if (Browser.document.readyState == "complete") {
             onReady();
         } else {
