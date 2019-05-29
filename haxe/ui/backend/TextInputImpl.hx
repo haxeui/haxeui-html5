@@ -102,7 +102,7 @@ class TextInputImpl extends TextDisplayImpl {
             }
         }
         
-        if (parentComponent.disabled || parentComponent._disabledInteractivityCounter > 0) { // TODO: bit of a haxeui builder hack here, not ideal, but for now its fine
+        if (parentComponent.disabled || parentComponent._interactivityDisabled == true) { // TODO: bit of a haxeui builder hack here, not ideal, but for now its fine
             #if !haxeui_builder
             element.style.cursor = "not-allowed";
             #end
