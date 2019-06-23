@@ -461,6 +461,11 @@ class ComponentImpl extends ComponentBase {
                     _eventMap.set(type, listener);
                     element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
                 }
+            case MouseEvent.RIGHT_CLICK:    
+                if (_eventMap.exists(type) == false) {
+                    _eventMap.set(type, listener);
+                    element.addEventListener("contextmenu", __onContextMenu);
+                }
             case MouseEvent.MOUSE_WHEEL:
                 _eventMap.set(type, listener);
                 if (UserAgent.instance.firefox == true) {
@@ -497,6 +502,9 @@ class ComponentImpl extends ComponentBase {
                 if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
                     element.removeEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
                 }
+            case MouseEvent.RIGHT_CLICK:    
+                _eventMap.remove(type);
+                element.removeEventListener("contextmenu", __onContextMenu);
             case MouseEvent.MOUSE_WHEEL:
                 _eventMap.remove(type);
                 if (UserAgent.instance.firefox == true) {
@@ -520,6 +528,21 @@ class ComponentImpl extends ComponentBase {
     //***********************************************************************************************************
     // Event Handlers
     //***********************************************************************************************************
+    private function __onContextMenu(event:js.html.UIEvent) {
+        event.preventDefault();
+        var type:String = MouseEvent.RIGHT_CLICK;
+        if (type != null) {
+            var fn = _eventMap.get(type);
+            if (fn != null) {
+                var uiEvent = new MouseEvent(type);
+                uiEvent.screenX = event.pageX;
+                uiEvent.screenY = event.pageY;
+                fn(uiEvent);
+            }
+        }
+        return false;
+    }
+    
     private function __onChangeEvent(event:js.html.UIEvent) {
         var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
         if (type != null) {
