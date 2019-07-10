@@ -5,6 +5,8 @@ import haxe.ui.assets.FontInfo;
 import haxe.ui.assets.ImageInfo;
 import haxe.ui.backend.html5.util.FontDetect;
 import js.Browser;
+import js.html.Blob;
+import js.html.URL;
 
 class AssetsImpl extends AssetsBase {
     private override function getImageInternal(resourceId:String, callback:ImageInfo->Void) {
@@ -57,8 +59,13 @@ class AssetsImpl extends AssetsBase {
             callback(null);
         }
         
+        var blob = new Blob([bytes.getData()]);
+        var blobUrl = URL.createObjectURL(blob);
+        image.src = blobUrl;
+        /*
         var base64:String = haxe.crypto.Base64.encode(bytes);
         image.src = "data:;base64," + base64;
+        */
     }
     
     private override function getFontInternal(resourceId:String, callback:FontInfo->Void) {
