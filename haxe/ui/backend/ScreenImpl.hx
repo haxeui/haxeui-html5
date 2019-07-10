@@ -121,6 +121,9 @@ class ScreenImpl extends ScreenBase {
         if (c.style.overflow == null || c.style.overflow == "") {
             c.style.overflow = "hidden";
         }
+        if (c.id != "haxeui-container") {
+            c.id = "haxeui-container";
+        }
         return c;
     }
 

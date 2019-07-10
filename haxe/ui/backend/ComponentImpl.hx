@@ -28,6 +28,7 @@ import haxe.ui.geom.Rectangle;
 import haxe.ui.styles.Style;
 import js.Browser;
 import js.html.CSSStyleDeclaration;
+import js.html.CSSStyleSheet;
 import js.html.Element;
 import js.html.MutationObserver;
 import js.html.MutationRecord;
@@ -42,6 +43,7 @@ class ComponentImpl extends ComponentBase {
 
     private static var _mutationObserver:MutationObserver;
     private static var elementToComponent:Map<Node, Component> = new Map<Node, Component>();
+    private static var _stylesAdded:Bool = false;
 
     @:access(haxe.ui.backend.ScreenImpl)
     public function new() {
@@ -50,6 +52,21 @@ class ComponentImpl extends ComponentBase {
         if (_mutationObserver == null) {
             _mutationObserver = new MutationObserver(onMutationEvent);
             _mutationObserver.observe(Screen.instance.container, { childList: true } );
+        }
+
+        var sheet:CSSStyleSheet = cast(Browser.document.styleSheets[0], CSSStyleSheet);
+        if (_stylesAdded == false) {
+            _stylesAdded = true;
+            sheet.insertRule("#haxeui-container * {
+                position: absolute;
+                box-sizing: border-box;
+                -webkit-touch-callout: none;
+                -webkit-user-select: none;
+                -khtml-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }", sheet.cssRules.length);
         }
     }
 
@@ -87,7 +104,6 @@ class ComponentImpl extends ComponentBase {
                 if (element == null) {
                     element = _nativeElement.create();
                 }
-                element.style.position = "absolute";
                 element.style.overflow = "auto";
                 elementToComponent.set(element, cast(this, Component));
                 return;
@@ -102,8 +118,6 @@ class ComponentImpl extends ComponentBase {
             }
 
             if (newElement != null) {
-                newElement.style.position = "absolute";
-
                 if (element != null) {
                     var p = element.parentElement;
                     if (p != null) {
@@ -123,14 +137,6 @@ class ComponentImpl extends ComponentBase {
                 _nativeElement = null;
                 if (element == null) {
                     element = Browser.document.createDivElement();
-                    element.style.setProperty("-webkit-touch-callout", "none");
-                    element.style.setProperty("-webkit-user-select", "none");
-                    element.style.setProperty("-khtml-user-select", "none");
-                    element.style.setProperty("-moz-user-select", "none");
-                    element.style.setProperty("-ms-user-select", "none");
-                    element.style.setProperty("user-select", "none");
-                    element.style.boxSizing = "border-box";
-                    element.style.position = "absolute";
                 }
 
                 element.scrollTop = 0;
@@ -141,15 +147,6 @@ class ComponentImpl extends ComponentBase {
             }
 
             newElement = Browser.document.createDivElement();
-
-            newElement.style.setProperty("-webkit-touch-callout", "none");
-            newElement.style.setProperty("-webkit-user-select", "none");
-            newElement.style.setProperty("-khtml-user-select", "none");
-            newElement.style.setProperty("-moz-user-select", "none");
-            newElement.style.setProperty("-ms-user-select", "none");
-            newElement.style.setProperty("user-select", "none");
-            newElement.style.boxSizing = "border-box";
-            newElement.style.position = "absolute";
 
             if (Std.is(this, Image)) {
                 newElement.style.boxSizing = "initial";
