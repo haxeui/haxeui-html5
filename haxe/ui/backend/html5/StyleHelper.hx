@@ -215,6 +215,7 @@ class StyleHelper {
                     canvas.width = cast width;
                     canvas.height = cast height;
                     var ctx:CanvasRenderingContext2D = canvas.getContext2d();
+                    ctx.imageSmoothingEnabled = false;
 
                     for (i in 0...srcRects.length) {
                         var srcRect = new Rectangle(srcRects[i].left + imageRect.left,
