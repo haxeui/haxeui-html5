@@ -113,6 +113,7 @@ class StyleHelper {
         }
 
         // background
+        var background:Array<String> = [];
         if (style.backgroundColor != null) {
             if (style.backgroundColorEnd != null && style.backgroundColorEnd != style.backgroundColor) {
                 css.removeProperty("background-color");
@@ -123,15 +124,15 @@ class StyleHelper {
 
                 if (style.backgroundOpacity != null) {
                     if (gradientStyle == "vertical") {
-                        css.background = 'linear-gradient(to bottom, ${HtmlUtils.rgba(style.backgroundColor, style.backgroundOpacity)}, ${HtmlUtils.rgba(style.backgroundColorEnd, style.backgroundOpacity)})';
+                        background.push('linear-gradient(to bottom, ${HtmlUtils.rgba(style.backgroundColor, style.backgroundOpacity)}, ${HtmlUtils.rgba(style.backgroundColorEnd, style.backgroundOpacity)})');
                     } else if (gradientStyle == "horizontal") {
-                        css.background = 'linear-gradient(to right, ${HtmlUtils.rgba(style.backgroundColor, style.backgroundOpacity)}, ${HtmlUtils.rgba(style.backgroundColorEnd, style.backgroundOpacity)})';
+                        background.push('linear-gradient(to right, ${HtmlUtils.rgba(style.backgroundColor, style.backgroundOpacity)}, ${HtmlUtils.rgba(style.backgroundColorEnd, style.backgroundOpacity)})');
                     }
                 } else {
                     if (gradientStyle == "vertical") {
-                        css.background = 'linear-gradient(to bottom, ${HtmlUtils.color(style.backgroundColor)}, ${HtmlUtils.color(style.backgroundColorEnd)})';
+                        background.push('linear-gradient(to bottom, ${HtmlUtils.color(style.backgroundColor)}, ${HtmlUtils.color(style.backgroundColorEnd)})');
                     } else if (gradientStyle == "horizontal") {
-                        css.background = 'linear-gradient(to right, ${HtmlUtils.color(style.backgroundColor)}, ${HtmlUtils.color(style.backgroundColorEnd)})';
+                        background.push('linear-gradient(to right, ${HtmlUtils.color(style.backgroundColor)}, ${HtmlUtils.color(style.backgroundColorEnd)})');
                     }
                 }
             } else {
@@ -188,7 +189,7 @@ class StyleHelper {
 
                 if (slice == null) {
                     if (imageRect.width == imageInfo.width && imageRect.height == imageInfo.height) {
-                        css.backgroundImage = 'url(${imageInfo.data.src})';
+                        background.push('url(${imageInfo.data.src})');
                         if (style.backgroundImageRepeat == null) {
                             css.backgroundRepeat = "no-repeat";
                         } else if (style.backgroundImageRepeat == "repeat") {
@@ -204,7 +205,7 @@ class StyleHelper {
                         var ctx:CanvasRenderingContext2D = canvas.getContext2d();
                         paintBitmap(ctx, cast imageInfo.data, imageRect, new Rectangle(0, 0, width, height));
                         var data = canvas.toDataURL();
-                        css.backgroundImage = 'url(${data})';
+                        background.push('url(${data})');
                     }
                 } else {
                     var rects:Slice9Rects = Slice9.buildRects(width, height, imageRect.width, imageRect.height, slice);
@@ -227,9 +228,14 @@ class StyleHelper {
                     }
 
                     var data = canvas.toDataURL();
-                    css.backgroundImage = 'url(${data})';
+                    background.push('url(${data})');
                 }
+                
+                background.reverse();
+                css.background = background.join(",");
             });
+        } else {
+            css.background = background[0];
         }
     }
 
