@@ -560,6 +560,8 @@ class ComponentImpl extends ComponentBase {
     }
 
     private function __onMouseEvent(event:js.html.Event) {
+        // TODO: conditionally implement: https://developer.mozilla.org/en-US/docs/Web/API/Element/setPointerCapture
+        // especially for scrolls
         var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
         if (type != null) {
             try { // set/releaseCapture isnt currently supported in chrome
