@@ -1,20 +1,15 @@
 package haxe.ui.backend;
 
+import haxe.io.Bytes;
 import haxe.ui.assets.FontInfo;
 import haxe.ui.assets.ImageInfo;
 import haxe.ui.backend.html5.util.FontDetect;
 import js.Browser;
+import js.html.Blob;
+import js.html.URL;
 
-class AssetsBase {
-    public function new() {
-
-    }
-
-    private function getTextDelegate(resourceId:String):String {
-        return null;
-    }
-
-    private function getImageInternal(resourceId:String, callback:ImageInfo->Void) {
+class AssetsImpl extends AssetsBase {
+    private override function getImageInternal(resourceId:String, callback:ImageInfo->Void) {
         var bytes = Resource.getBytes(resourceId);
         if (bytes != null) {
             callback(null);
@@ -37,23 +32,43 @@ class AssetsBase {
 
     }
 
-    private function getImageFromHaxeResource(resourceId:String, callback:String->ImageInfo->Void) {
-        var image = Browser.document.createImageElement();
+    private override function getImageFromHaxeResource(resourceId:String, callback:String->ImageInfo->Void) {
         var bytes = Resource.getBytes(resourceId);
+        imageFromBytes(bytes, function(imageInfo) {
+            callback(resourceId, imageInfo);
+        });
+    }
+
+    public override function imageFromBytes(bytes:Bytes, callback:ImageInfo->Void) {
+        if (bytes == null) {
+            callback(null);
+            return;
+        }
+
+        var image = Browser.document.createImageElement();
         image.onload = function(e) {
             var imageInfo:ImageInfo = {
                 width: image.width,
                 height: image.height,
                 data: cast image
             }
-            callback(resourceId, imageInfo);
+            callback(imageInfo);
         }
-
+        image.onerror = function(e) {
+            Browser.window.console.log(e);
+            callback(null);
+        }
+        
+        var blob = new Blob([bytes.getData()]);
+        var blobUrl = URL.createObjectURL(blob);
+        image.src = blobUrl;
+        /*
         var base64:String = haxe.crypto.Base64.encode(bytes);
-        image.src = "data:image/png;base64," + base64;
+        image.src = "data:;base64," + base64;
+        */
     }
-
-    private function getFontInternal(resourceId:String, callback:FontInfo->Void) {
+    
+    private override function getFontInternal(resourceId:String, callback:FontInfo->Void) {
         FontDetect.onFontLoaded(resourceId, function(f) {
             var fontInfo = {
                 data: f
@@ -62,9 +77,5 @@ class AssetsBase {
         }, function(f) {
             callback(null);
         });
-    }
-
-    private function getFontFromHaxeResource(resourceId:String, callback:String->FontInfo->Void) {
-        callback(resourceId, null);
     }
 }

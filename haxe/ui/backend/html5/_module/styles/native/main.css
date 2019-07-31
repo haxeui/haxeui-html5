@@ -1,7 +1,11 @@
 .button {
 }
 
-.tabbar-button {
+.tabbar-button, .menubar-button, .tabbar .button {
+    native: false;
+}
+
+.switch .button {
     native: false;
 }
 

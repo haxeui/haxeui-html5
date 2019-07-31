@@ -1,6 +1,5 @@
 package haxe.ui.backend.html5.native;
 
-import haxe.ui.components.Slider;
 import haxe.ui.core.Component;
 import js.Browser;
 import js.html.Element;
@@ -40,23 +39,31 @@ class NativeElement {
                     continue;
                 }
                 var parts = s.split(":");
+                if (StringTools.startsWith(StringTools.trim(parts[0]), "-webkit") && UserAgent.instance.chrome == false) {
+                    // skip manually as firefox supports webkit css extensions
+                    continue;
+                }
                 el.style.setProperty(StringTools.trim(parts[0]), StringTools.trim(parts[1]));
             }
         }
 
+        /*
         if (nodeType == "input" && type == "range") {
             el.addEventListener("change", onChange);
         }
+        */
 
         return el;
     }
 
+    /*
     private function onChange(e) {
         if (Std.is(_component, Slider)) {
             var input:InputElement = cast _component.element;
             cast(_component, Slider).pos = Std.parseFloat(input.value);
         }
     }
+    */
 
     public function getConfigValue(name:String, defaultValue:String = null):String {
         if (config == null) {

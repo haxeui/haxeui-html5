@@ -1,11 +1,11 @@
 package haxe.ui.backend;
 
-import haxe.ui.core.Platform;
 import haxe.ui.backend.html5.HtmlUtils;
+import haxe.ui.core.Platform;
 import js.Browser;
 
-class PlatformBase {
-    public function getMetric(id:String):Float {
+class PlatformImpl extends PlatformBase {
+    public override function getMetric(id:String):Float {
         switch (id) {
             case Platform.METRIC_VSCROLL_WIDTH:
                 calcScrollSize();
@@ -14,7 +14,7 @@ class PlatformBase {
                 calcScrollSize();
                 return _hscrollHeight;
         }
-        return 0;
+        return super.getMetric(id);
     }
 
     private static var _vscrollWidth:Float = -1;

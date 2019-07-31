@@ -2,30 +2,47 @@ package haxe.ui.backend;
 
 import haxe.ui.backend.html5.HtmlUtils;
 import haxe.ui.components.TextArea;
-import haxe.ui.core.TextInput.TextInputData;
 import js.Browser;
 import js.html.Element;
 import js.html.InputElement;
 import js.html.TextAreaElement;
 
-class TextInputBase extends TextDisplayBase {
-    private var _inputData:TextInputData = new TextInputData();
-    
-    public function new() {
-        super();
+class TextInputImpl extends TextDisplayImpl {
+    public override function focus() {
+        element.focus();
     }
-
-    private function onKeyUp(e) {
+    
+    public override function blur() {
+        element.blur();
+    }
+    
+    private function onChangeEvent(e) {
+        var newText = null;
         if (Std.is(parentComponent, TextArea)) {
-            _text = cast(element, TextAreaElement).value;
+            newText = cast(element, TextAreaElement).value;
         } else {
-            _text = cast(element, InputElement).value;
+            newText = cast(element, InputElement).value;
+        }
+        
+        if (newText != _text) {
+            _text = newText;
+            measureText();
+            if (_inputData.onChangedCallback != null) {
+                _inputData.onChangedCallback();
+            }
         }
     }
 
     private function onScroll(e) {
         _inputData.hscrollPos = element.scrollLeft;
         _inputData.vscrollPos = element.scrollTop;
+        
+        _inputData.hscrollMax = _textWidth - _width;
+        _inputData.hscrollPageSize = (_width * _inputData.hscrollMax) / _textWidth;
+        
+        _inputData.vscrollMax = _textHeight - _height;
+        _inputData.vscrollPageSize = (_height * _inputData.vscrollMax) / _textHeight;
+        
         if (_inputData.onScrollCallback != null) {
             _inputData.onScrollCallback();
         }
@@ -56,17 +73,19 @@ class TextInputBase extends TextDisplayBase {
         }
     }
 
+    @:access(haxe.ui.core.Component)
     private override function validateStyle():Bool {
         var measureTextRequired:Bool = false;
 
         if ((_displayData.multiline == false && Std.is(element, InputElement) == false)
             || (_displayData.multiline == true && Std.is(element, TextAreaElement) == false)) {
-
             var newElement:Element = createElement();
             element.parentElement.appendChild(newElement);
             HtmlUtils.removeElement(element);
 
-            element.removeEventListener("keyup", onKeyUp);
+            element.removeEventListener("input", onChangeEvent);
+            element.removeEventListener("propertychange", onChangeEvent);
+            element.removeEventListener("scroll", onScroll);
 
             element = newElement;
             validateData();
@@ -82,18 +101,22 @@ class TextInputBase extends TextDisplayBase {
                 inputElement.type = "";
             }
         }
-
-        if (_textStyle != null) {
-            if (_textStyle.borderLeftSize != null) {
-                element.style.marginLeft = '-${_textStyle.borderLeftSize}px';
-            } else {
-                element.style.marginLeft = null;
+        
+        if (parentComponent.disabled || parentComponent._interactivityDisabled == true) { // TODO: bit of a haxeui builder hack here, not ideal, but for now its fine
+            #if !haxeui_builder
+            element.style.cursor = "not-allowed";
+            #end
+            if (Std.is(element, InputElement)) {
+                cast(element, InputElement).disabled = true;
+            } else if (Std.is(element, TextAreaElement)) {
+                cast(element, TextAreaElement).disabled = true;
             }
-            
-            if (_textStyle.borderTopSize != null) {
-                element.style.marginTop = '-${_textStyle.borderTopSize}px';
-            } else {
-                element.style.marginTop = null;
+        } else {
+            element.style.cursor = null;
+            if (Std.is(element, InputElement)) {
+                cast(element, InputElement).disabled = false;
+            } else if (Std.is(element, TextAreaElement)) {
+                cast(element, TextAreaElement).disabled = false;
             }
         }
         
@@ -120,6 +143,12 @@ class TextInputBase extends TextDisplayBase {
     //***********************************************************************************************************
 
     private override function createElement():Element {
+        if (element != null) {
+            element.removeEventListener("input", onChangeEvent);
+            element.removeEventListener("propertychange", onChangeEvent);
+            element.removeEventListener("scroll", onScroll);
+        }
+        
         var el:Element = null;
         if (_displayData.multiline == false) {
             el = Browser.document.createInputElement();
@@ -130,43 +159,26 @@ class TextInputBase extends TextDisplayBase {
             el.style.cursor = "initial";
             el.style.position = "absolute";
             el.style.backgroundColor = "inherit";
-            el.onkeydown = function(e) {
-                if (parentComponent.disabled == true) {
-                    e.preventDefault();
-                    e.stopImmediatePropagation();
-                    e.stopPropagation();
-                    return false;
-                }
-                return true;
-            }
-            el.onmousedown = function(e) {
-                if (parentComponent.disabled == true) {
-                    e.preventDefault();
-                    e.stopImmediatePropagation();
-                    e.stopPropagation();
-                    return false;
-                }
-                return true;
-            }
+            el.style.padding = "0px";
+            el.style.marginLeft = "-1px";
+            el.style.marginTop = "-1px";
         } else {
             el = Browser.document.createTextAreaElement();
             el.style.border = "none";
             el.style.resize = "none";
             el.style.outline = "none";
             el.style.lineHeight = "1.4";
-            //el.style.padding = "5px";
+            el.style.padding = "0px";
+            el.style.margin = "0px";
+            el.style.bottom = "0px"; // chrome only?
+            el.style.right = "0px"; // chrome only?
             el.style.overflow = "hidden";
             el.style.cursor = "initial";
             el.style.position = "absolute";
             el.style.backgroundColor = "inherit";
-            el.style.whiteSpace = "nowrap";
+            el.style.whiteSpace = "normal";
+            el.id = "textArea";
             el.onkeydown = function(e) {
-                if (parentComponent.disabled == true) {
-                    e.preventDefault();
-                    e.stopImmediatePropagation();
-                    e.stopPropagation();
-                    return false;
-                }
                 if (e.keyCode == 9 || e.which == 9) {
                     e.preventDefault();
                     e.stopImmediatePropagation();
@@ -181,18 +193,10 @@ class TextInputBase extends TextDisplayBase {
                 }
                 return true;
             }
-            el.onmousedown = function(e) {
-                if (parentComponent.disabled == true) {
-                    e.preventDefault();
-                    e.stopImmediatePropagation();
-                    e.stopPropagation();
-                    return false;
-                }
-                return true;
-            }
         }
 
-        el.addEventListener("keyup", onKeyUp);
+        el.addEventListener("input", onChangeEvent);
+        el.addEventListener("propertychange", onChangeEvent);
         el.addEventListener("scroll", onScroll);
 
         return el;

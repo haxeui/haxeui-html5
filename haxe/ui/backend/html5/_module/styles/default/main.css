@@ -9,12 +9,34 @@
     border-radius: none;
 }
 
+.progress:native, .slider:native {
+    background: none;
+    border: none;
+    border-radius: none;
+    filter: none;
+    color: none;
+    width: auto;
+    height: auto;
+}
+
 .textfield:native {
     border: none;
     border-radius: none;
     filter: none;
     color: none;
     background-color: none;
+    width: auto;
+    height: auto;
+}
+
+.numberstepper:native {
+    border: none;
+    border-radius: none;
+    filter: none;
+    color: none;
+    background-color: none;
+    width: 70px;
+    height: 20px;
 }
 
 .textarea:native {
@@ -23,6 +45,8 @@
     filter: none;
     color: none;
     background-color: none;
+    font-name: "Arial";
+    font-size: 13px;
 }
 
 .component:disabled {

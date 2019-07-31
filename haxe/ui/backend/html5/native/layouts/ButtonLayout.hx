@@ -2,7 +2,7 @@ package haxe.ui.backend.html5.native.layouts;
 
 import haxe.ui.core.Component;
 import haxe.ui.layouts.DefaultLayout;
-import haxe.ui.util.Size;
+import haxe.ui.geom.Size;
 import js.html.Element;
 import js.html.ImageElement;
 import js.html.SpanElement;
@@ -57,7 +57,7 @@ class ButtonLayout extends DefaultLayout {
                     if (Std.is(last, ImageElement) == false) {
                         HtmlUtils.swapElements(first, last);
                     }
-                default : 
+                default:    
             }
 
             var img:ImageElement = getIcon();
@@ -83,7 +83,7 @@ class ButtonLayout extends DefaultLayout {
                         text.style.display = "inline-block";
                     case "top" | "bottom":
                         text.style.display = "block";
-                    default :
+                    default:    
                 }
             }
         }

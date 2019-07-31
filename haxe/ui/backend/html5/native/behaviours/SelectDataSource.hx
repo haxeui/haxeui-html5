@@ -1,6 +1,6 @@
 package haxe.ui.backend.html5.native.behaviours;
 
-import haxe.ui.core.Behaviour;
+import haxe.ui.behaviours.Behaviour;
 import haxe.ui.data.DataSource;
 import haxe.ui.util.Variant;
 import js.html.Element;
@@ -8,7 +8,7 @@ import js.html.OptionElement;
 import js.Browser;
 
 @:keep
-@:access(haxe.ui.backend.ComponentBase)
+@:access(haxe.ui.backend.ComponentImpl)
 class SelectDataSource extends Behaviour {
     public override function set(value:Variant) {
         var ds:DataSource<Dynamic> = value;

@@ -1,19 +1,18 @@
 package haxe.ui.backend.html5.native.behaviours;
 
-import haxe.ui.core.Behaviour;
-import haxe.ui.util.Variant;
+import haxe.ui.behaviours.DataBehaviour;
 import js.Browser;
 import js.html.Element;
 import js.html.InputElement;
 import js.html.SpanElement;
 
 @:keep
-class SpanText extends Behaviour {
-    public override function set(value:Variant) {
+class SpanText extends DataBehaviour {
+    public override function validateData() {
         var el:Element = _component.element;
         var span:SpanElement = getSpan(el);
         var checkbox:InputElement = getInput(el, "checkbox");
-        if (value.isNull) {
+        if (_value.isNull) {
             HtmlUtils.removeElement(span);
             if (checkbox != null) {
                 checkbox.style.marginTop = "-15px";
@@ -55,7 +54,7 @@ class SpanText extends Behaviour {
             invalidate = true;
         }
 
-        span.textContent = value;
+        span.textContent = _value;
         if (invalidate == true) {
             _component.invalidateComponentLayout();
         }
