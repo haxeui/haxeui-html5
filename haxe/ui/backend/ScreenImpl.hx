@@ -99,9 +99,9 @@ class ScreenImpl extends ScreenBase {
 
     public override function removeComponent(component:Component) {
         _topLevelComponents.remove(component);
-        try {
+        if (container.contains(component.element) == true) {
             container.removeChild(component.element);
-        } catch (e:Dynamic) { }
+        }
     }
 
     private override function handleSetComponentIndex(child:Component, index:Int) {
