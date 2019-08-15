@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<module>
+<module id="haxeui-html5" priority="-1">
     <resources>
         <resource path="/haxe/ui/backend/html5/_module/styles" prefix="styles" />
     </resources>

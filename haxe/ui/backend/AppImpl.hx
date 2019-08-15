@@ -24,7 +24,7 @@ class AppImpl extends AppBase {
 
     private override function getToolkitInit():ToolkitOptions {
         return {
-            container: findContainer(Toolkit.backendProperties.getProp("haxe.ui.html5.container"))
+            container: findContainer(Toolkit.backendProperties.getProp("haxe.ui.html5.container", "body"))
         };
     }
 
@@ -32,6 +32,8 @@ class AppImpl extends AppBase {
         var el:Element = null;
         if (id == "body") {
             el = Browser.document.body;
+        } else if (id != null) {
+            el = Browser.document.getElementById("haxeui-container");
         }
 
         if (el == null) {
