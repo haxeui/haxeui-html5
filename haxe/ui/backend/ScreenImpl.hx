@@ -152,6 +152,8 @@ class ScreenImpl extends ScreenBase {
     }
 
     private override function mapEvent(type:String, listener:UIEvent->Void) {
+        var container = Browser.document.body;
+        
         switch (type) {
             case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
                 MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
@@ -200,6 +202,8 @@ class ScreenImpl extends ScreenBase {
     }
 
     private override function unmapEvent(type:String, listener:UIEvent->Void) {
+        var container = Browser.document.body;
+        
         switch (type) {
             case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
                 MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
@@ -235,14 +239,14 @@ class ScreenImpl extends ScreenBase {
 
                 if (touchEvent == true) {
                     var te:js.html.TouchEvent = cast(event, js.html.TouchEvent);
-                    mouseEvent.screenX = te.changedTouches[0].pageX / Toolkit.scaleX;
-                    mouseEvent.screenY = te.changedTouches[0].pageY / Toolkit.scaleY;
+                    mouseEvent.screenX = (te.changedTouches[0].pageX - Screen.instance.container.offsetLeft) / Toolkit.scaleX;
+                    mouseEvent.screenY = (te.changedTouches[0].pageY - Screen.instance.container.offsetTop) / Toolkit.scaleY;
                     mouseEvent.touchEvent = true;
                 } else if (Std.is(event, js.html.MouseEvent)) {
                     var me:js.html.MouseEvent = cast(event, js.html.MouseEvent);
                     mouseEvent.buttonDown = (me.buttons != 0);
-                    mouseEvent.screenX = me.pageX / Toolkit.scaleX;
-                    mouseEvent.screenY = me.pageY / Toolkit.scaleY;
+                    mouseEvent.screenX = (me.pageX - Screen.instance.container.offsetLeft) / Toolkit.scaleX;
+                    mouseEvent.screenY = (me.pageY - Screen.instance.container.offsetTop) / Toolkit.scaleY;
                     mouseEvent.ctrlKey = me.ctrlKey;
                     mouseEvent.shiftKey = me.shiftKey;
                 }

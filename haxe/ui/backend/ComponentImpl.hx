@@ -57,7 +57,7 @@ class ComponentImpl extends ComponentBase {
         var sheet:CSSStyleSheet = cast(Browser.document.styleSheets[0], CSSStyleSheet);
         if (_stylesAdded == false) {
             _stylesAdded = true;
-            sheet.insertRule("#haxeui-container * {
+            sheet.insertRule("#haxeui-container .haxeui-component {
                 position: absolute;
                 box-sizing: border-box;
                 -webkit-touch-callout: none;
@@ -104,6 +104,7 @@ class ComponentImpl extends ComponentBase {
                 if (element == null) {
                     element = _nativeElement.create();
                 }
+                element.classList.add("haxeui-component");
                 element.style.overflow = "auto";
                 elementToComponent.set(element, cast(this, Component));
                 return;
@@ -114,6 +115,7 @@ class ComponentImpl extends ComponentBase {
                     _nativeElement = Type.createInstance(Type.resolveClass(nativeConfig.get("class")), [this]);
                     _nativeElement.config = nativeConfig;
                     newElement = _nativeElement.create();
+                    newElement.classList.add("haxeui-component");
                 }
             }
 
@@ -142,11 +144,13 @@ class ComponentImpl extends ComponentBase {
                 element.scrollTop = 0;
                 element.scrollLeft = 0;
                 element.style.overflow = "hidden";
+                element.classList.add("haxeui-component");
                 elementToComponent.set(element, cast(this, Component));
                 return;
             }
 
             newElement = Browser.document.createDivElement();
+            newElement.classList.add("haxeui-component");
 
             if (Std.is(this, Image)) {
                 newElement.style.boxSizing = "initial";
@@ -559,6 +563,7 @@ class ComponentImpl extends ComponentBase {
         }
     }
 
+    @:access(haxe.ui.core.Screen)
     private function __onMouseEvent(event:js.html.Event) {
         // TODO: conditionally implement: https://developer.mozilla.org/en-US/docs/Web/API/Element/setPointerCapture
         // especially for scrolls
@@ -584,14 +589,14 @@ class ComponentImpl extends ComponentBase {
                 
                 if (touchEvent == true) {
                     var te:js.html.TouchEvent = cast(event, js.html.TouchEvent);
-                    mouseEvent.screenX = te.changedTouches[0].pageX / Toolkit.scaleX;
-                    mouseEvent.screenY = te.changedTouches[0].pageY / Toolkit.scaleY;
+                    mouseEvent.screenX = (te.changedTouches[0].pageX - Screen.instance.container.offsetLeft) / Toolkit.scaleX;
+                    mouseEvent.screenY = (te.changedTouches[0].pageY - Screen.instance.container.offsetTop) / Toolkit.scaleY;
                     mouseEvent.touchEvent = true;
                 } else if (Std.is(event, js.html.MouseEvent)) {
                     var me:js.html.MouseEvent = cast(event, js.html.MouseEvent);
                     mouseEvent.buttonDown = (me.buttons != 0);
-                    mouseEvent.screenX = me.pageX / Toolkit.scaleX;
-                    mouseEvent.screenY = me.pageY / Toolkit.scaleY;
+                    mouseEvent.screenX = (me.pageX - Screen.instance.container.offsetLeft) / Toolkit.scaleX;
+                    mouseEvent.screenY = (me.pageY - Screen.instance.container.offsetTop) / Toolkit.scaleY;
                     mouseEvent.ctrlKey = me.ctrlKey;
                     mouseEvent.shiftKey = me.shiftKey;
                 }
@@ -601,6 +606,7 @@ class ComponentImpl extends ComponentBase {
         }
     }
 
+    @:access(haxe.ui.core.Screen)
     private function __onMouseWheelEvent(event:js.html.MouseEvent) {
         var fn = _eventMap.get(MouseEvent.MOUSE_WHEEL);
         if (fn == null) {
@@ -620,8 +626,8 @@ class ComponentImpl extends ComponentBase {
 
         var mouseEvent = new MouseEvent(MouseEvent.MOUSE_WHEEL);
         mouseEvent._originalEvent = event;
-        mouseEvent.screenX = event.pageX;
-        mouseEvent.screenY = event.pageY;
+        mouseEvent.screenX = (event.pageX - Screen.instance.container.offsetLeft) / Toolkit.scaleX;
+        mouseEvent.screenY = (event.pageY - Screen.instance.container.offsetTop) / Toolkit.scaleY;
         mouseEvent.ctrlKey = event.ctrlKey;
         mouseEvent.shiftKey = event.shiftKey;
         mouseEvent.delta = delta;
