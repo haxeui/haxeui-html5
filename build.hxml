@@ -5,4 +5,4 @@
 
 -cp .
 --no-output 
---macro haxe.macro.Compiler.include("haxe.ui")
+--macro haxe.macro.Compiler.include("haxe.ui", ["haxe.ui.macros"])
