@@ -9,6 +9,7 @@ import haxe.ui.events.KeyboardEvent;
 import haxe.ui.events.MouseEvent;
 import haxe.ui.events.UIEvent;
 import js.Browser;
+import js.html.CSSStyleSheet;
 import js.html.Element;
 import js.html.TouchEvent;
 
@@ -93,10 +94,52 @@ class ScreenImpl extends ScreenBase {
         }
 
         _topLevelComponents.push(component);
+        if (component.percentWidth != null) {
+            addPercentContainerWidth();
+        }
+        if (component.percentHeight != null) {
+            addPercentContainerHeight();
+        }
         addResizeListener();
         resizeComponent(component);
     }
 
+    private var _percentContainerWidthAdded:Bool = false;
+    private function addPercentContainerWidth() {
+        if (_percentContainerWidthAdded == true) {
+            return;
+        }
+        _percentContainerWidthAdded = true;
+        
+        var sheet:CSSStyleSheet = cast(Browser.document.styleSheets[0], CSSStyleSheet);
+        sheet.insertRule("#haxeui-container-parent {
+            margin: 0;
+            width: 100%;
+        }", sheet.cssRules.length);
+        sheet.insertRule("#haxeui-container {
+            margin: 0;
+            width: 100%;
+        }", sheet.cssRules.length);
+    }
+    
+    private var _percentContainerHeightAdded:Bool = false;
+    private function addPercentContainerHeight() {
+        if (_percentContainerHeightAdded == true) {
+            return;
+        }
+        _percentContainerHeightAdded = true;
+        
+        var sheet:CSSStyleSheet = cast(Browser.document.styleSheets[0], CSSStyleSheet);
+        sheet.insertRule("#haxeui-container-parent {
+            margin: 0;
+            height: 100%;
+        }", sheet.cssRules.length);
+        sheet.insertRule("#haxeui-container {
+            margin: 0;
+            height: 100%;
+        }", sheet.cssRules.length);
+    }
+    
     public override function removeComponent(component:Component) {
         _topLevelComponents.remove(component);
         if (container.contains(component.element) == true) {
@@ -125,6 +168,9 @@ class ScreenImpl extends ScreenBase {
         }
         if (c.id != "haxeui-container") {
             c.id = "haxeui-container";
+            if (c.parentElement != null && c.parentElement.id != "haxeui-container-parent") {
+                c.parentElement.id = "haxeui-container-parent";
+            }
         }
         return c;
     }
