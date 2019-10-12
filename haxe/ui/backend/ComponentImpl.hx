@@ -54,7 +54,6 @@ class ComponentImpl extends ComponentBase {
             _mutationObserver.observe(Screen.instance.container, { childList: true } );
         }
 
-        trace(Browser.document.styleSheets.length);
         if (Browser.document.styleSheets.length == 0) {
             var head = Browser.document.head;
             var style = Browser.document.createElement("style");
