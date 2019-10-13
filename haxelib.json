@@ -1,13 +1,22 @@
 {
-    "name": "haxeui-html5",
-    "url": "https://github.com/haxeui/haxeui-html5",
-    "license": "MIT",
-    "tags": ["ui", "gui", "html5"],
-    "description": "The HTML5 backend of the HaxeUI framework",
-    "version": "0.0.2",
-    "releasenote": "Enhanced text input support",
-    "contributors": ["haxeui", "ianharrigan", "_ibilon", "aW4KeNiNG"],
+    "contributors": [
+        "haxeui",
+        "ianharrigan",
+        "_ibilon",
+        "aW4KeNiNG"
+    ],
+    "version": "1.0.0",
     "dependencies": {
         "haxeui-core": ""
-    }
+    },
+    "releasenote": "Official release",
+    "tags": [
+        "ui",
+        "gui",
+        "html5"
+    ],
+    "license": "MIT",
+    "name": "haxeui-html5",
+    "description": "The HTML5 backend of the HaxeUI framework",
+    "url": "https://github.com/haxeui/haxeui-html5"
 }
