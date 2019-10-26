@@ -12,6 +12,7 @@ class ImageDisplayImpl extends ImageBase {
         super();
         element = Browser.document.createImageElement();
         element.style.position = "absolute";
+        element.style.borderRadius = "inherit";
         element.style.setProperty("pointer-events", "none");
     }
 
