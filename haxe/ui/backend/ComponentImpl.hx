@@ -15,6 +15,7 @@ import haxe.ui.containers.ScrollView;
 import haxe.ui.containers.TableView;
 import haxe.ui.core.Component;
 import haxe.ui.core.ImageDisplay;
+import haxe.ui.core.InteractiveComponent;
 import haxe.ui.core.Screen;
 import haxe.ui.core.TextDisplay;
 import haxe.ui.core.TextInput;
@@ -492,7 +493,7 @@ class ComponentImpl extends ComponentBase {
                     _eventMap.set(type, listener);
                     if (Std.is(this, TextField) || Std.is(this, TextArea)) {
                         element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(KeyboardEvent.KEY_UP), __onTextFieldChangeEvent);
-                    } else {
+                    } else if (Std.is(this, InteractiveComponent)) {
                         element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onChangeEvent);
                     }
                 }
