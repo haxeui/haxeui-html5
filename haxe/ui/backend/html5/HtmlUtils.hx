@@ -51,8 +51,10 @@ class HtmlUtils {
 
     private static function onValidationStop(e:ValidationEvent):Void {
         if (DIV_HELPER != null) {
+            /*
             removeElement(DIV_HELPER);
             DIV_HELPER = null;
+            */
         }
     }
 

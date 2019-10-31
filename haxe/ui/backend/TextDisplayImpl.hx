@@ -20,7 +20,8 @@ class TextDisplayImpl extends TextBase {
 
     private override function validateData() {
         var html:String = normalizeText(_text);
-        element.innerHTML = html;
+        //element.innerHTML = html;
+        element.textContent = html;
     }
 
     private var _rawFontName:String;
@@ -83,17 +84,24 @@ class TextDisplayImpl extends TextBase {
         style.top = HtmlUtils.px(_top);
     }
 
+    private var _fixedWidth:Bool = false;
+    private var _fixedHeight:Bool = false;
     private override function validateDisplay() {
         var style:CSSStyleDeclaration = element.style;
         if (_width > 0) {
+            _fixedWidth = true;
             style.width = HtmlUtils.px(_width);
         }
         if (_height > 0) {
+            _fixedHeight = true;
             style.height = HtmlUtils.px(_height);
         }
     }
 
     private override function measureText() {
+        if (_fixedWidth == true && _fixedHeight == true) {
+            return;
+        }
         if (HtmlUtils.DIV_HELPER == null) {
             HtmlUtils.createDivHelper();
         }
@@ -101,8 +109,12 @@ class TextDisplayImpl extends TextBase {
         var div = HtmlUtils.DIV_HELPER;
         setTempDivData(div);
 
-        _textWidth = div.clientWidth;
-        _textHeight = div.clientHeight;
+        if (_fixedWidth == false) {
+            _textWidth = div.clientWidth;
+        }
+        if (_fixedHeight == false) {
+            _textHeight = div.clientHeight;
+        }
     }
 
     //***********************************************************************************************************
@@ -129,7 +141,7 @@ class TextDisplayImpl extends TextBase {
         div.style.whiteSpace = element.style.whiteSpace;
         div.style.wordBreak = element.style.wordBreak;
         div.style.width = (_width > 0) ? '${HtmlUtils.px(_width)}' : "";
-        div.innerHTML = normalizeText(t);
+        div.textContent = normalizeText(t);
     }
 
     private function normalizeText(text:String):String {
