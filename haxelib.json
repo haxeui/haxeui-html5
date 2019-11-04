@@ -5,11 +5,11 @@
         "_ibilon",
         "aW4KeNiNG"
     ],
-    "version": "1.0.0",
+    "version": "1.0.1",
     "dependencies": {
         "haxeui-core": ""
     },
-    "releasenote": "Official release",
+    "releasenote": "faster text measuring & tweaks",
     "tags": [
         "ui",
         "gui",
