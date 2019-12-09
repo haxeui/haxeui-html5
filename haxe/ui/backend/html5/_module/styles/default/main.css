@@ -1,6 +1,6 @@
 .button, .label, .textarea, .textfield {
-    font-name: "Arial";
-    font-size: 13px;
+    font-name: "${fonts.normal.name}";
+    font-size: ${fonts.normal.size};
 }
 
 .button:native {
