@@ -9,7 +9,8 @@ import js.html.TextAreaElement;
 
 class TextInputImpl extends TextDisplayImpl {
     public override function focus() {
-        element.focus();
+        untyped __js__('{0}.focus({preventScroll: true})', element);
+        //element.focus();
     }
     
     public override function blur() {
