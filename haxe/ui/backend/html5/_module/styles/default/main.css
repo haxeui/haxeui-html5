@@ -1,6 +1,6 @@
 .button, .label, .textarea, .textfield {
-    font-name: "${fonts.normal.name}";
-    font-size: ${fonts.normal.size};
+    font-name: "${default.text.font.name}";
+    font-size: ${default.text.font.size};
 }
 
 .button:native {
@@ -45,8 +45,8 @@
     filter: none;
     color: none;
     background-color: none;
-    font-name: "Arial";
-    font-size: 13px;
+    font-name: "${default.text.font.name}";
+    font-size: ${default.text.font.size};
 }
 
 .component:disabled {
