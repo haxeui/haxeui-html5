@@ -305,6 +305,11 @@ class ScreenImpl extends ScreenBase {
     private function __onKeyEvent(event:js.html.KeyboardEvent) {
         var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
         if (type != null) {
+            if (event.keyCode == 9 || event.which == 9) {
+                event.preventDefault();
+                event.stopImmediatePropagation();
+                event.stopPropagation();
+            }
             var fn = _mapping.get(type);
             if (fn != null) {
                 var keyboardEvent = new KeyboardEvent(type);
