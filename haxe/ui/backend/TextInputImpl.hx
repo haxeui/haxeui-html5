@@ -162,6 +162,7 @@ class TextInputImpl extends TextDisplayImpl {
             el.style.padding = "0px";
             el.style.marginLeft = "-1px";
             el.style.marginTop = "-1px";
+            el.spellcheck = false;
         } else {
             el = Browser.document.createTextAreaElement();
             el.style.border = "none";
@@ -178,6 +179,7 @@ class TextInputImpl extends TextDisplayImpl {
             el.style.backgroundColor = "inherit";
             el.style.whiteSpace = "normal";
             el.id = "textArea";
+            el.spellcheck = false;
             el.onkeydown = function(e) {
                 if (e.keyCode == 9 || e.which == 9) {
                     e.preventDefault();
