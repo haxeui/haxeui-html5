@@ -9,7 +9,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
+    - uses: ianharrigan/GitHubActionsTest/.github/actions/haxe@master
+      with:
+        haxe-version: 4.0.3
+
     - name: Build app
       run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
+        git clone --branch master https://github.com/haxeui/haxeui-core.git --depth=1
+        haxelib dev haxeui-core haxeui-core
+        haxelib install build.hxml --always
+        haxe build.hxml
