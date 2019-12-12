@@ -14,7 +14,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - uses: ianharrigan/GitHubActionsTest/.github/actions/haxe@master
+    - uses: haxeui/haxeui-core/.github/actions/haxe@master
       with:
         haxe-version: ${{ matrix.haxe-version }}
 
