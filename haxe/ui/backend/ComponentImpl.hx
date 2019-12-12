@@ -35,7 +35,7 @@ import js.html.MutationObserver;
 import js.html.MutationRecord;
 import js.html.Node;
 import js.html.WheelEvent;
-s
+
 class ComponentImpl extends ComponentBase {
     public var element:Element;
     private var _eventMap:Map<String, UIEvent->Void>;
