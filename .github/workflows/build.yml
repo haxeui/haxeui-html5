@@ -1,0 +1,15 @@
+name: Build
+
+on: [push, repository_dispatch]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build app
+      run: |
+        echo Add other actions to build,
+        echo test, and deploy your project.
