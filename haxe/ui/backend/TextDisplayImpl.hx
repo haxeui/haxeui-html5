@@ -118,7 +118,12 @@ class TextDisplayImpl extends TextBase {
             _textWidth = div.clientWidth;
         }
         if (_fixedHeight == false) {
-            _textHeight = div.clientHeight;
+            var fontSize:Float = Std.parseFloat(StringTools.replace(div.style.fontSize, "px", ""));
+            var offset:Float = 0;
+            if (fontSize > 14) {
+                offset = Math.ceil(fontSize / 14);
+            }
+            _textHeight = div.clientHeight - offset;
         }
     }
 

@@ -65,6 +65,7 @@ class HtmlUtils {
             DIV_HELPER.style.position = "absolute";
             DIV_HELPER.style.top = "-99999px"; // position off-screen!
             DIV_HELPER.style.left = "-99999px"; // position off-screen!
+            //DIV_HELPER.style.height = "1.05em";
             Browser.document.body.appendChild(DIV_HELPER);
         }
     }
