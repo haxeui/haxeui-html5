@@ -75,6 +75,11 @@ class TextDisplayImpl extends TextBase {
             }
         }
 
+        if (measureTextRequired == true) {
+            _fixedWidth = false;
+            _fixedHeight = false;
+        }
+        
         return measureTextRequired;
     }
 
