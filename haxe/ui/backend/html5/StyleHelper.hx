@@ -80,7 +80,11 @@ class StyleHelper {
             style.borderLeftColor == style.borderBottomColor &&
             style.borderLeftColor == style.borderTopColor) {
 
-            css.borderColor = HtmlUtils.color(style.borderLeftColor);
+            if (style.borderOpacity == null) {
+                css.borderColor = HtmlUtils.color(style.borderLeftColor);
+            } else {
+                css.borderColor = HtmlUtils.rgba(style.borderLeftColor, style.borderOpacity);
+            }
         } else if (style.borderLeftColor == null &&
             style.borderRightColor == null &&
             style.borderBottomColor == null &&
