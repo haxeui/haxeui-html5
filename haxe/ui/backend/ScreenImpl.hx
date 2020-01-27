@@ -202,7 +202,7 @@ class ScreenImpl extends ScreenBase {
         
         switch (type) {
             case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
-                MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
+                MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DOUBLE_CLICK:
 
                 // chrome sends a spurious mouse move event even if the mouse hasnt moved, lets consume that first
                 if (type == MouseEvent.MOUSE_MOVE && _mapping.exists(type) == false && UserAgent.instance.chrome == true) {
@@ -252,7 +252,7 @@ class ScreenImpl extends ScreenBase {
         
         switch (type) {
             case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
-                MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK:
+                MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DOUBLE_CLICK:
                 _mapping.remove(type);
                 container.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
                 if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
