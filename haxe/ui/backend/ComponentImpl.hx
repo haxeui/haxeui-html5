@@ -462,7 +462,7 @@ class ComponentImpl extends ComponentBase {
     private override function mapEvent(type:String, listener:UIEvent->Void) {
         switch (type) {
             case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
-                MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DOUBLE_CLICK:
+                MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DBL_CLICK:
                 if (_eventMap.exists(type) == false) {
                     if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
                         element.addEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
@@ -506,7 +506,7 @@ class ComponentImpl extends ComponentBase {
     private override function unmapEvent(type:String, listener:UIEvent->Void) {
         switch (type) {
             case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
-                MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DOUBLE_CLICK:
+                MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DBL_CLICK:
                 _eventMap.remove(type);
                 element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
                 if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
