@@ -2,9 +2,9 @@ package haxe.ui.backend.html5;
 
 import haxe.ui.assets.ImageInfo;
 import haxe.ui.backend.ComponentImpl;
-import haxe.ui.styles.Style;
 import haxe.ui.geom.Rectangle;
 import haxe.ui.geom.Slice9;
+import haxe.ui.styles.Style;
 import js.Browser;
 import js.html.CSSStyleDeclaration;
 import js.html.CanvasElement;
@@ -118,40 +118,38 @@ class StyleHelper {
 
         // background
         var background:Array<String> = [];
-        if (style.backgroundColor != null) {
-            if (style.backgroundColorEnd != null && style.backgroundColorEnd != style.backgroundColor) {
-                css.removeProperty("background-color");
+        if (style.backgroundColors != null && style.backgroundColors.length > 0) {
+            css.removeProperty("background-color");
+            if (style.backgroundColors.length == 1) { // solid
+                if (style.backgroundOpacity != null) {
+                    css.backgroundColor = HtmlUtils.rgba(style.backgroundColors[0].color, style.backgroundOpacity);
+                } else {
+                    css.backgroundColor = HtmlUtils.color(style.backgroundColors[0].color);
+                }
+            } else { // gradient
                 var gradientStyle = style.backgroundGradientStyle;
                 if (gradientStyle == null) {
                     gradientStyle = "vertical";
                 }
-
-                if (style.backgroundOpacity != null) {
-                    if (gradientStyle == "vertical") {
-                        background.push('linear-gradient(to bottom, ${HtmlUtils.rgba(style.backgroundColor, style.backgroundOpacity)}, ${HtmlUtils.rgba(style.backgroundColorEnd, style.backgroundOpacity)})');
-                    } else if (gradientStyle == "horizontal") {
-                        background.push('linear-gradient(to right, ${HtmlUtils.rgba(style.backgroundColor, style.backgroundOpacity)}, ${HtmlUtils.rgba(style.backgroundColorEnd, style.backgroundOpacity)})');
-                    }
-                } else {
-                    if (gradientStyle == "vertical") {
-                        background.push('linear-gradient(to bottom, ${HtmlUtils.color(style.backgroundColor)}, ${HtmlUtils.color(style.backgroundColorEnd)})');
-                    } else if (gradientStyle == "horizontal") {
-                        background.push('linear-gradient(to right, ${HtmlUtils.color(style.backgroundColor)}, ${HtmlUtils.color(style.backgroundColorEnd)})');
+                
+                var linearGradientFromTo = "to bottom";
+                if (gradientStyle == "horizontal") {
+                    linearGradientFromTo = "to right";
+                }
+                
+                var gradientParts:Array<String> = [];
+                for (backgroundPair in style.backgroundColors) {
+                    if (style.backgroundOpacity != null) {
+                        gradientParts.push('${HtmlUtils.rgba(backgroundPair.color, style.backgroundOpacity)} ${backgroundPair.location}%');
+                    } else {
+                        gradientParts.push('${HtmlUtils.color(backgroundPair.color)} ${backgroundPair.location}%');
                     }
                 }
-            } else {
-                css.removeProperty("background");
-                if (style.backgroundOpacity != null) {
-                    css.backgroundColor = HtmlUtils.rgba(style.backgroundColor, style.backgroundOpacity);
-                } else {
-                    css.backgroundColor = HtmlUtils.color(style.backgroundColor);
-                }
+                
+                background.push('linear-gradient(${linearGradientFromTo}, ${gradientParts.join(",")})');
             }
-        } else {
-            css.removeProperty("background");
-            css.removeProperty("background-color");
         }
-
+        
         if (style.borderRadius != null && style.borderRadius > 0) {
             css.borderRadius = HtmlUtils.px(style.borderRadius);
         } else {
