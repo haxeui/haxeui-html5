@@ -1,21 +1,21 @@
 {
+    "version": "1.0.6",
     "contributors": [
         "haxeui",
         "ianharrigan",
         "_ibilon",
         "aW4KeNiNG"
     ],
-    "version": "1.0.5",
-    "dependencies": {
-        "haxeui-core": ""
-    },
-    "releasenote": "rename double_click => dbl_click",
+    "license": "MIT",
     "tags": [
         "ui",
         "gui",
         "html5"
     ],
-    "license": "MIT",
+    "releasenote": "Various bug fixes",
+    "dependencies": {
+        "haxeui-core": ""
+    },
     "name": "haxeui-html5",
     "description": "The HTML5 backend of the HaxeUI framework",
     "url": "https://github.com/haxeui/haxeui-html5"
