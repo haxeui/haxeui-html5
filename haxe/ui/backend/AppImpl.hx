@@ -33,7 +33,7 @@ class AppImpl extends AppBase {
         if (id == "body") {
             el = Browser.document.body;
         } else if (id != null) {
-            el = Browser.document.getElementById("haxeui-container");
+            el = Browser.document.getElementById(id);
         }
 
         if (el == null) {
