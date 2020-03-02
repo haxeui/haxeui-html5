@@ -36,11 +36,39 @@ class TextDisplayImpl extends TextBase {
             measureTextRequired = true;
         }
 
-        if (_textStyle != null) {
-            if (element.style.textAlign != _textStyle.textAlign) {
-                element.style.textAlign = _textStyle.textAlign;
+        if (_textStyle2 != null) {
+            if (_textStyle2.textAlign != null) {
+                var textAlignValue:String = _textStyle2.textAlign;
+                if (element.style.textAlign != textAlignValue) {
+                    element.style.textAlign = textAlignValue;
+                }
             }
 
+            if (_textStyle2.font.size != null) {
+                var fontSizeValue = HtmlUtils.px(_textStyle2.font.size);
+                if (element.style.fontSize != fontSizeValue) {
+                    element.style.fontSize = fontSizeValue;
+                    measureTextRequired = true;
+                }
+            }
+            
+            if (_textStyle2.font.weight != null) {
+                var fontWeightValue:Float = _textStyle2.font.weight;
+                if (element.style.fontWeight != "" + fontWeightValue) {
+                    element.style.fontWeight = "" + fontWeightValue;
+                    measureTextRequired = true;
+                }
+            }
+            
+            if (_textStyle2.font.style != null) {
+                var fontStyleValue:String = _textStyle2.font.style;
+                if (element.style.fontStyle != fontStyleValue) {
+                    element.style.fontStyle = fontStyleValue;
+                    measureTextRequired = true;
+                }
+            }
+            
+            /*
             var fontSizeValue = HtmlUtils.px(_textStyle.fontSize);
             if (element.style.fontSize != fontSizeValue) {
                 element.style.fontSize = fontSizeValue;
@@ -61,8 +89,15 @@ class TextDisplayImpl extends TextBase {
                 element.style.textDecoration = "underline";
                 measureTextRequired = true;
             }
+            */
             
+            /*
             var colorValue = HtmlUtils.color(_textStyle.color);
+            if (element.style.color != colorValue) {
+                element.style.color = colorValue;
+            }
+            */
+            var colorValue = HtmlUtils.color(_textStyle2.color);
             if (element.style.color != colorValue) {
                 element.style.color = colorValue;
             }
@@ -148,6 +183,8 @@ class TextDisplayImpl extends TextBase {
 
         div.style.fontFamily = element.style.fontFamily;
         div.style.fontSize = element.style.fontSize;
+        div.style.fontStyle = element.style.fontStyle;
+        div.style.fontWeight = element.style.fontWeight;
         div.style.whiteSpace = element.style.whiteSpace;
         div.style.wordBreak = element.style.wordBreak;
         div.style.width = (_width > 0) ? '${HtmlUtils.px(_width)}' : "";

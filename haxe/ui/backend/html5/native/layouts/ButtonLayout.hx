@@ -16,7 +16,8 @@ class ButtonLayout extends DefaultLayout {
     public override function calcAutoSize(exclusions:Array<Component> = null):Size {
         //var size:Size = super.calcAutoSize();
 
-        var textSize:Size = HtmlUtils.measureText(component.text, 0, 0, component.style.fontSize, component.style.fontName);
+//        var textSize:Size = HtmlUtils.measureText(component.text, 0, 0, component.style.fontSize, component.style.fontName);
+        var textSize:Size = HtmlUtils.measureText(component.text, 0, 0, component.computedStyle.font.size, component.computedStyle.font.family);
 
         var iconCX:Float = getIconWidth();
         var iconCY:Float = getIconHeight();
@@ -27,9 +28,11 @@ class ButtonLayout extends DefaultLayout {
             if (iconCX > cx) {
                 cx = iconCX;
             }
-            cy += iconCY + component.style.verticalSpacing;
+//            cy += iconCY + component.style.verticalSpacing;
+            cy += iconCY + verticalSpacing;
         } else {
-            cx += iconCX + component.style.horizontalSpacing;
+//            cx += iconCX + component.style.horizontalSpacing;
+            cx += iconCX + horizontalSpacing;
             if (iconCY > cy) {
                 cy = iconCY;
             }
@@ -64,15 +67,20 @@ class ButtonLayout extends DefaultLayout {
             if (img != null) {
                 switch (component.style.iconPosition) {
                     case "top":
-                        img.style.marginBottom = HtmlUtils.px(_component.style.verticalSpacing);
+//                        img.style.marginBottom = HtmlUtils.px(_component.style.verticalSpacing);
+                        img.style.marginBottom = HtmlUtils.px(verticalSpacing);
                     case "left":
-                        img.style.marginRight = HtmlUtils.px(_component.style.horizontalSpacing);
+//                        img.style.marginBottom = HtmlUtils.px(_component.style.verticalSpacing);
+                        img.style.marginBottom = HtmlUtils.px(verticalSpacing);
                     case "bottom":
-                        img.style.marginTop = HtmlUtils.px(_component.style.verticalSpacing);
+//                        img.style.marginBottom = HtmlUtils.px(_component.style.verticalSpacing);
+                        img.style.marginBottom = HtmlUtils.px(verticalSpacing);
                     case "right":
-                        img.style.marginLeft = HtmlUtils.px(_component.style.horizontalSpacing);
+//                        img.style.marginLeft = HtmlUtils.px(_component.style.horizontalSpacing);
+                        img.style.marginLeft = HtmlUtils.px(horizontalSpacing);
                     default:
-                        img.style.marginRight = HtmlUtils.px(_component.style.horizontalSpacing);
+//                        img.style.marginRight = HtmlUtils.px(_component.style.horizontalSpacing);
+                        img.style.marginRight = HtmlUtils.px(horizontalSpacing);
                 }
             }
 

@@ -7,7 +7,8 @@ import js.html.ImageElement;
 @:keep
 class ButtonSize extends DelegateLayoutSize {
     private override function get_width():Float {
-        var size = HtmlUtils.measureText(component.text, 0, 0, component.style.fontSize, component.style.fontName);
+//        var size = HtmlUtils.measureText(component.text, 0, 0, component.style.fontSize, component.style.fontName);
+        var size = HtmlUtils.measureText(component.text, 0, 0, component.computedStyle.font.size, component.computedStyle.font.family);
 
         var iconCX:Float = getIconWidth();
         var cx:Float = size.width;
@@ -17,20 +18,21 @@ class ButtonSize extends DelegateLayoutSize {
                 cx = iconCX;
             }
         } else {
-            cx += iconCX + component.style.horizontalSpacing;
+            //cx += iconCX + component.style.horizontalSpacing;
         }
 
         return cx + getInt("incrementWidthBy");
     }
 
     private override function get_height():Float {
-        var size = HtmlUtils.measureText(component.text, 0, 0, component.style.fontSize, component.style.fontName);
+//        var size = HtmlUtils.measureText(component.text, 0, 0, component.style.fontSize, component.style.fontName);
+        var size = HtmlUtils.measureText(component.text, 0, 0, component.computedStyle.font.size, component.computedStyle.font.family);
 
         var iconCY:Float = getIconHeight();
         var cy:Float = size.height;
         var iconPosition:String = component.style.iconPosition;
         if (iconPosition == "top" || iconPosition == "bottom") {
-            cy += iconCY + component.style.verticalSpacing;
+            //cy += iconCY + component.style.verticalSpacing;
         } else {
             if (iconCY > cy) {
                 cy = iconCY;

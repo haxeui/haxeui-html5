@@ -27,6 +27,7 @@ import haxe.ui.filters.Blur;
 import haxe.ui.filters.DropShadow;
 import haxe.ui.geom.Rectangle;
 import haxe.ui.styles.Style;
+import haxe.ui.styles.Style2;
 import js.Browser;
 import js.html.CSSStyleDeclaration;
 import js.html.CSSStyleSheet;
@@ -247,6 +248,7 @@ class ComponentImpl extends ComponentBase {
         } else {
         }
 
+        /*
         for (child in cast(this, Component).childComponents) {
             if (style.borderLeftSize != null && style.borderLeftSize > 0) {
                 child.element.style.marginLeft = '-${style.borderLeftSize}px';
@@ -254,6 +256,33 @@ class ComponentImpl extends ComponentBase {
             if (style.borderTopSize != null && style.borderTopSize > 0) {
                 child.element.style.marginTop = '-${style.borderTopSize}px';
             }
+        }
+        */
+        
+        var style2:Style2 = computedStyle;
+        for (child in cast(this, Component).childComponents) {
+            if (style2.border != null && style2.border.isEmpty == false) {
+                if (style2.border.left != null && style2.border.left.isEmpty == false) {
+                    var leftSize:Float = style2.border.left.width;
+                    if (leftSize > 0) {
+                        child.element.style.marginLeft = '-${leftSize}px';
+                    }
+                }
+                if (style2.border.top != null && style2.border.top.isEmpty == false) {
+                    var topSize:Float = style2.border.top.width;
+                    if (topSize > 0) {
+                        child.element.style.marginTop = '-${topSize}px';
+                    }
+                }
+            }
+            /*
+            if (style.borderLeftSize != null && style.borderLeftSize > 0) {
+                child.element.style.marginLeft = '-${style.borderLeftSize}px';
+            }
+            if (style.borderTopSize != null && style.borderTopSize > 0) {
+                child.element.style.marginTop = '-${style.borderTopSize}px';
+            }
+            */
         }
     }
 
@@ -359,7 +388,11 @@ class ComponentImpl extends ComponentBase {
             return;
         }
 
-        setCursor(style.cursor);
+        var style2:Style2 = computedStyle;
+        if (style2.cursor != null) {
+            setCursor(style2.cursor);
+        }
+        //setCursor(style.cursor);
 
         if (style.filter != null) {
             if (Std.is(style.filter[0], DropShadow)) {
@@ -388,10 +421,12 @@ class ComponentImpl extends ComponentBase {
             element.style.removeProperty("filter");
         }
 
-        if (style.opacity != null) {
-            element.style.opacity = '${style.opacity}';
+        if (style2.opacity != null) {
+            var opacity:Float = style2.opacity;
+            element.style.opacity = '${opacity}';
         }
 
+        /*
         if (style.fontName != null) {
             element.style.fontFamily = style.fontName;
         }
@@ -399,9 +434,25 @@ class ComponentImpl extends ComponentBase {
         if (style.fontSize != null) {
             element.style.fontSize = HtmlUtils.px(style.fontSize);
         }
+        */
+        /*
+        if (style2.font != null) {
+            if (style2.font.family != null) {
+                element.style.fontFamily = style2.font.family;
+            }
+            if (style2.font.size != null) {
+                element.style.fontSize = HtmlUtils.px(style2.font.size);
+            }
+        }
+        */
         
+        /*
         if (style.color != null) {
             element.style.color = HtmlUtils.color(style.color);
+        }
+        */
+        if (style2.color != null) {
+            element.style.color = HtmlUtils.color(style2.color);
         }
     }
 
