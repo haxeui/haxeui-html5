@@ -20,8 +20,7 @@ class TextDisplayImpl extends TextBase {
 
     private override function validateData() {
         var html:String = normalizeText(_text);
-        //element.innerHTML = html;
-        element.textContent = html;
+        element.innerHTML = html;
     }
 
     private var _rawFontName:String;
@@ -188,7 +187,7 @@ class TextDisplayImpl extends TextBase {
         div.style.whiteSpace = element.style.whiteSpace;
         div.style.wordBreak = element.style.wordBreak;
         div.style.width = (_width > 0) ? '${HtmlUtils.px(_width)}' : "";
-        div.textContent = normalizeText(t);
+        div.innerHTML = normalizeText(t);
     }
 
     private function normalizeText(text:String):String {

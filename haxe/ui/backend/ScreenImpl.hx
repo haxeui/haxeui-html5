@@ -77,7 +77,7 @@ class ScreenImpl extends ScreenBase {
         return cy;
     }
 
-    public override function addComponent(component:Component) {
+    public override function addComponent(component:Component):Component {
         container.appendChild(component.element);
         component.ready();
 
@@ -102,6 +102,7 @@ class ScreenImpl extends ScreenBase {
         }
         addResizeListener();
         resizeComponent(component);
+		return component;
     }
 
     private var _percentContainerWidthAdded:Bool = false;
@@ -140,11 +141,12 @@ class ScreenImpl extends ScreenBase {
         }", sheet.cssRules.length);
     }
     
-    public override function removeComponent(component:Component) {
+    public override function removeComponent(component:Component):Component {
         _topLevelComponents.remove(component);
         if (container.contains(component.element) == true) {
             container.removeChild(component.element);
         }
+		return component;
     }
 
     private override function handleSetComponentIndex(child:Component, index:Int) {
