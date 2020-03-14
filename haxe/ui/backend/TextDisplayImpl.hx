@@ -1,6 +1,7 @@
 package haxe.ui.backend;
 
 import haxe.ui.backend.html5.HtmlUtils;
+import haxe.ui.components.Label;
 import js.Browser;
 import js.html.CSSStyleDeclaration;
 import js.html.Element;
@@ -92,11 +93,11 @@ class TextDisplayImpl extends TextBase {
     private var _fixedHeight:Bool = false;
     private override function validateDisplay() {
         var style:CSSStyleDeclaration = element.style;
-        if (_width > 0) {
+        if (_width > 0 && autoWidth == false) {
             _fixedWidth = true;
             style.width = HtmlUtils.px(_width);
         }
-        if (_height > 0) {
+        if (_height > 0 && autoWidth == false) {
             _fixedHeight = true;
             style.height = HtmlUtils.px(_height);
         }
@@ -149,7 +150,11 @@ class TextDisplayImpl extends TextBase {
         div.style.fontSize = element.style.fontSize;
         div.style.whiteSpace = element.style.whiteSpace;
         div.style.wordBreak = element.style.wordBreak;
-        div.style.width = (_width > 0) ? '${HtmlUtils.px(_width)}' : "";
+        if (autoWidth == false) {
+            div.style.width = (_width > 0) ? '${HtmlUtils.px(_width)}' : "";
+        } else {
+            div.style.width = "";
+        }
         div.innerHTML = normalizeText(t);
     }
 
@@ -160,5 +165,13 @@ class TextDisplayImpl extends TextBase {
         html = StringTools.replace(html, "\r", "<br/>");
         html = StringTools.replace(html, "\n", "<br/>");
         return html;
+    }
+    
+    private var autoWidth(get, null):Bool;
+    private function get_autoWidth():Bool {
+        if (Std.is(parentComponent, Label)) {
+            return cast(parentComponent, Label).autoWidth;
+        }
+        return false;
     }
 }
