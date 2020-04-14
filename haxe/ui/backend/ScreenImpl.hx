@@ -77,6 +77,10 @@ class ScreenImpl extends ScreenBase {
         return cy;
     }
 
+    private override function get_isRetina():Bool {
+        return HtmlUtils.isRetinaDisplay();
+    }
+    
     public override function addComponent(component:Component):Component {
         container.appendChild(component.element);
         component.ready();

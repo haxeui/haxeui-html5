@@ -125,4 +125,17 @@ class HtmlUtils {
             el.parentElement.removeChild(el);
         }
     }
+    
+    private static var _isRetina:Null<Bool> = null;
+    public static function isRetinaDisplay():Bool {
+        if (_isRetina == null) {
+            var query = "(-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2), (min-resolution: 192dpi)";
+            if (Browser.window.matchMedia(query).matches) {
+                _isRetina = true;
+            } else {
+                _isRetina = false;
+            }
+        }
+        return _isRetina;
+    }
 }
