@@ -30,6 +30,7 @@ import haxe.ui.styles.Style;
 import js.Browser;
 import js.html.CSSStyleDeclaration;
 import js.html.CSSStyleSheet;
+import js.html.CanvasElement;
 import js.html.Element;
 import js.html.MutationObserver;
 import js.html.MutationRecord;
@@ -456,6 +457,16 @@ class ComponentImpl extends ComponentBase {
         return __props.exists(name);
     }
 
+    private var _canvas:CanvasElement = null;
+    private function getCanvas(width:Float, height:Float) {
+        if (_canvas == null || _canvas.width != width || _canvas.height != height) {
+            _canvas = Browser.document.createCanvasElement();
+            _canvas.width = cast width;
+            _canvas.height = cast height;
+        }
+        return _canvas;
+    }
+    
     //***********************************************************************************************************
     // Events
     //***********************************************************************************************************

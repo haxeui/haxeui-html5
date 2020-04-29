@@ -2,18 +2,16 @@ package haxe.ui.backend.html5;
 
 import haxe.ui.assets.ImageInfo;
 import haxe.ui.backend.ComponentImpl;
-import haxe.ui.styles.Style;
 import haxe.ui.geom.Rectangle;
 import haxe.ui.geom.Slice9;
-import js.Browser;
+import haxe.ui.styles.Style;
 import js.html.CSSStyleDeclaration;
-import js.html.CanvasElement;
 import js.html.CanvasRenderingContext2D;
 import js.html.Element;
 import js.html.Image;
 
 class StyleHelper {
-    @:access(haxe.ui.core.ComponentImpl)
+    @:access(haxe.ui.backend.ComponentImpl)
     public static function apply(component:ComponentImpl, width:Float, height:Float, style:Style) {
         var element:Element = component.element;
         var css:CSSStyleDeclaration = element.style;
@@ -203,9 +201,7 @@ class StyleHelper {
                             css.backgroundSize = '${HtmlUtils.px(width)} ${HtmlUtils.px(height)}';
                         }
                     } else {
-                        var canvas:CanvasElement = Browser.document.createCanvasElement();
-                        canvas.width = cast width;
-                        canvas.height = cast height;
+                        var canvas = component.getCanvas(width, height);
                         var ctx:CanvasRenderingContext2D = canvas.getContext2d();
                         paintBitmap(ctx, cast imageInfo.data, imageRect, new Rectangle(0, 0, width, height));
                         var data = canvas.toDataURL();
@@ -216,9 +212,7 @@ class StyleHelper {
                     var srcRects:Array<Rectangle> = rects.src;
                     var dstRects:Array<Rectangle> = rects.dst;
 
-                    var canvas:CanvasElement = Browser.document.createCanvasElement();
-                    canvas.width = cast width;
-                    canvas.height = cast height;
+                    var canvas = component.getCanvas(width, height);
                     var ctx:CanvasRenderingContext2D = canvas.getContext2d();
                     ctx.imageSmoothingEnabled = false;
 
