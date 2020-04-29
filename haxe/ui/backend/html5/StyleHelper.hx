@@ -203,6 +203,7 @@ class StyleHelper {
                     } else {
                         var canvas = component.getCanvas(width, height);
                         var ctx:CanvasRenderingContext2D = canvas.getContext2d();
+                        ctx.clearRect(0, 0, width, height);
                         paintBitmap(ctx, cast imageInfo.data, imageRect, new Rectangle(0, 0, width, height));
                         var data = canvas.toDataURL();
                         background.push('url(${data})');
@@ -214,6 +215,7 @@ class StyleHelper {
 
                     var canvas = component.getCanvas(width, height);
                     var ctx:CanvasRenderingContext2D = canvas.getContext2d();
+                    ctx.clearRect(0, 0, width, height);
                     ctx.imageSmoothingEnabled = false;
 
                     for (i in 0...srcRects.length) {
