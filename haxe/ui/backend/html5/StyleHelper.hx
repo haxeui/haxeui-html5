@@ -16,6 +16,22 @@ class StyleHelper {
         var element:Element = component.element;
         var css:CSSStyleDeclaration = element.style;
 
+        var slice:Rectangle = null;
+        if (style.backgroundImageSliceTop != null &&
+            style.backgroundImageSliceLeft != null &&
+            style.backgroundImageSliceBottom != null &&
+            style.backgroundImageSliceRight != null) {
+            slice = new Rectangle(style.backgroundImageSliceLeft,
+                                  style.backgroundImageSliceTop,
+                                  style.backgroundImageSliceRight - style.backgroundImageSliceLeft,
+                                  style.backgroundImageSliceBottom - style.backgroundImageSliceTop);
+        }
+
+        if (slice != null) {
+            width = Std.int(width);
+            height = Std.int(height);
+        }
+
         css.width = HtmlUtils.px(width);
         css.height = HtmlUtils.px(height);
 
@@ -178,17 +194,6 @@ class StyleHelper {
                                                   style.backgroundImageClipBottom - style.backgroundImageClipTop);
                 }
 
-                var slice:Rectangle = null;
-                if (style.backgroundImageSliceTop != null &&
-                    style.backgroundImageSliceLeft != null &&
-                    style.backgroundImageSliceBottom != null &&
-                    style.backgroundImageSliceRight != null) {
-                    slice = new Rectangle(style.backgroundImageSliceLeft,
-                                          style.backgroundImageSliceTop,
-                                          style.backgroundImageSliceRight - style.backgroundImageSliceLeft,
-                                          style.backgroundImageSliceBottom - style.backgroundImageSliceTop);
-                }
-
                 if (slice == null) {
                     if (imageRect.width == imageInfo.width && imageRect.height == imageInfo.height) {
                         background.push('url(${imageInfo.data.src})');
@@ -240,6 +245,6 @@ class StyleHelper {
     }
 
     private static function paintBitmap(ctx:CanvasRenderingContext2D, img:Image, srcRect:Rectangle, dstRect:Rectangle) {
-        ctx.drawImage(img, srcRect.left, srcRect.top, srcRect.width, srcRect.height, dstRect.left, dstRect.top, dstRect.width, dstRect.height);
+        ctx.drawImage(img, Std.int(srcRect.left), Std.int(srcRect.top), Std.int(srcRect.width), Std.int(srcRect.height), Std.int(dstRect.left), Std.int(dstRect.top), Std.int(dstRect.width), Std.int(dstRect.height));
     }
 }
