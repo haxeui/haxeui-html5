@@ -366,7 +366,7 @@ class ComponentImpl extends ComponentBase {
             if (Std.is(style.filter[0], DropShadow)) {
                 var dropShadow:DropShadow = cast style.filter[0];
                 if (dropShadow.inner == false) {
-                    element.style.boxShadow = '${dropShadow.distance}px ${dropShadow.distance}px ${dropShadow.blurX - 1}px ${dropShadow.blurY - 1}px ${HtmlUtils.rgba(dropShadow.color, dropShadow.alpha)}';
+                    element.style.boxShadow = '${dropShadow.distance}px ${dropShadow.distance + 2}px ${dropShadow.blurX - 1}px ${dropShadow.blurY - 1}px ${HtmlUtils.rgba(dropShadow.color, dropShadow.alpha)}';
                 } else {
                     element.style.boxShadow = 'inset ${dropShadow.distance}px ${dropShadow.distance}px ${dropShadow.blurX}px 0px ${HtmlUtils.rgba(dropShadow.color, dropShadow.alpha)}';
                 }
