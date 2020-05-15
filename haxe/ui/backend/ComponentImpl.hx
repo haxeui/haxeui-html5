@@ -203,7 +203,7 @@ class ComponentImpl extends ComponentBase {
             return;
         }
 
-        left = Std.int(left);
+        //left = Std.int(left);
         top = Std.int(top);
         
         if (left != null) {
@@ -231,7 +231,7 @@ class ComponentImpl extends ComponentBase {
             return;
         }
 
-        width = Math.fceil(width);
+        //width = Math.fceil(width);
         height = Math.fceil(height);
         
         
