@@ -231,8 +231,9 @@ class ComponentImpl extends ComponentBase {
             return;
         }
 
-        width = Std.int(width);
-        height = Std.int(height);
+        width = Math.fceil(width);
+        height = Math.fceil(height);
+        
         
         if (Std.is(this, VerticalProgress)) { // this is a hack for chrome
             if (element.style.getPropertyValue("transform-origin") != null && element.style.getPropertyValue("transform-origin").length > 0) {
