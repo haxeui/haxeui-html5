@@ -203,9 +203,6 @@ class ComponentImpl extends ComponentBase {
             return;
         }
 
-        left = Std.int(left);
-        top = Std.int(top);
-        
         if (left != null) {
             element.style.left = HtmlUtils.px(left);
         }
@@ -231,10 +228,6 @@ class ComponentImpl extends ComponentBase {
             return;
         }
 
-        width = Math.fceil(width);
-        height = Math.fceil(height);
-        
-        
         if (Std.is(this, VerticalProgress)) { // this is a hack for chrome
             if (element.style.getPropertyValue("transform-origin") != null && element.style.getPropertyValue("transform-origin").length > 0) {
                 var tw = width;

@@ -28,8 +28,8 @@ class StyleHelper {
         }
 
         if (slice != null) {
-            width = Std.int(width);
-            height = Std.int(height);
+            width = Math.fround(width);
+            height = Math.fround(height);
         }
 
         css.width = HtmlUtils.px(width);
