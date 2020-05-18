@@ -245,6 +245,12 @@ class StyleHelper {
     }
 
     private static function paintBitmap(ctx:CanvasRenderingContext2D, img:Image, srcRect:Rectangle, dstRect:Rectangle) {
+        if (srcRect.width == 0 || srcRect.height == 0) {
+            return;
+        }
+        if (dstRect.width == 0 || dstRect.height == 0) {
+            return;
+        }
         ctx.drawImage(img, Std.int(srcRect.left), Std.int(srcRect.top), Std.int(srcRect.width), Std.int(srcRect.height), Std.int(dstRect.left), Std.int(dstRect.top), Std.int(dstRect.width), Std.int(dstRect.height));
     }
 }

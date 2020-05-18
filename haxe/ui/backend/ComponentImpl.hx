@@ -57,7 +57,6 @@ class ComponentImpl extends ComponentBase {
         }
 
         if (Browser.document.styleSheets.length == 0) {
-            var head = Browser.document.head;
             var style = Browser.document.createElement("style");
             style.appendChild(Browser.document.createTextNode(""));
             Browser.document.head.appendChild(style);
@@ -67,7 +66,7 @@ class ComponentImpl extends ComponentBase {
         if (_stylesAdded == false) {
             _stylesAdded = true;
             
-            sheet.insertRule("#haxeui-container .haxeui-component {
+            sheet.insertRule("#haxeui-container .haxeui-component, .haxeui-component:focus {
                 position: absolute;
                 box-sizing: border-box;
                 -webkit-touch-callout: none;
@@ -76,6 +75,9 @@ class ComponentImpl extends ComponentBase {
                 -moz-user-select: none;
                 -ms-user-select: none;
                 user-select: none;
+                -webkit-tap-highlight-color: transparent;
+                webkit-user-select;
+                outline: none !important;
             }", sheet.cssRules.length);
         }
     }
@@ -461,6 +463,9 @@ class ComponentImpl extends ComponentBase {
     private function getCanvas(width:Float, height:Float) {
         if (_canvas == null || _canvas.width != width || _canvas.height != height) {
             _canvas = Browser.document.createCanvasElement();
+            _canvas.style.setProperty("-webkit-backface-visibility", "hidden");
+            _canvas.style.setProperty("-moz-backface-visibility", "hidden");
+            _canvas.style.setProperty("-ms-backface-visibility", "hidden");
             _canvas.width = cast width;
             _canvas.height = cast height;
         }
