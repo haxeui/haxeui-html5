@@ -9,7 +9,11 @@ import js.html.TextAreaElement;
 
 class TextInputImpl extends TextDisplayImpl {
     public override function focus() {
+        #if (haxe_ver >= 4)
+        js.Syntax.code('{0}.focus({preventScroll: true})', element);
+        #else
         untyped __js__('{0}.focus({preventScroll: true})', element);
+        #end
         //element.focus();
     }
     
