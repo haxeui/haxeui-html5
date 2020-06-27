@@ -85,7 +85,7 @@ class TextDisplayImpl extends TextBase {
 
     private override function validatePosition() {
         var style:CSSStyleDeclaration = element.style;
-        style.left = HtmlUtils.px(_left + 2);
+        style.left = HtmlUtils.px(_left);
         style.top = HtmlUtils.px(_top);
     }
 
@@ -115,15 +115,10 @@ class TextDisplayImpl extends TextBase {
         setTempDivData(div);
 
         if (_fixedWidth == false) {
-            _textWidth = div.clientWidth + 3;
+            _textWidth = div.clientWidth;
         }
         if (_fixedHeight == false) {
-            var fontSize:Float = Std.parseFloat(StringTools.replace(div.style.fontSize, "px", ""));
-            var offset:Float = 0;
-            if (fontSize > 14) {
-                offset = Math.ceil(fontSize / 14);
-            }
-            _textHeight = div.clientHeight - offset;
+            _textHeight = div.clientHeight;
         }
     }
 
