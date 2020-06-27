@@ -6,7 +6,6 @@ import haxe.ui.backend.html5.StyleHelper;
 import haxe.ui.backend.html5.UserAgent;
 import haxe.ui.backend.html5.native.NativeElement;
 import haxe.ui.components.Image;
-import haxe.ui.components.Label;
 import haxe.ui.components.TextArea;
 import haxe.ui.components.TextField;
 import haxe.ui.components.VerticalProgress;
@@ -264,11 +263,20 @@ class ComponentImpl extends ComponentBase {
         if (cast(this, Component).id != null) {
             element.id = cast(this, Component).id;
         }
-        if (Std.is(this, Label)) { // TODO: is this hacky?? 
-            element.style.setProperty("pointer-events", "none");
-        }
     }
 
+    private override function handleFrameworkProperty(id:String, value:Any) {
+        switch (id) {
+            case "allowMouseInteraction":
+                if (value == true) {
+                    element.style.removeProperty("pointer-events");
+                } else {
+                    element.style.setProperty("pointer-events", "none");
+                    setCursor(null);
+                }
+        }
+    }
+    
     private override function handleClipRect(value:Rectangle) {
         var c:Component = cast(this, Component);
         var parent:Component = c.parentComponent;
