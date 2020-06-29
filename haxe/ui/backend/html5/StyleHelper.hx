@@ -174,10 +174,6 @@ class StyleHelper {
 
         // background image
         if (style.backgroundImage != null) {
-            if (component.element.nodeName == "BUTTON") {
-                css.border = "none";
-            }
-
             Toolkit.assets.getImage(style.backgroundImage, function(imageInfo:ImageInfo) {
                 if (imageInfo == null) {
                     return;
