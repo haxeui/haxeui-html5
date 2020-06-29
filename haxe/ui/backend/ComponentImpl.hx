@@ -61,6 +61,7 @@ class ComponentImpl extends ComponentBase {
             Browser.document.head.appendChild(style);
         }
         
+        
         var sheet:CSSStyleSheet = cast(Browser.document.styleSheets[0], CSSStyleSheet);
         if (_stylesAdded == false) {
             _stylesAdded = true;
@@ -469,8 +470,7 @@ class ComponentImpl extends ComponentBase {
 
     private var _canvas:CanvasElement = null;
     private function getCanvas(width:Float, height:Float) {
-        if (_canvas == null || _canvas.width != width || _canvas.height != height) {
-            removeCanvas();
+        if (_canvas == null) {
             _canvas = Browser.document.createCanvasElement();
             _canvas.style.setProperty("-webkit-backface-visibility", "hidden");
             _canvas.style.setProperty("-moz-backface-visibility", "hidden");
@@ -481,6 +481,12 @@ class ComponentImpl extends ComponentBase {
             _canvas.height = cast height;
             element.insertBefore(_canvas, element.firstChild);
         }
+        if (width != _canvas.width) {
+            _canvas.width = cast width;
+        }
+        if (height != _canvas.height) {
+            _canvas.height = cast height;
+        }
         return _canvas;
     }
     
@@ -489,7 +495,7 @@ class ComponentImpl extends ComponentBase {
     }
     
     private function removeCanvas() {
-        if (_canvas != null) {
+        if (_canvas != null && element.contains(_canvas)) {
             element.removeChild(_canvas);
             _canvas = null;
         }
