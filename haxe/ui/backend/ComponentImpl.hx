@@ -470,14 +470,28 @@ class ComponentImpl extends ComponentBase {
     private var _canvas:CanvasElement = null;
     private function getCanvas(width:Float, height:Float) {
         if (_canvas == null || _canvas.width != width || _canvas.height != height) {
+            removeCanvas();
             _canvas = Browser.document.createCanvasElement();
             _canvas.style.setProperty("-webkit-backface-visibility", "hidden");
             _canvas.style.setProperty("-moz-backface-visibility", "hidden");
             _canvas.style.setProperty("-ms-backface-visibility", "hidden");
             _canvas.width = cast width;
             _canvas.height = cast height;
+            _canvas.style.position = "absolute";
+            element.insertBefore(_canvas, element.firstChild);
         }
         return _canvas;
+    }
+    
+    private function hasCanvas() {
+        return (_canvas != null);
+    }
+    
+    private function removeCanvas() {
+        if (_canvas != null) {
+            element.removeChild(_canvas);
+            _canvas = null;
+        }
     }
     
     //***********************************************************************************************************

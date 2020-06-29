@@ -205,13 +205,13 @@ class StyleHelper {
                             css.backgroundRepeat = "no-repeat";
                             css.backgroundSize = '${HtmlUtils.px(width)} ${HtmlUtils.px(height)}';
                         }
+                        background.reverse();
+                        css.background = background.join(",");
                     } else {
                         var canvas = component.getCanvas(width, height);
                         var ctx:CanvasRenderingContext2D = canvas.getContext2d();
                         ctx.clearRect(0, 0, width, height);
                         paintBitmap(ctx, cast imageInfo.data, imageRect, new Rectangle(0, 0, width, height));
-                        var data = canvas.toDataURL();
-                        background.push('url(${data})');
                     }
                 } else {
                     var rects:Slice9Rects = Slice9.buildRects(width, height, imageRect.width, imageRect.height, slice);
@@ -231,15 +231,10 @@ class StyleHelper {
                         var dstRect = dstRects[i];
                         paintBitmap(ctx, cast imageInfo.data, srcRect, dstRect);
                     }
-
-                    var data = canvas.toDataURL();
-                    background.push('url(${data})');
                 }
-                
-                background.reverse();
-                css.background = background.join(",");
             });
         } else {
+            component.removeCanvas();
             css.background = background[0];
         }
     }
