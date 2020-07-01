@@ -120,4 +120,12 @@ class AssetsImpl extends AssetsBase {
             callback(resourceId, null);
 		});
     }
+    
+    public override function imageInfoFromImageData(imageData:ImageData):ImageInfo {
+        return {
+            data: imageData,
+            width: imageData.width,
+            height: imageData.height
+        }
+    }
 }
