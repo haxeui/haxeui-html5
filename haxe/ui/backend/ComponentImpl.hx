@@ -287,11 +287,11 @@ class ComponentImpl extends ComponentBase {
                 if (element.style.position != "fixed") {
                     element.style.position = "fixed";
                 }
-                element.style.left = '${HtmlUtils.px(c.screenLeft - value.left)}';
-                element.style.top = '${HtmlUtils.px(c.screenTop - value.top)}';
+                element.style.left = '${HtmlUtils.px(Std.int(c.screenLeft - value.left))}';
+                element.style.top = '${HtmlUtils.px(Std.int(c.screenTop - value.top))}';
             } else {
-                element.style.left = '${HtmlUtils.px(c.left - value.left)}';
-                element.style.top = '${HtmlUtils.px(c.top - value.top)}';
+                element.style.left = '${HtmlUtils.px(Std.int(c.left - value.left))}';
+                element.style.top = '${HtmlUtils.px(Std.int(c.top - value.top))}';
             }
         } else {
             element.style.removeProperty("clip");
