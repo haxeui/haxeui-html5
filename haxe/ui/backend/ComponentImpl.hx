@@ -400,6 +400,15 @@ class ComponentImpl extends ComponentBase {
             element.style.removeProperty("filter");
         }
 
+        if (style.backdropFilter != null) {
+            if (Std.is(style.backdropFilter[0], Blur)) {
+                var blur:Blur = cast style.backdropFilter[0];
+                element.style.setProperty("backdrop-filter", 'blur(${blur.amount}px)');
+            }
+        } else {
+            element.style.removeProperty("backdrop-filter");
+        }
+        
         if (style.opacity != null) {
             element.style.opacity = '${style.opacity}';
         }
