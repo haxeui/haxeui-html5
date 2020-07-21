@@ -106,6 +106,9 @@ class ScreenImpl extends ScreenBase {
         }
         addResizeListener();
         resizeComponent(component);
+        #if haxeui_html5_set_zindex
+        component.element.style.zIndex = "10000";
+        #end
 		return component;
     }
 
