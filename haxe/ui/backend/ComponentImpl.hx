@@ -269,9 +269,9 @@ class ComponentImpl extends ComponentBase {
     private override function handleFrameworkProperty(id:String, value:Any) {
         switch (id) {
             case "allowMouseInteraction":
-                if (value == true) {
+                if (value == true && element.style.getPropertyValue("pointer-events") != null) {
                     element.style.removeProperty("pointer-events");
-                } else {
+                } else if (element.style.getPropertyValue("pointer-events") != "none") {
                     element.style.setProperty("pointer-events", "none");
                     setCursor(null);
                 }
