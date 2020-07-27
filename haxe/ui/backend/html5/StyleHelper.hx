@@ -106,25 +106,41 @@ class StyleHelper {
             css.removeProperty("border-color");
         } else {
             if (style.borderTopColor != null) {
-               css.borderTopColor = HtmlUtils.color(style.borderTopColor);
+                if (style.borderOpacity == null) {
+                    css.borderTopColor = HtmlUtils.color(style.borderTopColor);
+                } else {
+                    css.borderTopColor = HtmlUtils.rgba(style.borderTopColor, style.borderOpacity);
+                }
             } else {
                 css.removeProperty("border-top-color");
             }
 
             if (style.borderLeftColor != null) {
-               css.borderLeftColor = HtmlUtils.color(style.borderLeftColor);
+                if (style.borderOpacity == null) {
+                    css.borderLeftColor = HtmlUtils.color(style.borderLeftColor);
+                } else {
+                    css.borderLeftColor = HtmlUtils.rgba(style.borderLeftColor, style.borderOpacity);
+                }
             } else {
                 css.removeProperty("border-left-color");
             }
 
             if (style.borderBottomColor != null) {
-               css.borderBottomColor = HtmlUtils.color(style.borderBottomColor);
+                if (style.borderOpacity == null) {
+                    css.borderBottomColor = HtmlUtils.color(style.borderBottomColor);
+                } else {
+                    css.borderBottomColor = HtmlUtils.rgba(style.borderBottomColor, style.borderOpacity);
+                }
             } else {
                 css.removeProperty("border-bottom-color");
             }
 
             if (style.borderRightColor != null) {
-               css.borderRightColor = HtmlUtils.color(style.borderRightColor);
+                if (style.borderOpacity == null) {
+                    css.borderRightColor = HtmlUtils.color(style.borderRightColor);
+                } else {
+                    css.borderRightColor = HtmlUtils.rgba(style.borderRightColor, style.borderOpacity);
+                }
             } else {
                 css.removeProperty("border-right-color");
             }
@@ -166,8 +182,36 @@ class StyleHelper {
             css.removeProperty("background-color");
         }
 
-        if (style.borderRadius != null && style.borderRadius > 0) {
+        if (style.borderRadius != null && style.borderRadius > 0
+            && (style.borderRadiusTopLeft == null || style.borderRadiusTopLeft == style.borderRadius)
+            && (style.borderRadiusTopRight == null || style.borderRadiusTopRight == style.borderRadius)
+            && (style.borderRadiusBottomLeft == null || style.borderRadiusBottomLeft == style.borderRadius)
+            && (style.borderRadiusBottomRight == null || style.borderRadiusBottomRight == style.borderRadius)) {
             css.borderRadius = HtmlUtils.px(style.borderRadius);
+        } else if ((style.borderRadiusTopLeft != null && style.borderRadiusTopLeft > 0)
+            || (style.borderRadiusTopRight != null && style.borderRadiusTopRight > 0)
+            || (style.borderRadiusBottomLeft != null && style.borderRadiusBottomLeft > 0)
+            || (style.borderRadiusBottomRight != null && style.borderRadiusBottomRight > 0)) {
+                if (style.borderRadiusTopLeft != null && style.borderRadiusTopLeft > 0) {
+                    css.borderTopLeftRadius = HtmlUtils.px(style.borderRadiusTopLeft);
+                } else {
+                    css.removeProperty("border-top-left-radius");
+                }
+                if (style.borderRadiusTopRight != null && style.borderRadiusTopRight > 0) {
+                    css.borderTopRightRadius = HtmlUtils.px(style.borderRadiusTopRight);
+                } else {
+                    css.removeProperty("border-top-right-radius");
+                }
+                if (style.borderRadiusBottomLeft != null && style.borderRadiusBottomLeft > 0) {
+                    css.borderBottomLeftRadius = HtmlUtils.px(style.borderRadiusBottomLeft);
+                } else {
+                    css.removeProperty("border-bottom-left-radius");
+                }
+                if (style.borderRadiusBottomRight != null && style.borderRadiusBottomRight > 0) {
+                    css.borderBottomRightRadius = HtmlUtils.px(style.borderRadiusBottomRight);
+                } else {
+                    css.removeProperty("border-bottom-right-radius");
+                }
         } else {
             css.removeProperty("border-radius");
         }
