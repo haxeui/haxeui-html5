@@ -19,9 +19,17 @@ class TextDisplayImpl extends TextBase {
     // Validation functions
     //***********************************************************************************************************
 
+    private var _html:String;
     private override function validateData() {
         var html:String = normalizeText(_text);
-        element.innerHTML = html;
+        if (_html != html) {
+            element.innerHTML = html;
+            _html = html;
+            if (autoWidth == false) {
+                _fixedWidth = false;
+                _fixedHeight = false;
+            }
+        }
     }
 
     private var _rawFontName:String;
@@ -93,6 +101,10 @@ class TextDisplayImpl extends TextBase {
     private var _fixedHeight:Bool = false;
     private override function validateDisplay() {
         var style:CSSStyleDeclaration = element.style;
+        var allowFixed = true;
+        if (autoWidth == false && style.width != HtmlUtils.px(_width)) {
+            allowFixed = false;
+        }
         if (_width > 0 && autoWidth == false) {
             _fixedWidth = true;
             style.width = HtmlUtils.px(_width);
@@ -100,6 +112,9 @@ class TextDisplayImpl extends TextBase {
         if (_height > 0 && autoWidth == false) {
             _fixedHeight = true;
             style.height = HtmlUtils.px(_height);
+        }
+        if (allowFixed == false) {
+            _fixedHeight = false;
         }
     }
 
