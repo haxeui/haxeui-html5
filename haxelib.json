@@ -1,21 +1,21 @@
 {
+    "version": "1.1.1",
     "contributors": [
         "haxeui",
         "ianharrigan",
         "_ibilon",
         "aW4KeNiNG"
     ],
-    "version": "1.1.0",
-    "dependencies": {
-        "haxeui-core": ""
-    },
-    "releasenote": "1.1 release",
+    "license": "MIT",
     "tags": [
         "ui",
         "gui",
         "html5"
     ],
-    "license": "MIT",
+    "releasenote": "Various tweaks / fixes",
+    "dependencies": {
+        "haxeui-core": ""
+    },
     "name": "haxeui-html5",
     "description": "The HTML5 backend of the HaxeUI framework",
     "url": "https://github.com/haxeui/haxeui-html5"
