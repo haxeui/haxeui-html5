@@ -5,6 +5,7 @@ import haxe.ui.backend.html5.HtmlUtils;
 import haxe.ui.backend.html5.StyleHelper;
 import haxe.ui.backend.html5.UserAgent;
 import haxe.ui.backend.html5.native.NativeElement;
+import haxe.ui.backend.html5.util.StyleSheetHelper;
 import haxe.ui.components.Image;
 import haxe.ui.components.TextArea;
 import haxe.ui.components.TextField;
@@ -61,11 +62,10 @@ class ComponentImpl extends ComponentBase {
             Browser.document.head.appendChild(style);
         }
         
-        
-        var sheet:CSSStyleSheet = cast(Browser.document.styleSheets[0], CSSStyleSheet);
         if (_stylesAdded == false) {
             _stylesAdded = true;
             
+            var sheet:CSSStyleSheet = StyleSheetHelper.getValidStyleSheet();
             sheet.insertRule("#haxeui-container .haxeui-component, .haxeui-component:focus {
                 position: absolute;
                 box-sizing: border-box;

@@ -3,6 +3,7 @@ package haxe.ui.backend;
 import haxe.ui.backend.html5.EventMapper;
 import haxe.ui.backend.html5.HtmlUtils;
 import haxe.ui.backend.html5.UserAgent;
+import haxe.ui.backend.html5.util.StyleSheetHelper;
 import haxe.ui.core.Component;
 import haxe.ui.core.Screen;
 import haxe.ui.events.KeyboardEvent;
@@ -119,7 +120,7 @@ class ScreenImpl extends ScreenBase {
         }
         _percentContainerWidthAdded = true;
         
-        var sheet:CSSStyleSheet = cast(Browser.document.styleSheets[0], CSSStyleSheet);
+        var sheet:CSSStyleSheet = StyleSheetHelper.getValidStyleSheet();
         sheet.insertRule("#haxeui-container-parent {
             margin: 0;
             width: 100%;
@@ -137,7 +138,7 @@ class ScreenImpl extends ScreenBase {
         }
         _percentContainerHeightAdded = true;
         
-        var sheet:CSSStyleSheet = cast(Browser.document.styleSheets[0], CSSStyleSheet);
+        var sheet:CSSStyleSheet = StyleSheetHelper.getValidStyleSheet();
         sheet.insertRule("#haxeui-container-parent {
             margin: 0;
             height: 100%;
