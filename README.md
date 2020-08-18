@@ -86,9 +86,9 @@ button.native = true; // this component alone will be native
 ```
 
 ## Addtional resources
-* <a href="http://haxeui.org/explorer/">component-explorer - Browse HaxeUI components
-* <a href="http://haxeui.org/builder/">playground - Write and test HaxeUI layouts in your browser
-* <a href="https://github.com/haxeui/component-examples">component-examples - Various componet examples
+* <a href="http://haxeui.org/explorer/">component-explorer</a> - Browse HaxeUI components
+* <a href="http://haxeui.org/builder/">playground</a> - Write and test HaxeUI layouts in your browser
+* <a href="https://github.com/haxeui/component-examples">component-examples</a> - Various componet examples
 * <a href="http://haxeui.org/api/haxe/ui/">haxeui-api</a> - The HaxeUI api docs.
 * <a href="https://github.com/haxeui/haxeui-guides">haxeui-guides</a> - Set of guides to working with HaxeUI and backends.
 
