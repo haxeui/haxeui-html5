@@ -98,6 +98,13 @@ class ComponentImpl extends ComponentBase {
         }
     }
 
+    private override function get_isNativeScroller():Bool {
+        if (Std.is(this, ScrollView) && cast(this, Component).native == true) {
+            return true;
+        }
+        return false;
+    }
+    
     private function recursiveReady() {
         elementToComponent.remove(element);
         var component:Component = cast(this, Component);
@@ -237,6 +244,8 @@ class ComponentImpl extends ComponentBase {
 
                 width = th;
                 height = tw;
+                
+                element.style.marginLeft = "-" + width + "px";
             }
         }
 

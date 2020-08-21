@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <native>
     <component id="haxe.ui.components.Button" class="haxe.ui.backend.html5.native.NativeElement" nodeType="button" style="padding:0px; padding-bottom: 1px">
-        <behaviour id="text" class="haxe.ui.backend.html5.native.behaviours.SpanText" style="margin-top:-2px;margin-left:-2px;" />
+        <behaviour id="text" class="haxe.ui.backend.html5.native.behaviours.SpanText" />
         <behaviour id="icon" class="haxe.ui.backend.html5.native.behaviours.ElementImage" />
         <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
         <layout class="haxe.ui.backend.html5.native.layouts.ButtonLayout" />
@@ -19,17 +19,17 @@
         <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
         <size class="haxe.ui.backend.html5.native.size.TextSize" incrementWidthBy="20" incrementHeightBy="0" />
     </component>
-    <component id="haxe.ui.components.TextField" class="haxe.ui.backend.html5.native.NativeElement" nodeType="input" style="padding-left:2px;cursor:pointer;">
+    <component id="haxe.ui.components.TextField" class="haxe.ui.backend.html5.native.NativeElement" nodeType="input" style="padding-left:2px;cursor:pointer;padding-top:3px;padding-bottom:3px;">
         <behaviour id="text" class="haxe.ui.backend.html5.native.behaviours.ElementValue" />
         <behaviour id="placeholder" class="haxe.ui.backend.html5.native.behaviours.ElementPlaceholder" />
         <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
         <size class="haxe.ui.backend.html5.native.size.ElementSize" />
     </component>
     
-    <component id="haxe.ui.components.NumberStepper" class="haxe.ui.backend.html5.native.NativeElement" type="number" nodeType="input" style="padding-left:2px;cursor:pointer;">
+    <component id="haxe.ui.components.NumberStepper" class="haxe.ui.backend.html5.native.NativeElement" type="number" nodeType="input" style="padding-left:2px;cursor:pointer;padding-top:10px;padding-bottom:11px;">
         <behaviour id="text" class="haxe.ui.backend.html5.native.behaviours.ElementValue" />
         <behaviour id="step" class="haxe.ui.backend.html5.native.behaviours.ElementProperty" name="step" />
-        <behaviour id="pos" class="haxe.ui.core.DefaultBehaviour" />
+        <behaviour id="pos" class="haxe.ui.backend.html5.native.behaviours.ElementValue" />
         <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
         <size class="haxe.ui.backend.html5.native.size.ElementSize" />
     </component>
@@ -44,6 +44,7 @@
         <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
         <behaviour id="hscrollPos" class="haxe.ui.backend.html5.native.behaviours.ElementScrollLeft" />
         <behaviour id="vscrollPos" class="haxe.ui.backend.html5.native.behaviours.ElementScrollTop" />
+        <behaviour id="contentLayoutName" class="haxe.ui.behaviours.DefaultBehaviour" />
         <builder class="haxe.ui.backend.html5.native.builders.ScrollViewBuilder" />
     </component>
     <component id="haxe.ui.containers.ListView" class="haxe.ui.backend.html5.native.NativeElement">
@@ -55,6 +56,7 @@
     <component id="haxe.ui.components.DropDown" class="haxe.ui.backend.html5.native.NativeElement" nodeType="select" style="padding:3px;" allowChildren="false">
         <behaviour id="dataSource" class="haxe.ui.backend.html5.native.behaviours.SelectDataSource" />
         <behaviour id="selectedItem" class="haxe.ui.backend.html5.native.behaviours.SelectedItem" />
+        <behaviour id="selectedIndex" class="haxe.ui.backend.html5.native.behaviours.SelectedIndex" />
         <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
         <size class="haxe.ui.backend.html5.native.size.ElementSize" />
     </component>
@@ -74,7 +76,7 @@
         <size class="haxe.ui.backend.html5.native.size.ElementSize" />
     </component>
     
-    <component id="haxe.ui.components.VerticalProgress" class="haxe.ui.backend.html5.native.NativeElement" nodeType="progress" style="-webkit-transform: rotate(-90deg) translateY(-1000%);-webkit-transform-origin: 100% 0%;-moz-orient: vertical;writing-mode: bt-lr;" orient="vertical">
+    <component id="haxe.ui.components.VerticalProgress" class="haxe.ui.backend.html5.native.NativeElement" nodeType="progress" style="-webkit-transform: rotate(-90deg);-webkit-transform-origin: 100% 0%;-moz-orient: vertical;writing-mode: bt-lr;" orient="vertical">
         <behaviour id="max" class="haxe.ui.backend.html5.native.behaviours.ElementProperty" name="max" />
         <behaviour id="end" class="haxe.ui.backend.html5.native.behaviours.ElementProperty" name="value" />
         <behaviour id="indeterminate" class="haxe.ui.backend.html5.native.behaviours.ElementAttribute" name="value" remove="true" />

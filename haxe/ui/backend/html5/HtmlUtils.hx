@@ -1,9 +1,10 @@
 package haxe.ui.backend.html5;
 
 import haxe.ui.events.ValidationEvent;
-import haxe.ui.validation.ValidationManager;
 import haxe.ui.geom.Size;
+import haxe.ui.validation.ValidationManager;
 import js.Browser;
+import js.html.DivElement;
 import js.html.Element;
 
 class HtmlUtils {
@@ -43,7 +44,7 @@ class HtmlUtils {
         return el;
     }
     
-    public static var DIV_HELPER:Element;
+    public static var DIV_HELPER:DivElement;
 
     public static function __init__():Void {
         ValidationManager.instance.registerEvent(ValidationEvent.STOP, onValidationStop);
@@ -61,7 +62,7 @@ class HtmlUtils {
     public static function createDivHelper():Void
     {
         if (DIV_HELPER == null) {
-            DIV_HELPER = Browser.document.createElement("div");
+            DIV_HELPER = Browser.document.createDivElement();
             DIV_HELPER.style.position = "absolute";
             DIV_HELPER.style.top = "-99999px"; // position off-screen!
             DIV_HELPER.style.left = "-99999px"; // position off-screen!
@@ -75,13 +76,19 @@ class HtmlUtils {
             createDivHelper();
         }
 
-        DIV_HELPER.innerHTML = text;
+        DIV_HELPER.style.width = "";
+        DIV_HELPER.style.height = "";
         if (fontSize > 0) {
             DIV_HELPER.style.fontSize = px(fontSize);
+        } else {
+            DIV_HELPER.style.fontSize = "";
         }
         if (fontName != null) {
             DIV_HELPER.style.fontFamily = fontName;
+        } else {
+            DIV_HELPER.style.fontFamily = "";
         }
+        DIV_HELPER.innerHTML = text;
 
         return new Size(DIV_HELPER.clientWidth + addWidth, DIV_HELPER.clientHeight + addHeight);
     }

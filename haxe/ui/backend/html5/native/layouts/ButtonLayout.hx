@@ -36,8 +36,8 @@ class ButtonLayout extends DefaultLayout {
         }
 
         var size:Size = new Size(cx, cy);
-        size.width += paddingLeft + paddingRight + 6;
-        size.height += paddingTop + paddingBottom + 2;
+        size.width += paddingLeft + paddingRight;// + 6;
+        size.height += paddingTop + paddingBottom;// + 2;
 
         return size;
     }
