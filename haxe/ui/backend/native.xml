@@ -10,14 +10,14 @@
         <behaviour id="text" class="haxe.ui.backend.html5.native.behaviours.SpanText" index="last" />
         <behaviour id="selected" class="haxe.ui.backend.html5.native.behaviours.ElementProperty" child="input" name="checked" removeIfNegative="true" />
         <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
-        <size class="haxe.ui.backend.html5.native.size.TextSize" incrementWidthBy="20" incrementHeightBy="0" />
+        <size class="haxe.ui.backend.html5.native.size.TextSize" incrementWidthBy="16" incrementHeightBy="2" />
     </component>
     <component id="haxe.ui.components.OptionBox" class="haxe.ui.backend.html5.native.LabeledInputElement" type="radio">
         <behaviour id="text" class="haxe.ui.backend.html5.native.behaviours.SpanText" index="last" />
         <behaviour id="selected" class="haxe.ui.backend.html5.native.behaviours.ElementProperty" child="input" name="checked" removeIfNegative="true" />
         <behaviour id="componentGroup" class="haxe.ui.backend.html5.native.behaviours.RadioGroup" child="input" name="name" removeIfNegative="true" />
         <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
-        <size class="haxe.ui.backend.html5.native.size.TextSize" incrementWidthBy="20" incrementHeightBy="0" />
+        <size class="haxe.ui.backend.html5.native.size.TextSize" incrementWidthBy="16" incrementHeightBy="2" />
     </component>
     <component id="haxe.ui.components.TextField" class="haxe.ui.backend.html5.native.NativeElement" nodeType="input" style="padding-left:2px;cursor:pointer;padding-top:3px;padding-bottom:3px;">
         <behaviour id="text" class="haxe.ui.backend.html5.native.behaviours.ElementValue" />
@@ -31,6 +31,8 @@
         <behaviour id="step" class="haxe.ui.backend.html5.native.behaviours.ElementProperty" name="step" />
         <behaviour id="pos" class="haxe.ui.backend.html5.native.behaviours.ElementValue" />
         <behaviour id="disabled" class="haxe.ui.backend.html5.native.behaviours.ElementDisabled" />
+        <behaviour id="min" class="haxe.ui.backend.html5.native.behaviours.ElementProperty" name="min" />
+        <behaviour id="max" class="haxe.ui.backend.html5.native.behaviours.ElementProperty" name="max" />
         <size class="haxe.ui.backend.html5.native.size.ElementSize" />
     </component>
     
