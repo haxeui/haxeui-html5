@@ -256,15 +256,21 @@ class ComponentImpl extends ComponentBase {
         if (parent != null && parent.element.style.borderWidth != null) {
             css.marginTop = '-${parent.element.style.borderWidth}';
             css.marginLeft = '-${parent.element.style.borderWidth}';
-        } else {
+        } else if (parent != null) {
+            css.marginTop = '';
+            css.marginLeft = '';
         }
 
         for (child in cast(this, Component).childComponents) {
             if (style.borderLeftSize != null && style.borderLeftSize > 0) {
                 child.element.style.marginLeft = '-${style.borderLeftSize}px';
+            } else {
+                child.element.style.marginLeft = '';
             }
             if (style.borderTopSize != null && style.borderTopSize > 0) {
                 child.element.style.marginTop = '-${style.borderTopSize}px';
+            } else {
+                child.element.style.marginTop = '';
             }
         }
     }
