@@ -159,7 +159,7 @@ class TextInputImpl extends TextDisplayImpl {
             el = Browser.document.createInputElement();
             el.style.border = "none";
             el.style.outline = "none";
-            el.style.whiteSpace = "nowrap";
+            el.style.whiteSpace = "pre";
             el.style.overflow = "hidden";
             el.style.cursor = "initial";
             el.style.position = "absolute";

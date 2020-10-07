@@ -39,8 +39,8 @@ class TextDisplayImpl extends TextBase {
             element.style.whiteSpace = "normal";
             element.style.wordBreak = "break-word";
             measureTextRequired = true;
-        } else if (_displayData.wordWrap == false && element.style.whiteSpace != "nowrap") {
-            element.style.whiteSpace = "nowrap";
+        } else if (_displayData.wordWrap == false && element.style.whiteSpace != "pre") {
+            element.style.whiteSpace = "pre";
             measureTextRequired = true;
         }
 
