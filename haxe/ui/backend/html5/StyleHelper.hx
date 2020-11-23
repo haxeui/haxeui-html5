@@ -239,11 +239,13 @@ class StyleHelper {
                         background.push('url(${imageInfo.data.src})');
                         if (style.backgroundImageRepeat == null) {
                             css.backgroundRepeat = "no-repeat";
+                            css.removeProperty("background-size");
                         } else if (style.backgroundImageRepeat == "repeat") {
                             css.backgroundRepeat = "repeat";
+                            css.removeProperty("background-size");
                         } else if (style.backgroundImageRepeat == "stretch") {
                             css.backgroundRepeat = "no-repeat";
-                            css.backgroundSize = '${HtmlUtils.px(width)} ${HtmlUtils.px(height)}';
+                            css.backgroundSize = '100% 100%';
                         }
                         background.reverse();
                         css.background = background.join(",");
