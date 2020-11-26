@@ -25,6 +25,7 @@ import haxe.ui.events.ScrollEvent;
 import haxe.ui.events.UIEvent;
 import haxe.ui.filters.Blur;
 import haxe.ui.filters.DropShadow;
+import haxe.ui.geom.Point;
 import haxe.ui.geom.Rectangle;
 import haxe.ui.styles.Style;
 import js.Browser;
@@ -684,6 +685,11 @@ class ComponentImpl extends ComponentBase {
         }
     }
 
+    @:access(haxe.ui.core.Screen)
+    private override function getComponentOffset():Point {
+        return new Point(Screen.instance.pageRoot(element).offsetLeft, Screen.instance.pageRoot(element).offsetTop);
+    }
+    
     @:access(haxe.ui.core.Screen)
     private function __onMouseWheelEvent(event:js.html.MouseEvent) {
         var fn = _eventMap.get(MouseEvent.MOUSE_WHEEL);

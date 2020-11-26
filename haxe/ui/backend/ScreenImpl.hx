@@ -185,6 +185,25 @@ class ScreenImpl extends ScreenBase {
         return c;
     }
 
+    var _pageRoot:Element = null;
+    private function pageRoot(from:Element):Element {
+        if (_pageRoot != null) {
+            return _pageRoot;
+        }
+        
+        var r = null;
+        var el = from;
+        while (el != null) {
+            if (el.classList.contains("haxeui-component") == false) {
+                r = el;
+                _pageRoot = el;
+                break;
+            }
+            el = el.parentElement;
+        }
+        return r;
+    }
+    
     private var _hasListener:Bool = false;
     private function addResizeListener() {
         if (_hasListener == true) {
