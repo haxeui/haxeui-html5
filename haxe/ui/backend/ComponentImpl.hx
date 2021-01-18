@@ -25,6 +25,7 @@ import haxe.ui.events.ScrollEvent;
 import haxe.ui.events.UIEvent;
 import haxe.ui.filters.Blur;
 import haxe.ui.filters.DropShadow;
+import haxe.ui.filters.Grayscale;
 import haxe.ui.geom.Point;
 import haxe.ui.geom.Rectangle;
 import haxe.ui.styles.Style;
@@ -404,6 +405,12 @@ class ComponentImpl extends ComponentBase {
                 element.style.setProperty("-o-filter", 'blur(${blur.amount}px)');
                 //element.style.setProperty("-ms-filter", 'blur(${blur.amount}px)');
                 element.style.setProperty("filter", 'blur(${blur.amount}px)');
+            } else if (Std.is(style.filter[0], Grayscale)) {
+                var grayscale:Grayscale = cast style.filter[0];
+                element.style.setProperty("-webkit-filter", 'grayscale(${grayscale.amount}%)');
+                element.style.setProperty("-moz-filter", 'grayscale(${grayscale.amount}%)');
+                element.style.setProperty("-o-filter", 'grayscale(${grayscale.amount}%)');
+                element.style.setProperty("filter", 'grayscale(${grayscale.amount}%)');
             }
         } else {
             element.style.filter = null;
