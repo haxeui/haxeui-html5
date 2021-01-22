@@ -16,6 +16,10 @@ class PlatformImpl extends PlatformBase {
         }
         return super.getMetric(id);
     }
+    
+    public override function getSystemLocale():String {
+        return Browser.navigator.language;
+    }
 
     private static var _vscrollWidth:Float = -1;
     private static var _hscrollHeight:Float = -1;
