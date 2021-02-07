@@ -700,7 +700,9 @@ class ComponentImpl extends ComponentBase {
 
     @:access(haxe.ui.core.Screen)
     private override function getComponentOffset():Point {
-        return new Point(Screen.instance.pageRoot(element).offsetLeft, Screen.instance.pageRoot(element).offsetTop);
+        return new Point(0, 0);
+        // ill concieved?
+        //return new Point(Screen.instance.pageRoot(element).offsetLeft, Screen.instance.pageRoot(element).offsetTop);
     }
     
     @:access(haxe.ui.core.Screen)

@@ -15,10 +15,17 @@ class StyleSheetHelper {
         
         var sheet:CSSStyleSheet = null;
         for (test in Browser.document.styleSheets) {
+            if (test.ownerNode == null || test.disabled == true) {
+                continue;
+            }
             var css = cast(test, CSSStyleSheet);
             if (css.ownerNode.nodeName == "STYLE" && css.href == null) {
-                sheet = css;
-                break;
+                try {
+                    var r = css.cssRules;
+                    sheet = css;
+                    break;
+                } catch (e:Dynamic) {
+                }
             }
         }
         
