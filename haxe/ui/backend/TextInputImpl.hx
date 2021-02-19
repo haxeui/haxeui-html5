@@ -23,7 +23,7 @@ class TextInputImpl extends TextDisplayImpl {
     
     private function onChangeEvent(e) {
         var newText = null;
-        if (Std.is(parentComponent, TextArea)) {
+        if ((parentComponent is TextArea)) {
             newText = cast(element, TextAreaElement).value;
         } else {
             newText = cast(element, InputElement).value;
@@ -60,9 +60,9 @@ class TextInputImpl extends TextDisplayImpl {
     private override function validateData() {
         if (_text != null) {
             var html:String = normalizeText(_text);
-            if (Std.is(element, InputElement)) {
+            if ((element is InputElement)) {
                 cast(element, InputElement).value = html;
-            } else if (Std.is(element, TextAreaElement)) {
+            } else if ((element is TextAreaElement)) {
                 cast(element, TextAreaElement).value = html;
             }
         }
@@ -82,8 +82,8 @@ class TextInputImpl extends TextDisplayImpl {
     private override function validateStyle():Bool {
         var measureTextRequired:Bool = false;
 
-        if ((_displayData.multiline == false && Std.is(element, InputElement) == false)
-            || (_displayData.multiline == true && Std.is(element, TextAreaElement) == false)) {
+        if ((_displayData.multiline == false && (element is InputElement) == false)
+            || (_displayData.multiline == true && (element is TextAreaElement) == false)) {
             var newElement:Element = createElement();
             element.parentElement.appendChild(newElement);
             HtmlUtils.removeElement(element);
@@ -98,7 +98,7 @@ class TextInputImpl extends TextDisplayImpl {
             measureTextRequired = true;
         }
 
-        if (Std.is(element, InputElement)) {
+        if ((element is InputElement)) {
             var inputElement:InputElement = cast element;
             if (_inputData.password == true && inputElement.type != "password") {
                 inputElement.type = "password";
@@ -111,16 +111,16 @@ class TextInputImpl extends TextDisplayImpl {
             #if !haxeui_builder
             element.style.cursor = "not-allowed";
             #end
-            if (Std.is(element, InputElement)) {
+            if ((element is InputElement)) {
                 cast(element, InputElement).disabled = true;
-            } else if (Std.is(element, TextAreaElement)) {
+            } else if ((element is TextAreaElement)) {
                 cast(element, TextAreaElement).disabled = true;
             }
         } else {
             element.style.cursor = null;
-            if (Std.is(element, InputElement)) {
+            if ((element is InputElement)) {
                 cast(element, InputElement).disabled = false;
-            } else if (Std.is(element, TextAreaElement)) {
+            } else if ((element is TextAreaElement)) {
                 cast(element, TextAreaElement).disabled = false;
             }
         }
@@ -129,7 +129,7 @@ class TextInputImpl extends TextDisplayImpl {
     }
 
     private override function measureText() {
-        if (Std.is(element, TextAreaElement)) {
+        if ((element is TextAreaElement)) {
             _textWidth = cast(element, TextAreaElement).scrollWidth;
             _textHeight = cast(element, TextAreaElement).scrollHeight;
         } else {

@@ -10,18 +10,18 @@ import js.html.TextAreaElement;
 class ElementPlaceholder extends Behaviour {
     public override function set(value:Variant) {
         var el:Element = _component.element;
-        if (Std.is(el, TextAreaElement)) {
+        if ((el is TextAreaElement)) {
             cast(el, TextAreaElement).placeholder = value;
-        } else if (Std.is(el, InputElement)){
+        } else if ((el is InputElement)){
             cast(el, InputElement).placeholder = value;
         }
     }
 
     public override function get():Variant {
         var el:Element = _component.element;
-        if (Std.is(el, TextAreaElement)) {
+        if ((el is TextAreaElement)) {
             return cast(el, TextAreaElement).placeholder;
-        } else if (Std.is(el, InputElement)){
+        } else if ((el is InputElement)){
             return cast(el, InputElement).placeholder;
         } else {
             return null;

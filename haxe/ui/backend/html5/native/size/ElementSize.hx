@@ -8,11 +8,11 @@ import haxe.ui.layouts.DelegateLayout.DelegateLayoutSize;
 class ElementSize extends DelegateLayoutSize {
     private override function get_width():Float {
         var w:Float = component.element.offsetWidth;
-        if (Std.is(component, VerticalSlider)) {
+        if ((component is VerticalSlider)) {
             if (w == component.element.offsetHeight) {
                 w = 21;
             }
-        } else if (Std.is(component, VerticalProgress)) {
+        } else if ((component is VerticalProgress)) {
             if (component.element.offsetWidth > component.element.offsetHeight) {
                 w = component.element.offsetHeight;
             }
@@ -22,7 +22,7 @@ class ElementSize extends DelegateLayoutSize {
 
     private override function get_height():Float {
         var h:Float = component.element.offsetHeight;
-        if (Std.is(component, VerticalProgress)) {
+        if ((component is VerticalProgress)) {
             if (component.element.offsetWidth > component.element.offsetHeight) {
                h = component.element.offsetWidth;
             }

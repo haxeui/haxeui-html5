@@ -50,11 +50,11 @@ class ButtonLayout extends DefaultLayout {
 
             switch (component.style.iconPosition) {
                 case "top" | "left" | null:
-                    if (Std.is(first, ImageElement) == false) {
+                    if ((first is ImageElement) == false) {
                         HtmlUtils.swapElements(first, last);
                     }
                 case "right" | "bottom":
-                    if (Std.is(last, ImageElement) == false) {
+                    if ((last is ImageElement) == false) {
                         HtmlUtils.swapElements(first, last);
                     }
                 default:    

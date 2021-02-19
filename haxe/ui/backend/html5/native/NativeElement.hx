@@ -58,7 +58,7 @@ class NativeElement {
 
     /*
     private function onChange(e) {
-        if (Std.is(_component, Slider)) {
+        if ((_component is Slider)) {
             var input:InputElement = cast _component.element;
             cast(_component, Slider).pos = Std.parseFloat(input.value);
         }

@@ -101,7 +101,7 @@ class ComponentImpl extends ComponentBase {
     }
 
     private override function get_isNativeScroller():Bool {
-        if (Std.is(this, ScrollView) && cast(this, Component).native == true) {
+        if ((this is ScrollView) && cast(this, Component).native == true) {
             return true;
         }
         return false;
@@ -120,7 +120,7 @@ class ComponentImpl extends ComponentBase {
     private override function handleCreate(native:Bool) {
         var newElement = null;
         if (native == true) {
-            if (Std.is(this, ScrollView)) { // special case for scrollview
+            if ((this is ScrollView)) { // special case for scrollview
                 _nativeElement = new NativeElement(cast this);
                 if (element == null) {
                     element = _nativeElement.create();
@@ -156,7 +156,7 @@ class ComponentImpl extends ComponentBase {
         }
 
         if (newElement == null) {
-            if (Std.is(this, ScrollView)) {
+            if ((this is ScrollView)) {
                 _nativeElement = null;
                 if (element == null) {
                     element = Browser.document.createDivElement();
@@ -173,7 +173,7 @@ class ComponentImpl extends ComponentBase {
             newElement = Browser.document.createDivElement();
             newElement.classList.add("haxeui-component");
 
-            if (Std.is(this, Image)) {
+            if ((this is Image)) {
                 newElement.style.boxSizing = "initial";
             }
 
@@ -221,7 +221,7 @@ class ComponentImpl extends ComponentBase {
             element.style.top = HtmlUtils.px(top);
         }
 
-        if (Std.is(this, TableView) && left != null && top != null && cast(this, TableView).native == true) {
+        if ((this is TableView) && left != null && top != null && cast(this, TableView).native == true) {
             var c:Component = cast(this, Component);
             var h = c.findComponent(Header);
             h.element.style.left = '${HtmlUtils.px(h.screenLeft)}';
@@ -239,7 +239,7 @@ class ComponentImpl extends ComponentBase {
             return;
         }
 
-        if (Std.is(this, VerticalProgress)) { // this is a hack for chrome
+        if ((this is VerticalProgress)) { // this is a hack for chrome
             if (element.style.getPropertyValue("transform-origin") != null && element.style.getPropertyValue("transform-origin").length > 0) {
                 var tw = width;
                 var th = height;
@@ -298,9 +298,9 @@ class ComponentImpl extends ComponentBase {
     private override function handleClipRect(value:Rectangle) {
         var c:Component = cast(this, Component);
         var parent:Component = c.parentComponent;
-        if (value != null && parent != null && (parent._nativeElement == null || Std.is(c, Header))) {
+        if (value != null && parent != null && (parent._nativeElement == null || (c is Header))) {
             element.style.clip = 'rect(${HtmlUtils.px(value.top)},${HtmlUtils.px(value.right)},${HtmlUtils.px(value.bottom)},${HtmlUtils.px(value.left)})';
-            if (Std.is(this, Header) && parent.native == true) {
+            if ((this is Header) && parent.native == true) {
                 if (element.style.position != "fixed") {
                     element.style.position = "fixed";
                 }
@@ -397,21 +397,21 @@ class ComponentImpl extends ComponentBase {
         setCursor(style.cursor);
 
         if (style.filter != null) {
-            if (Std.is(style.filter[0], DropShadow)) {
+            if ((style.filter[0] is DropShadow)) {
                 var dropShadow:DropShadow = cast style.filter[0];
                 if (dropShadow.inner == false) {
                     element.style.boxShadow = '${dropShadow.distance}px ${dropShadow.distance + 2}px ${dropShadow.blurX - 1}px ${dropShadow.blurY - 1}px ${HtmlUtils.rgba(dropShadow.color, dropShadow.alpha)}';
                 } else {
                     element.style.boxShadow = 'inset ${dropShadow.distance}px ${dropShadow.distance}px ${dropShadow.blurX}px 0px ${HtmlUtils.rgba(dropShadow.color, dropShadow.alpha)}';
                 }
-            } else if (Std.is(style.filter[0], Blur)) {
+            } else if ((style.filter[0] is Blur)) {
                 var blur:Blur = cast style.filter[0];
                 element.style.setProperty("-webkit-filter", 'blur(${blur.amount}px)');
                 element.style.setProperty("-moz-filter", 'blur(${blur.amount}px)');
                 element.style.setProperty("-o-filter", 'blur(${blur.amount}px)');
                 //element.style.setProperty("-ms-filter", 'blur(${blur.amount}px)');
                 element.style.setProperty("filter", 'blur(${blur.amount}px)');
-            } else if (Std.is(style.filter[0], Grayscale)) {
+            } else if ((style.filter[0] is Grayscale)) {
                 var grayscale:Grayscale = cast style.filter[0];
                 element.style.setProperty("-webkit-filter", 'grayscale(${grayscale.amount}%)');
                 element.style.setProperty("-moz-filter", 'grayscale(${grayscale.amount}%)');
@@ -430,7 +430,7 @@ class ComponentImpl extends ComponentBase {
         }
 
         if (style.backdropFilter != null) {
-            if (Std.is(style.backdropFilter[0], Blur)) {
+            if ((style.backdropFilter[0] is Blur)) {
                 var blur:Blur = cast style.backdropFilter[0];
                 element.style.setProperty("backdrop-filter", 'blur(${blur.amount}px)');
             }
@@ -574,9 +574,9 @@ class ComponentImpl extends ComponentBase {
             case UIEvent.CHANGE:
                 if (_eventMap.exists(type) == false) {
                     _eventMap.set(type, listener);
-                    if (Std.is(this, TextField) || Std.is(this, TextArea)) {
+                    if ((this is TextField) || (this is TextArea)) {
                         element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(KeyboardEvent.KEY_UP), __onTextFieldChangeEvent);
-                    } else if (Std.is(this, InteractiveComponent)) {
+                    } else if ((this is InteractiveComponent)) {
                         element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onChangeEvent);
                     }
                 }
@@ -610,7 +610,7 @@ class ComponentImpl extends ComponentBase {
                 element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onKeyboardEvent);
             case UIEvent.CHANGE:
                 _eventMap.remove(type);
-                if (Std.is(this, TextField)) {
+                if ((this is TextField)) {
                     element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(KeyboardEvent.KEY_UP), __onTextFieldChangeEvent);
                 } else {
                     element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onChangeEvent);
@@ -676,7 +676,7 @@ class ComponentImpl extends ComponentBase {
                 mouseEvent._originalEvent = event;
                 var touchEvent = false;
                 try {
-                    touchEvent = Std.is(event, js.html.TouchEvent);
+                    touchEvent = (event is js.html.TouchEvent);
                 } catch (e:Dynamic) { }
                 
                 if (touchEvent == true) {
@@ -684,7 +684,7 @@ class ComponentImpl extends ComponentBase {
                     mouseEvent.screenX = (te.changedTouches[0].pageX - Screen.instance.container.offsetLeft) / Toolkit.scaleX;
                     mouseEvent.screenY = (te.changedTouches[0].pageY - Screen.instance.container.offsetTop) / Toolkit.scaleY;
                     mouseEvent.touchEvent = true;
-                } else if (Std.is(event, js.html.MouseEvent)) {
+                } else if ((event is js.html.MouseEvent)) {
                     var me:js.html.MouseEvent = cast(event, js.html.MouseEvent);
                     mouseEvent.buttonDown = (me.buttons != 0);
                     mouseEvent.screenX = (me.pageX - Screen.instance.container.offsetLeft) / Toolkit.scaleX;
@@ -715,7 +715,7 @@ class ComponentImpl extends ComponentBase {
         var delta:Float = 0;
         if (Reflect.field(event, "wheelDelta") != null) {
             delta = Reflect.field(event, "wheelDelta");
-        } else if (Std.is(event, WheelEvent)) {
+        } else if ((event is WheelEvent)) {
             delta = cast(event, WheelEvent).deltaY;
         } else {
             delta = -event.detail;
@@ -741,7 +741,7 @@ class ComponentImpl extends ComponentBase {
                 var keyboardEvent = new KeyboardEvent(type);
                 keyboardEvent._originalEvent = event;
                 
-                if (Std.is(event, js.html.KeyboardEvent)) {
+                if ((event is js.html.KeyboardEvent)) {
                     var me:js.html.KeyboardEvent = cast(event, js.html.KeyboardEvent);
 					keyboardEvent.keyCode = me.keyCode;
 					keyboardEvent.altKey = me.altKey;

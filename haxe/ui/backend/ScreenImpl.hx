@@ -309,7 +309,7 @@ class ScreenImpl extends ScreenBase {
 
                 var touchEvent = false;
                 try {
-                    touchEvent = Std.is(event, js.html.TouchEvent);
+                    touchEvent = (event is js.html.TouchEvent);
                 } catch (e:Dynamic) { }
 
                 if (touchEvent == true) {
@@ -317,7 +317,7 @@ class ScreenImpl extends ScreenBase {
                     mouseEvent.screenX = (te.changedTouches[0].pageX - Screen.instance.container.offsetLeft) / Toolkit.scaleX;
                     mouseEvent.screenY = (te.changedTouches[0].pageY - Screen.instance.container.offsetTop) / Toolkit.scaleY;
                     mouseEvent.touchEvent = true;
-                } else if (Std.is(event, js.html.MouseEvent)) {
+                } else if ((event is js.html.MouseEvent)) {
                     var me:js.html.MouseEvent = cast(event, js.html.MouseEvent);
                     mouseEvent.buttonDown = (me.buttons != 0);
                     mouseEvent.screenX = (me.pageX - Screen.instance.container.offsetLeft) / Toolkit.scaleX;

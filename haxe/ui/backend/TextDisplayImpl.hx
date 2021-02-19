@@ -192,7 +192,7 @@ class TextDisplayImpl extends TextBase {
     
     private var autoWidth(get, null):Bool;
     private function get_autoWidth():Bool {
-        if (Std.is(parentComponent, Label)) {
+        if ((parentComponent is Label)) {
             return cast(parentComponent, Label).autoWidth;
         }
         return false;

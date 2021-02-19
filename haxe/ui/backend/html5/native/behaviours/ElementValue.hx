@@ -8,7 +8,7 @@ import js.html.TextAreaElement;
 class ElementValue extends DataBehaviour {
     public override function validateData() {
         var el:Element = _component.element;
-        if (Std.is(el, TextAreaElement)) {
+        if ((el is TextAreaElement)) {
             cast(el, TextAreaElement).value = StringTools.replace(_value, "\\n", "\n");
         } else {
             el.setAttribute("value", _value);

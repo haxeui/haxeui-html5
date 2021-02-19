@@ -75,7 +75,7 @@ class SpanText extends DataBehaviour {
         if (list.length != 0) {
             for (n in 0...list.length) {
                 var child = list.item(n);
-                if (Std.is(child, InputElement) && cast(child, InputElement).type == type) {
+                if ((child is InputElement) && cast(child, InputElement).type == type) {
                     input = cast child;
                     break;
                 }
