@@ -39,7 +39,54 @@ class StyleHelper {
             borderStyle = "solid";
         }
 
+        switch (style.borderType) {
+            case Full:
+                if (style.borderLeftSize > 0) {
+                    css.borderWidth = HtmlUtils.px(style.borderLeftSize);
+                    css.borderStyle = borderStyle;
+                } else {
+                    css.removeProperty("border-width");
+                    css.removeProperty("border-style");
+                }
+            case None:
+                css.removeProperty("border-width");
+                css.removeProperty("border-style");
+            case Compound:    
+                if (style.borderTopSize != null && style.borderTopSize > 0) {
+                   css.borderTopWidth = HtmlUtils.px(style.borderTopSize);
+                   css.borderTopStyle = borderStyle;
+                } else {
+                    css.removeProperty("border-top-width");
+                    css.removeProperty("border-top-style");
+                }
+
+                if (style.borderLeftSize != null && style.borderLeftSize > 0) {
+                   css.borderLeftWidth = HtmlUtils.px(style.borderLeftSize);
+                   css.borderLeftStyle = borderStyle;
+                } else {
+                    css.removeProperty("border-left-width");
+                    css.removeProperty("border-left-style");
+                }
+
+                if (style.borderBottomSize != null && style.borderBottomSize > 0) {
+                   css.borderBottomWidth = HtmlUtils.px(style.borderBottomSize);
+                   css.borderBottomStyle = borderStyle;
+                } else {
+                    css.removeProperty("border-bottom-width");
+                    css.removeProperty("border-bottom-style");
+                }
+
+                if (style.borderRightSize != null && style.borderRightSize > 0) {
+                   css.borderRightWidth = HtmlUtils.px(style.borderRightSize);
+                   css.borderRightStyle = borderStyle;
+                } else {
+                    css.removeProperty("border-right-width");
+                    css.removeProperty("border-right-style");
+                }
+        }
+        
         // border size
+        /*
         if (style.borderLeftSize != null &&
             style.borderLeftSize == style.borderRightSize &&
             style.borderLeftSize == style.borderBottomSize &&
@@ -91,6 +138,7 @@ class StyleHelper {
                 css.removeProperty("border-right-style");
             }
         }
+        */
 
         // border colour
         if (style.borderLeftColor != null &&
