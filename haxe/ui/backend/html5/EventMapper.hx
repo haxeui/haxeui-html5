@@ -1,4 +1,5 @@
 package haxe.ui.backend.html5;
+
 import haxe.ui.events.KeyboardEvent;
 import haxe.ui.events.MouseEvent;
 import haxe.ui.events.ScrollEvent;
@@ -13,6 +14,9 @@ class EventMapper {
         haxe.ui.events.MouseEvent.MOUSE_UP => "mouseup",
         haxe.ui.events.MouseEvent.CLICK => "click",
 		haxe.ui.events.MouseEvent.DBL_CLICK => "dblclick",
+        haxe.ui.events.MouseEvent.RIGHT_MOUSE_DOWN => "mousedown",
+        haxe.ui.events.MouseEvent.RIGHT_MOUSE_UP => "mouseup",
+        haxe.ui.events.MouseEvent.RIGHT_CLICK => "contextmenu",
         haxe.ui.events.UIEvent.CHANGE => "change",
         haxe.ui.events.KeyboardEvent.KEY_DOWN => "keydown",
         haxe.ui.events.KeyboardEvent.KEY_UP => "keyup",
@@ -29,6 +33,7 @@ class EventMapper {
         "touchstart" => haxe.ui.events.MouseEvent.MOUSE_DOWN,
         "touchend" => haxe.ui.events.MouseEvent.MOUSE_UP,
         "click" => haxe.ui.events.MouseEvent.CLICK,
+        "contextmenu" => haxe.ui.events.MouseEvent.RIGHT_CLICK,
 		"dblclick" => haxe.ui.events.MouseEvent.DBL_CLICK,
         "change" => haxe.ui.events.UIEvent.CHANGE,
         "keydown" => haxe.ui.events.KeyboardEvent.KEY_DOWN,

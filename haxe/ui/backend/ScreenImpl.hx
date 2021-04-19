@@ -25,6 +25,11 @@ class ScreenImpl extends ScreenBase {
             e.preventDefault();
             return false;
         });
+        Browser.document.body.addEventListener("contextmenu", function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+            return false;
+        });
         */
     }
 
@@ -231,7 +236,8 @@ class ScreenImpl extends ScreenBase {
         
         switch (type) {
             case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
-                MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DBL_CLICK:
+                MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DBL_CLICK |
+                MouseEvent.RIGHT_MOUSE_DOWN | MouseEvent.RIGHT_MOUSE_UP | MouseEvent.RIGHT_CLICK:
 
                 // chrome sends a spurious mouse move event even if the mouse hasnt moved, lets consume that first
                 if (type == MouseEvent.MOUSE_MOVE && _mapping.exists(type) == false && UserAgent.instance.chrome == true) {
@@ -281,7 +287,8 @@ class ScreenImpl extends ScreenBase {
         
         switch (type) {
             case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
-                MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DBL_CLICK:
+                MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DBL_CLICK |
+                MouseEvent.RIGHT_MOUSE_DOWN | MouseEvent.RIGHT_MOUSE_UP | MouseEvent.RIGHT_CLICK:
                 _mapping.remove(type);
                 container.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
                 if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
@@ -300,17 +307,29 @@ class ScreenImpl extends ScreenBase {
     private function __onMouseEvent(event:js.html.Event) {
         //event.preventDefault();
 
+        var button:Int = -1;
+        var touchEvent = false;
+        try {
+            touchEvent = (event is js.html.TouchEvent);
+        } catch (e:Dynamic) { }
+        if (touchEvent == false && (event is js.html.MouseEvent)) {
+            var me:js.html.MouseEvent = cast(event, js.html.MouseEvent);
+            button = me.which;
+        }
+        
+        var r = true;
         var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
+        if (type == MouseEvent.RIGHT_CLICK) {
+            event.stopPropagation();
+            event.preventDefault();
+            r = false;
+        }
+        
         if (type != null) {
             var fn = _mapping.get(type);
             if (fn != null) {
                 var mouseEvent = new MouseEvent(type);
                 mouseEvent._originalEvent = event;
-
-                var touchEvent = false;
-                try {
-                    touchEvent = (event is js.html.TouchEvent);
-                } catch (e:Dynamic) { }
 
                 if (touchEvent == true) {
                     var te:js.html.TouchEvent = cast(event, js.html.TouchEvent);
@@ -329,6 +348,8 @@ class ScreenImpl extends ScreenBase {
                 fn(mouseEvent);
             }
         }
+        
+        return r;
     }
 
     private function __onKeyEvent(event:js.html.KeyboardEvent) {
