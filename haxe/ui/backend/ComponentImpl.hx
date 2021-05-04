@@ -1,5 +1,6 @@
 package haxe.ui.backend;
 
+import haxe.ui.Toolkit;
 import haxe.ui.backend.html5.EventMapper;
 import haxe.ui.backend.html5.HtmlUtils;
 import haxe.ui.backend.html5.StyleHelper;
@@ -81,6 +82,7 @@ class ComponentImpl extends ComponentBase {
                 webkit-user-select;
                 outline: none !important;
             }", sheet.cssRules.length);
+            @:privateAccess Screen.instance.container.classList.add("haxeui-theme-" + Toolkit.theme);
         }
     }
 
