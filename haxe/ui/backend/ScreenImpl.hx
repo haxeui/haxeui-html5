@@ -1,5 +1,6 @@
 package haxe.ui.backend;
 
+import haxe.ui.Toolkit;
 import haxe.ui.backend.html5.EventMapper;
 import haxe.ui.backend.html5.HtmlUtils;
 import haxe.ui.backend.html5.UserAgent;
@@ -68,7 +69,7 @@ class ScreenImpl extends ScreenBase {
                 }
             }
         }
-        return cx;
+        return cx / Toolkit.scaleX;
     }
 
     private override function get_height():Float {
@@ -80,7 +81,7 @@ class ScreenImpl extends ScreenBase {
                 }
             }
         }
-        return cy;
+        return cy / Toolkit.scaleY;
     }
 
     private override function get_isRetina():Bool {
