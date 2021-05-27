@@ -63,7 +63,7 @@ class ScreenImpl extends ScreenBase {
     private override function get_width():Float {
         var cx:Float = container.offsetWidth;
         if (cx <= 0) {
-            for (c in _topLevelComponents) {
+            for (c in rootComponents) {
                 if (c.width > cx) {
                     cx = c.width;
                 }
@@ -75,7 +75,7 @@ class ScreenImpl extends ScreenBase {
     private override function get_height():Float {
         var cy:Float = container.offsetHeight;
         if (cy <= 0) {
-            for (c in _topLevelComponents) {
+            for (c in rootComponents) {
                 if (c.height > cy) {
                     cy = c.height;
                 }
@@ -104,7 +104,6 @@ class ScreenImpl extends ScreenBase {
             component.element.style.transformOrigin = "top left";
         }
 
-        _topLevelComponents.push(component);
         if (component.percentWidth != null) {
             addPercentContainerWidth();
         }
@@ -156,7 +155,7 @@ class ScreenImpl extends ScreenBase {
     }
     
     public override function removeComponent(component:Component):Component {
-        _topLevelComponents.remove(component);
+        rootComponents.remove(component);
         if (container.contains(component.element) == true) {
             container.removeChild(component.element);
         }
@@ -218,9 +217,7 @@ class ScreenImpl extends ScreenBase {
 
         _hasListener = true;
         Browser.window.addEventListener("resize", function(e) {
-           for (c in _topLevelComponents) {
-               resizeComponent(c);
-           }
+            resizeRootComponents();
         });
 
     }
