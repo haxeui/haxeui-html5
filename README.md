@@ -2,7 +2,7 @@
 `haxeui-html5` is the pure HTML5 backend for HaxeUI. It has no other framework dependency except `haxeui-core` itself and outputs a DOM tree.
 
 <p align="center">
-	<img src="https://github.com/haxeui/haxeui-html5/raw/master/screen-hybrid.png" />
+	<img src="https://github.com/haxeui/haxeui-html5/raw/master/.github/images/screen-hybrid.png" />
 </p>
 <p align="center">
 	<img src="https://github.com/haxeui/haxeui-html5/raw/master/screen.png" />
