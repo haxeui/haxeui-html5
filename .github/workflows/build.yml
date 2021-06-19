@@ -13,7 +13,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v1
-    - name: Setup Haxe (haxe ${{ matrix.haxe-version }}, ${{ matrix.os }}) ${{ !(matrix.os == 'windows-latest' && matrix.haxe-version == '3.4.7') }} ${{ matrix.os == 'windows-latest' }} ${{matrix.haxe-version == '3.4.7'}}
+    - name: Setup Haxe (haxe ${{ matrix.haxe-version }}, ${{ matrix.os }})
       if: ${{ !(matrix.os == 'windows-latest' && matrix.haxe-version == '3.4.7') }}
       uses: krdlab/setup-haxe@v1
       with:
