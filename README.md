@@ -5,7 +5,7 @@
 	<img src="https://github.com/haxeui/haxeui-html5/raw/master/.github/images/screen-hybrid.png" />
 </p>
 <p align="center">
-	<img src="https://github.com/haxeui/haxeui-html5/raw/master/screen.png" />
+	<img src="https://github.com/haxeui/haxeui-html5/raw/master/.github/images/screen.png" />
 </p>
 
 ## Installation
