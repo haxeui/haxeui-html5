@@ -13,8 +13,8 @@ jobs:
         haxe-version: [3.4.4, 4.0.3]
 
     steps:
-    - uses: actions/checkout@v1
-    - uses: haxeui/haxeui-core/.github/actions/haxe@master
+    - uses: actions/checkout@v2
+    - uses: krdlab/setup-haxe@v1
       with:
         haxe-version: ${{ matrix.haxe-version }}
 
