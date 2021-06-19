@@ -1,4 +1,4 @@
-name: Build (all platforms, all haxe versions)
+name: Build
 
 on: [push, repository_dispatch]
 
