@@ -14,13 +14,13 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Setup Haxe
-      if: ${{ matrix.os != 'windows-latest' }}
+      if: ${{ matrix.os != 'windows-latest' && matrix.haxe-version != '3.4.4' }}
       uses: haxeui/haxeui-core/.github/actions/haxe@master
       with:
         haxe-version: ${{ matrix.haxe-version }}
 
     - name: Build app (haxe ${{ matrix.haxe-version }}, ${{ matrix.os }})
-      if: ${{ matrix.os != 'windows-latest' }}
+      if: ${{ matrix.os != 'windows-latest' && matrix.haxe-version != '3.4.4' }}
       run: |
         git clone --branch master https://github.com/haxeui/haxeui-core.git --depth=1
         haxelib dev haxeui-core haxeui-core
