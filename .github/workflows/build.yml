@@ -26,4 +26,5 @@ jobs:
         git clone --branch master https://github.com/haxeui/haxeui-core.git --depth=1
         haxelib dev haxeui-core haxeui-core
         haxelib install build.hxml --always --quiet
+        cp .github/workflows/build.hxml build.hxml
         haxe build.hxml
