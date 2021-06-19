@@ -14,13 +14,13 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Setup Haxe (haxe ${{ matrix.haxe-version }}, ${{ matrix.os }}) ${{ !(matrix.os == 'windows-latest' && matrix.haxe-version == '3.4.7') }} ${{ matrix.os == 'windows-latest' }} ${{matrix.haxe-version == '3.4.7'}}
-      if: matrix.os != 'windows-latest' && matrix.haxe-version != '3.4.7'
+      if: ${{ !(matrix.os == 'windows-latest' && matrix.haxe-version == '3.4.7') }}
       uses: krdlab/setup-haxe@v1
       with:
         haxe-version: ${{ matrix.haxe-version }}
 
     - name: Build app (haxe ${{ matrix.haxe-version }}, ${{ matrix.os }})
-      if: matrix.os != 'windows-latest' && matrix.haxe-version != '3.4.7'
+      if: ${{ !(matrix.os == 'windows-latest' && matrix.haxe-version == '3.4.7') }}
       run: |
         git clone --branch master https://github.com/haxeui/haxeui-core.git --depth=1
         haxelib dev haxeui-core haxeui-core
