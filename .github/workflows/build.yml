@@ -13,15 +13,14 @@ jobs:
         haxe-version: [3.4.4, 4.0.3]
 
     steps:
-    - name: Build app (haxe ${{ matrix.haxe-version }}, ${{ matrix.os }})
-      if: ${{ matrix.os != 'windows-latest' }}
-    - uses: actions/checkout@v2
-    - uses: krdlab/setup-haxe@v1
-      with:
-        haxe-version: ${{ matrix.haxe-version }}
-
-      run: |
-        git clone --branch master https://github.com/haxeui/haxeui-core.git --depth=1
-        haxelib dev haxeui-core haxeui-core
-        haxelib install build.hxml --always --quiet
-        haxe build.hxml
+      - name: Build app (haxe ${{ matrix.haxe-version }}, ${{ matrix.os }})
+        if: ${{ matrix.os != 'windows-latest' }}
+        uses: actions/checkout@v2
+        uses: krdlab/setup-haxe@v1
+          with:
+            haxe-version: ${{ matrix.haxe-version }}
+        run: |
+          git clone --branch master https://github.com/haxeui/haxeui-core.git --depth=1
+          haxelib dev haxeui-core haxeui-core
+          haxelib install build.hxml --always --quiet
+          haxe build.hxml
