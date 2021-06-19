@@ -516,7 +516,7 @@ class ComponentImpl extends ComponentBase {
             _canvas.style.setProperty("-moz-backface-visibility", "hidden");
             _canvas.style.setProperty("-ms-backface-visibility", "hidden");
             _canvas.style.position = "absolute";
-            _canvas.style.pointerEvents = "none";
+            _canvas.style.setProperty("pointer-events", "none");
             _canvas.width = cast width;
             _canvas.height = cast height;
             element.insertBefore(_canvas, element.firstChild);
