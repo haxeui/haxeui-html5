@@ -14,6 +14,9 @@ class ImageDisplayImpl extends ImageBase {
         element.style.position = "absolute";
         element.style.borderRadius = "inherit";
         element.style.setProperty("pointer-events", "none");
+        element.style.setProperty("image-rendering", "pixelated");
+        element.style.setProperty("image-rendering", "-moz-crisp-edges");
+        element.style.setProperty("image-rendering", "crisp-edges");
     }
 
     public override function dispose() {
