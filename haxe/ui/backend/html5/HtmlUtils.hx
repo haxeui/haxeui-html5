@@ -12,7 +12,10 @@ class HtmlUtils {
         return '${value}px';
     }
 
-    public static function color(value:Int):String {
+    public static function color(value:Null<Int>):String {
+        if (value == null) {
+            return 'rgba(0, 0, 0, 0)';
+        }
         return '#${StringTools.hex(value, 6)}';
     }
 

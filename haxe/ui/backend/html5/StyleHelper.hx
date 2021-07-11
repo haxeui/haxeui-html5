@@ -109,42 +109,50 @@ class StyleHelper {
             style.borderTopColor == null) {
             css.removeProperty("border-color");
         } else {
-            if (style.borderTopColor != null) {
+            if (style.borderTopColor != null && style.borderTopSize != null) {
                 if (style.borderOpacity == null) {
                     css.borderTopColor = HtmlUtils.color(style.borderTopColor);
                 } else {
                     css.borderTopColor = HtmlUtils.rgba(style.borderTopColor, style.borderOpacity);
                 }
+            } else if (style.borderTopColor == null && style.borderTopSize != null) {
+                css.borderTopColor = HtmlUtils.color(style.borderTopColor);
             } else {
                 css.removeProperty("border-top-color");
             }
 
-            if (style.borderLeftColor != null) {
+            if (style.borderLeftColor != null && style.borderLeftSize != null) {
                 if (style.borderOpacity == null) {
                     css.borderLeftColor = HtmlUtils.color(style.borderLeftColor);
                 } else {
                     css.borderLeftColor = HtmlUtils.rgba(style.borderLeftColor, style.borderOpacity);
                 }
+            } else if (style.borderLeftColor == null && style.borderLeftSize != null) {
+                css.borderLeftColor = HtmlUtils.color(style.borderLeftColor);
             } else {
                 css.removeProperty("border-left-color");
             }
 
-            if (style.borderBottomColor != null) {
+            if (style.borderBottomColor != null && style.borderBottomSize != null) {
                 if (style.borderOpacity == null) {
                     css.borderBottomColor = HtmlUtils.color(style.borderBottomColor);
                 } else {
                     css.borderBottomColor = HtmlUtils.rgba(style.borderBottomColor, style.borderOpacity);
                 }
+            } else if (style.borderBottomColor == null && style.borderBottomSize != null) {
+                css.borderBottomColor = HtmlUtils.color(style.borderBottomColor);
             } else {
                 css.removeProperty("border-bottom-color");
             }
 
-            if (style.borderRightColor != null) {
+            if (style.borderRightColor != null && style.borderRightSize != null) {
                 if (style.borderOpacity == null) {
                     css.borderRightColor = HtmlUtils.color(style.borderRightColor);
                 } else {
                     css.borderRightColor = HtmlUtils.rgba(style.borderRightColor, style.borderOpacity);
                 }
+            } else if (style.borderRightColor == null && style.borderRightSize != null) {
+                css.borderRightColor = HtmlUtils.color(style.borderRightColor);
             } else {
                 css.removeProperty("border-right-color");
             }
