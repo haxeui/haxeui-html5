@@ -201,4 +201,17 @@ class TextDisplayImpl extends TextBase {
     private override function get_supportsHtml():Bool {
         return true;
     }
+    
+    
+    public override function measureTextWidth():Float {
+        if (HtmlUtils.DIV_HELPER == null) {
+            HtmlUtils.createDivHelper();
+        }
+
+        var div = HtmlUtils.DIV_HELPER;
+        setTempDivData(div);
+        div.style.width = "";
+     
+        return div.clientWidth;
+    }
 }
