@@ -41,7 +41,7 @@ class TextDisplayImpl extends TextBase {
     private override function validateStyle():Bool {
         var measureTextRequired:Bool = false;
         if (_displayData.wordWrap == true && element.style.whiteSpace != null) {
-            element.style.whiteSpace = "normal";
+            element.style.whiteSpace = "pre-wrap";
             element.style.wordBreak = "break-word";
             measureTextRequired = true;
         } else if (_displayData.wordWrap == false && element.style.whiteSpace != "pre") {

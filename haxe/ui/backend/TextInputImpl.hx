@@ -182,7 +182,7 @@ class TextInputImpl extends TextDisplayImpl {
             el.style.cursor = "initial";
             el.style.position = "absolute";
             el.style.backgroundColor = "inherit";
-            el.style.whiteSpace = "normal";
+            el.style.whiteSpace = "pre-wrap";
             el.id = "textArea";
             el.spellcheck = false;
             el.onkeydown = function(e) {
