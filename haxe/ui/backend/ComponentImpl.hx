@@ -5,18 +5,10 @@ import haxe.ui.backend.html5.EventMapper;
 import haxe.ui.backend.html5.HtmlUtils;
 import haxe.ui.backend.html5.StyleHelper;
 import haxe.ui.backend.html5.UserAgent;
-import haxe.ui.backend.html5.native.NativeElement;
 import haxe.ui.backend.html5.util.StyleSheetHelper;
 import haxe.ui.components.Image;
-import haxe.ui.components.TextArea;
-import haxe.ui.components.TextField;
-import haxe.ui.components.VerticalProgress;
-import haxe.ui.containers.Header;
-import haxe.ui.containers.ScrollView;
-import haxe.ui.containers.TableView;
 import haxe.ui.core.Component;
 import haxe.ui.core.ImageDisplay;
-import haxe.ui.core.InteractiveComponent;
 import haxe.ui.core.Screen;
 import haxe.ui.core.TextDisplay;
 import haxe.ui.core.TextInput;
@@ -43,8 +35,6 @@ import js.html.WheelEvent;
 class ComponentImpl extends ComponentBase {
     public var element:Element;
     private var _eventMap:Map<String, UIEvent->Void>;
-
-    private var _nativeElement:NativeElement;
 
     private static var _mutationObserver:MutationObserver;
     private static var elementToComponent:Map<Node, Component> = new Map<Node, Component>();
@@ -103,9 +93,6 @@ class ComponentImpl extends ComponentBase {
     }
 
     private override function get_isNativeScroller():Bool {
-        if ((this is ScrollView) && cast(this, Component).native == true) {
-            return true;
-        }
         return false;
     }
     
@@ -120,79 +107,38 @@ class ComponentImpl extends ComponentBase {
     }
 
     private override function handleCreate(native:Bool) {
-        var newElement = null;
-        if (native == true) {
-            if ((this is ScrollView)) { // special case for scrollview
-                _nativeElement = new NativeElement(cast this);
-                if (element == null) {
-                    element = _nativeElement.create();
-                }
-                element.classList.add("haxeui-component");
-                element.style.overflow = "auto";
-                elementToComponent.set(element, cast(this, Component));
-                return;
-            } else {
-                var component:Component = cast(this, Component);
-                var nativeConfig:Map<String, String> = component.getNativeConfigProperties();
-                if (nativeConfig != null && nativeConfig.exists("class")) {
-                    _nativeElement = Type.createInstance(Type.resolveClass(nativeConfig.get("class")), [this]);
-                    _nativeElement.config = nativeConfig;
-                    newElement = _nativeElement.create();
-                    newElement.classList.add("haxeui-component");
-                }
+        if (this.isScroller) {
+            if (element == null) {
+                element = Browser.document.createDivElement();
             }
 
-            if (newElement != null) {
-                if (element != null) {
-                    var p = element.parentElement;
-                    if (p != null) {
-                        elementToComponent.remove(element);
-                        p.replaceChild(newElement, element);
-                    }
-                }
-
-                element = newElement;
-
-                remapEvents();
-            }
-        }
-
-        if (newElement == null) {
-            if ((this is ScrollView)) {
-                _nativeElement = null;
-                if (element == null) {
-                    element = Browser.document.createDivElement();
-                }
-
-                element.scrollTop = 0;
-                element.scrollLeft = 0;
-                element.style.overflow = "hidden";
-                element.classList.add("haxeui-component");
-                elementToComponent.set(element, cast(this, Component));
-                return;
-            }
-
-            newElement = Browser.document.createDivElement();
-            newElement.classList.add("haxeui-component");
-
-            if ((this is Image)) {
-                newElement.style.boxSizing = "initial";
-            }
-
-            if (element != null) {
-                var p = element.parentElement;
-                if (p != null) {
-                    elementToComponent.remove(element);
-                    p.replaceChild(newElement, element);
-                }
-            }
-
-            element = newElement;
+            element.scrollTop = 0;
+            element.scrollLeft = 0;
+            element.style.overflow = "hidden";
+            element.classList.add("haxeui-component");
             elementToComponent.set(element, cast(this, Component));
-            _nativeElement = null;
-
-            remapEvents();
+            return;
         }
+
+        var newElement = Browser.document.createDivElement();
+        newElement.classList.add("haxeui-component");
+
+        if ((this is Image)) {
+            newElement.style.boxSizing = "initial";
+        }
+
+        if (element != null) {
+            var p = element.parentElement;
+            if (p != null) {
+                elementToComponent.remove(element);
+                p.replaceChild(newElement, element);
+            }
+        }
+
+        element = newElement;
+        elementToComponent.set(element, cast(this, Component));
+
+        remapEvents();
     }
 
     private function remapEvents() {
@@ -222,14 +168,6 @@ class ComponentImpl extends ComponentBase {
         if (top != null) {
             element.style.top = HtmlUtils.px(top);
         }
-
-        if ((this is TableView) && left != null && top != null && cast(this, TableView).native == true) {
-            var c:Component = cast(this, Component);
-            var h = c.findComponent(Header);
-            h.element.style.left = '${HtmlUtils.px(h.screenLeft)}';
-            h.element.style.top = '${HtmlUtils.px(h.screenTop)}';
-
-        }
     }
 
     private override function handleSize(width:Null<Float>, height:Null<Float>, style:Style) {
@@ -239,18 +177,6 @@ class ComponentImpl extends ComponentBase {
 
         if (this.element == null) {
             return;
-        }
-
-        if ((this is VerticalProgress)) { // this is a hack for chrome
-            if (element.style.getPropertyValue("transform-origin") != null && element.style.getPropertyValue("transform-origin").length > 0) {
-                var tw = width;
-                var th = height;
-
-                width = th;
-                height = tw;
-                
-                element.style.marginLeft = "-" + width + "px";
-            }
         }
 
         var c:Component = cast(this, Component);
@@ -300,18 +226,10 @@ class ComponentImpl extends ComponentBase {
     private override function handleClipRect(value:Rectangle) {
         var c:Component = cast(this, Component);
         var parent:Component = c.parentComponent;
-        if (value != null && parent != null && (parent._nativeElement == null || (c is Header))) {
+        if (value != null && parent != null) {
             element.style.clip = 'rect(${HtmlUtils.px(value.top)},${HtmlUtils.px(value.right)},${HtmlUtils.px(value.bottom)},${HtmlUtils.px(value.left)})';
-            if ((this is Header) && parent.native == true) {
-                if (element.style.position != "fixed") {
-                    element.style.position = "fixed";
-                }
-                element.style.left = '${HtmlUtils.px(Std.int(c.screenLeft - value.left))}';
-                element.style.top = '${HtmlUtils.px(Std.int(c.screenTop - value.top))}';
-            } else {
-                element.style.left = '${HtmlUtils.px(Std.int(c.left - value.left))}';
-                element.style.top = '${HtmlUtils.px(Std.int(c.top - value.top))}';
-            }
+            element.style.left = '${HtmlUtils.px(Std.int(c.left - value.left))}';
+            element.style.top = '${HtmlUtils.px(Std.int(c.top - value.top))}';
         } else {
             element.style.removeProperty("clip");
         }
@@ -486,28 +404,6 @@ class ComponentImpl extends ComponentBase {
         }
     }
 
-    private var __props:Map<String, Dynamic>;
-    private function get(name:String):Dynamic {
-        if (__props == null) {
-            return null;
-        }
-        return __props.get(name);
-    }
-
-    private function set(name:String, value:Dynamic) {
-        if (__props == null) {
-            __props = new Map<String, Dynamic>();
-        }
-        __props.set(name, value);
-    }
-
-    private function has(name:String):Bool {
-        if (__props == null) {
-            return false;
-        }
-        return __props.exists(name);
-    }
-
     private var _canvas:CanvasElement = null;
     private function getCanvas(width:Float, height:Float) {
         if (_canvas == null) {
@@ -575,11 +471,9 @@ class ComponentImpl extends ComponentBase {
 				}
             case UIEvent.CHANGE:
                 if (_eventMap.exists(type) == false) {
-                    _eventMap.set(type, listener);
-                    if ((this is TextField) || (this is TextArea)) {
-                        element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(KeyboardEvent.KEY_UP), __onTextFieldChangeEvent);
-                    } else if ((this is InteractiveComponent)) {
-                        element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onChangeEvent);
+                    if (hasTextInput() == true) {
+                        _eventMap.set(type, listener);
+                        getTextInput().element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(KeyboardEvent.KEY_UP), __onTextFieldChangeEvent);
                     }
                 }
             case ScrollEvent.CHANGE:
@@ -611,11 +505,9 @@ class ComponentImpl extends ComponentBase {
 				_eventMap.remove(type);
                 element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onKeyboardEvent);
             case UIEvent.CHANGE:
-                _eventMap.remove(type);
-                if ((this is TextField)) {
-                    element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(KeyboardEvent.KEY_UP), __onTextFieldChangeEvent);
-                } else {
-                    element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onChangeEvent);
+                if (hasTextInput()) {
+                    _eventMap.remove(type);
+                    getTextInput().element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(KeyboardEvent.KEY_UP), __onTextFieldChangeEvent);
                 }
         }
     }

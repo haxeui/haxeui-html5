@@ -1,7 +1,6 @@
 package haxe.ui.backend;
 
 import haxe.ui.backend.html5.HtmlUtils;
-import haxe.ui.components.TextArea;
 import js.Browser;
 import js.html.Element;
 import js.html.InputElement;
@@ -23,7 +22,7 @@ class TextInputImpl extends TextDisplayImpl {
     
     private function onChangeEvent(e) {
         var newText = null;
-        if ((parentComponent is TextArea)) {
+        if ((element is TextAreaElement)) {
             newText = cast(element, TextAreaElement).value;
         } else {
             newText = cast(element, InputElement).value;

@@ -1,10 +1,5 @@
 package haxe.ui.backend.html5;
 
-import haxe.ui.events.KeyboardEvent;
-import haxe.ui.events.MouseEvent;
-import haxe.ui.events.ScrollEvent;
-import haxe.ui.events.UIEvent;
-
 class EventMapper {
     public static var HAXEUI_TO_DOM:Map<String, String> = [
         haxe.ui.events.MouseEvent.MOUSE_MOVE => "mousemove",
