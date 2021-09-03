@@ -128,12 +128,15 @@ class TextInputImpl extends TextDisplayImpl {
     }
 
     private override function measureText() {
-        if ((element is TextAreaElement)) {
-            _textWidth = cast(element, TextAreaElement).scrollWidth;
-            _textHeight = cast(element, TextAreaElement).scrollHeight;
-        } else {
-            super.measureText();
+        if (HtmlUtils.DIV_HELPER == null) {
+            HtmlUtils.createDivHelper();
         }
+
+        var div = HtmlUtils.DIV_HELPER;
+        setTempDivData(div);
+
+        _textWidth = div.clientWidth;
+        _textHeight = div.clientHeight;
         
         _inputData.hscrollMax = _textWidth - _width;
         _inputData.hscrollPageSize = (_width * _inputData.hscrollMax) / _textWidth;
@@ -213,11 +216,21 @@ class TextInputImpl extends TextDisplayImpl {
         if (t == null || t.length == 0) {
             t = "|";
         }
-
+        
         div.style.fontFamily = element.style.fontFamily;
         div.style.fontSize = element.style.fontSize;
-        div.style.width = "";
-        div.innerHTML = normalizeText(t);
+        div.style.whiteSpace = element.style.whiteSpace;
+        div.style.lineHeight = element.style.lineHeight;
+        if (autoWidth == false) {
+            div.style.width = (_width > 0) ? '${HtmlUtils.px(_width)}' : "";
+        } else {
+            div.style.width = "";
+        }
+        var normalizedText = super.normalizeText(t);
+        if (_displayData.multiline == true) {
+            normalizedText += "<br>";
+        }
+        div.innerHTML = normalizedText;
     }
 
     private override function normalizeText(text:String, escape:Bool = true):String {
