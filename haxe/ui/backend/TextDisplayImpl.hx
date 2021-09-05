@@ -135,7 +135,7 @@ class TextDisplayImpl extends TextBase {
         setTempDivData(div);
 
         if (_fixedWidth == false) {
-            _textWidth = div.clientWidth;
+            _textWidth = div.clientWidth + 1;
         }
         if (_fixedHeight == false) {
             _textHeight = div.clientHeight;
