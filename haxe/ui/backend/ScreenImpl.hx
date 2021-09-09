@@ -154,7 +154,7 @@ class ScreenImpl extends ScreenBase {
         }", sheet.cssRules.length);
     }
     
-    public override function removeComponent(component:Component):Component {
+    public override function removeComponent(component:Component, dispose:Bool = true):Component {
         rootComponents.remove(component);
         if (container.contains(component.element) == true) {
             container.removeChild(component.element);
