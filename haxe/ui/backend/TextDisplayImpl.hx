@@ -170,6 +170,7 @@ class TextDisplayImpl extends TextBase {
         div.style.fontSize = element.style.fontSize;
         div.style.whiteSpace = element.style.whiteSpace;
         div.style.wordBreak = element.style.wordBreak;
+        div.style.lineHeight = null;
         if (autoWidth == false) {
             div.style.width = (_width > 0) ? '${HtmlUtils.px(_width)}' : "";
         } else {
