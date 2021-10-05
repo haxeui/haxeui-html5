@@ -34,11 +34,11 @@ import js.html.WheelEvent;
 
 class ComponentImpl extends ComponentBase {
     public var element:Element;
-    private var _eventMap:Map<String, UIEvent->Void>;
+    @:noCompletion private var _eventMap:Map<String, UIEvent->Void>;
 
-    private static var _mutationObserver:MutationObserver;
+    @:noCompletion private static var _mutationObserver:MutationObserver;
     private static var elementToComponent:Map<Node, Component> = new Map<Node, Component>();
-    private static var _stylesAdded:Bool = false;
+    @:noCompletion private static var _stylesAdded:Bool = false;
 
     @:access(haxe.ui.backend.ScreenImpl)
     public function new() {
@@ -404,7 +404,7 @@ class ComponentImpl extends ComponentBase {
         }
     }
 
-    private var _canvas:CanvasElement = null;
+    @:noCompletion private var _canvas:CanvasElement = null;
     private function getCanvas(width:Float, height:Float) {
         if (_canvas == null) {
             _canvas = Browser.document.createCanvasElement();
@@ -515,6 +515,7 @@ class ComponentImpl extends ComponentBase {
     //***********************************************************************************************************
     // Event Handlers
     //***********************************************************************************************************
+    @:noCompletion 
     private function __onContextMenu(event:js.html.UIEvent) {
         event.preventDefault();
         var type:String = MouseEvent.RIGHT_CLICK;
@@ -530,6 +531,7 @@ class ComponentImpl extends ComponentBase {
         return false;
     }
     
+    @:noCompletion 
     private function __onChangeEvent(event:js.html.UIEvent) {
         var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
         if (type != null) {
@@ -541,6 +543,7 @@ class ComponentImpl extends ComponentBase {
         }
     }
 
+	@:noCompletion 
     private function __onTextFieldChangeEvent(event:js.html.UIEvent) {
         var fn = _eventMap.get(UIEvent.CHANGE);
         if (fn != null) {
@@ -549,6 +552,7 @@ class ComponentImpl extends ComponentBase {
         }
     }
 
+	@:noCompletion 
     @:access(haxe.ui.core.Screen)
     private function __onMouseEvent(event:js.html.Event) {
         // TODO: conditionally implement: https://developer.mozilla.org/en-US/docs/Web/API/Element/setPointerCapture
@@ -599,6 +603,7 @@ class ComponentImpl extends ComponentBase {
         //return new Point(Screen.instance.pageRoot(element).offsetLeft, Screen.instance.pageRoot(element).offsetTop);
     }
     
+    @:noCompletion 
     @:access(haxe.ui.core.Screen)
     private function __onMouseWheelEvent(event:js.html.MouseEvent) {
         var fn = _eventMap.get(MouseEvent.MOUSE_WHEEL);
@@ -627,6 +632,7 @@ class ComponentImpl extends ComponentBase {
         fn(mouseEvent);
     }
 	
+	@:noCompletion 
 	private function __onKeyboardEvent(event:js.html.Event) {
 		var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
         if (type != null) {
@@ -648,6 +654,7 @@ class ComponentImpl extends ComponentBase {
         }
 	}
     
+    @:noCompletion 
     private function __onScrollEvent(event:js.html.MouseScrollEvent) {
         var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
         var fn = _eventMap.get(type);
