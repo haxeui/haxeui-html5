@@ -114,7 +114,7 @@ class ComponentImpl extends ComponentBase {
 
             element.scrollTop = 0;
             element.scrollLeft = 0;
-            element.style.overflow = "hidden";
+            //element.style.overflow = "hidden";
             element.classList.add("haxeui-component");
             elementToComponent.set(element, cast(this, Component));
             return;
