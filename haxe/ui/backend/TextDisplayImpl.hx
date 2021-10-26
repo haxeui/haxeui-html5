@@ -20,18 +20,24 @@ class TextDisplayImpl extends TextBase {
     //***********************************************************************************************************
 
     private var _html:String;
+    private var _isHtml:Bool = false;
     private override function validateData() {
         var html:String = null;
         if (_text != null) {
             html = normalizeText(_text);
+            element.innerText = html;
+            _isHtml = false;
         } else if (_htmlText != null) {
             html = normalizeText(_htmlText, false);
+            element.innerHTML = html;
+            _isHtml = true;
         }
         if (html != null && _html != html) {
-            element.innerHTML = html;
             _html = html;
-            if (autoWidth == false) {
+            if (autoWidth == true) {
                 _fixedWidth = false;
+            }
+            if (autoHeight == true) {
                 _fixedHeight = false;
             }
         }
@@ -89,8 +95,12 @@ class TextDisplayImpl extends TextBase {
         }
 
         if (measureTextRequired == true) {
-            _fixedWidth = false;
-            _fixedHeight = false;
+            if (autoWidth == true) {
+                _fixedWidth = false;
+            }
+            if (autoHeight == true) {
+                _fixedHeight = false;
+            }
         }
         
         return measureTextRequired;
@@ -119,14 +129,20 @@ class TextDisplayImpl extends TextBase {
             style.height = HtmlUtils.px(_height);
         }
         if (allowFixed == false) {
-            _fixedHeight = false;
+            //_fixedHeight = false;
         }
     }
 
     private override function measureText() {
+        if (forceStaticSize == true) {
+            if (_textWidth > 0 && _textHeight > 0) {
+                return;
+            }
+        }
         if (_fixedWidth == true && _fixedHeight == true) {
             return;
         }
+
         if (HtmlUtils.DIV_HELPER == null) {
             HtmlUtils.createDivHelper();
         }
@@ -176,7 +192,11 @@ class TextDisplayImpl extends TextBase {
         } else {
             div.style.width = "";
         }
-        div.innerHTML = t;
+        if (_isHtml == true) {
+            div.innerHTML = t;
+        } else {
+            div.innerText = t;
+        }
     }
 
     private function normalizeText(text:String, escape:Bool = true):String {
@@ -195,6 +215,14 @@ class TextDisplayImpl extends TextBase {
     private function get_autoWidth():Bool {
         if ((parentComponent is Label)) {
             return cast(parentComponent, Label).autoWidth;
+        }
+        return false;
+    }
+    
+    private var autoHeight(get, null):Bool;
+    private function get_autoHeight():Bool {
+        if ((parentComponent is Label)) {
+            return cast(parentComponent, Label).autoHeight;
         }
         return false;
     }
