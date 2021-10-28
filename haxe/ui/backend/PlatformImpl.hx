@@ -40,4 +40,8 @@ class PlatformImpl extends PlatformBase {
         _hscrollHeight = div.offsetHeight - div.clientHeight;
         HtmlUtils.removeElement(div);
     }
+    
+    public override function perf():Float {
+        return Browser.window.performance.now();
+    }
 }
