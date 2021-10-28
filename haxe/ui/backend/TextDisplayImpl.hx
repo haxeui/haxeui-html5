@@ -20,15 +20,23 @@ class TextDisplayImpl extends TextBase {
     //***********************************************************************************************************
 
     private var _html:String;
+    private var _isHTML:Bool = false;
     private override function validateData() {
         var html:String = null;
         if (_text != null) {
             html = normalizeText(_text);
+            _isHTML = false;
         } else if (_htmlText != null) {
             html = normalizeText(_htmlText, false);
+            _isHTML = true;
         }
         if (html != null && _html != html) {
-            element.innerHTML = html;
+            if (_isHTML == false) {
+                element.textContent = html;
+            } else {
+                element.innerHTML = html;
+            }
+
             _html = html;
             if (autoWidth == true) {
                 _fixedWidth = false;
@@ -188,10 +196,16 @@ class TextDisplayImpl extends TextBase {
         } else {
             div.style.width = "";
         }
-        div.innerHTML = t;
+        
+        if (_isHTML == false) {
+            div.textContent = t;
+        } else {
+            div.innerHTML = t;
+        }
     }
 
     private function normalizeText(text:String, escape:Bool = true):String {
+        return text;
         var html = text;
         if (escape == true) {
             html = HtmlUtils.escape(text);
@@ -222,7 +236,6 @@ class TextDisplayImpl extends TextBase {
     private override function get_supportsHtml():Bool {
         return true;
     }
-    
     
     public override function measureTextWidth():Float {
         if (HtmlUtils.DIV_HELPER == null) {

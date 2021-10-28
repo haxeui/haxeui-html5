@@ -60,7 +60,11 @@ class ScreenImpl extends ScreenBase {
         return s;
     }
     
+    private var _width:Null<Float> = null;
     private override function get_width():Float {
+        if (_width != null) {
+            return _width;
+        }
         var cx:Float = container.offsetWidth;
         if (cx <= 0) {
             for (c in rootComponents) {
@@ -69,10 +73,15 @@ class ScreenImpl extends ScreenBase {
                 }
             }
         }
-        return cx / Toolkit.scaleX;
+        _width = cx / Toolkit.scaleX;
+        return _width;
     }
 
+    private var _height:Null<Float> = null;
     private override function get_height():Float {
+        if (_height != null) {
+            return _height;
+        }
         var cy:Float = container.offsetHeight;
         if (cy <= 0) {
             for (c in rootComponents) {
@@ -81,7 +90,8 @@ class ScreenImpl extends ScreenBase {
                 }
             }
         }
-        return cy / Toolkit.scaleY;
+        _height = cy / Toolkit.scaleY;
+        return _height;
     }
 
     private override function get_isRetina():Bool {
@@ -170,8 +180,12 @@ class ScreenImpl extends ScreenBase {
         }
     }
 
+    private var _container:Element = null;
     private var container(get, null):Element;
     private function get_container():Element {
+        if (_container != null) {
+            return _container;
+        }
         var c : Element = null;
         if (options == null || options.container == null) {
             c = Browser.document.body;
@@ -187,6 +201,7 @@ class ScreenImpl extends ScreenBase {
                 c.parentElement.id = "haxeui-container-parent";
             }
         }
+        _container = c;
         return c;
     }
 
@@ -217,6 +232,8 @@ class ScreenImpl extends ScreenBase {
 
         _hasListener = true;
         Browser.window.addEventListener("resize", function(e) {
+            _width = null;
+            _height = null;
             resizeRootComponents();
         });
 
