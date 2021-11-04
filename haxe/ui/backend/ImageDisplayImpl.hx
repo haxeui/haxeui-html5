@@ -14,9 +14,6 @@ class ImageDisplayImpl extends ImageBase {
         element.style.position = "absolute";
         element.style.borderRadius = "inherit";
         element.style.setProperty("pointer-events", "none");
-        element.style.setProperty("image-rendering", "pixelated");
-        element.style.setProperty("image-rendering", "-moz-crisp-edges");
-        element.style.setProperty("image-rendering", "crisp-edges");
     }
 
     public override function dispose() {
@@ -32,6 +29,7 @@ class ImageDisplayImpl extends ImageBase {
     private override function validateData() {
         if (element.src != _imageInfo.data.src) {
             element.src = _imageInfo.data.src;
+            applyStyle();
         }
     }
 
@@ -53,6 +51,16 @@ class ImageDisplayImpl extends ImageBase {
             }
         } else if (element.style.clip != null) {
             element.style.removeProperty("clip");
+        }
+    }
+    
+    public function applyStyle() {
+        if (parentComponent.style.imageRendering == "pixelated") {
+            element.style.setProperty("image-rendering", "pixelated");
+            element.style.setProperty("image-rendering", "-moz-crisp-edges");
+            element.style.setProperty("image-rendering", "crisp-edges");
+        } else if (element.style.getPropertyValue("image-rendering") != null) {
+            element.style.removeProperty("image-rendering");
         }
     }
 }

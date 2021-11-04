@@ -373,6 +373,10 @@ class ComponentImpl extends ComponentBase {
         if (style.color != null) {
             element.style.color = HtmlUtils.color(style.color);
         }
+        
+        if (hasImageDisplay()) {
+            _imageDisplay.applyStyle();
+        }
     }
 
     //***********************************************************************************************************
