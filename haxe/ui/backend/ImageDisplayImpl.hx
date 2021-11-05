@@ -55,7 +55,7 @@ class ImageDisplayImpl extends ImageBase {
     }
     
     public function applyStyle() {
-        if (parentComponent != null) {
+        if (parentComponent != null && parentComponent.style != null) {
             if (parentComponent.style.imageRendering == "pixelated") {
                 element.style.setProperty("image-rendering", "pixelated");
                 element.style.setProperty("image-rendering", "-moz-crisp-edges");
