@@ -55,12 +55,14 @@ class ImageDisplayImpl extends ImageBase {
     }
     
     public function applyStyle() {
-        if (parentComponent.style.imageRendering == "pixelated") {
-            element.style.setProperty("image-rendering", "pixelated");
-            element.style.setProperty("image-rendering", "-moz-crisp-edges");
-            element.style.setProperty("image-rendering", "crisp-edges");
-        } else if (element.style.getPropertyValue("image-rendering") != null) {
-            element.style.removeProperty("image-rendering");
+        if (parentComponent != null) {
+            if (parentComponent.style.imageRendering == "pixelated") {
+                element.style.setProperty("image-rendering", "pixelated");
+                element.style.setProperty("image-rendering", "-moz-crisp-edges");
+                element.style.setProperty("image-rendering", "crisp-edges");
+            } else if (element.style.getPropertyValue("image-rendering") != null) {
+                element.style.removeProperty("image-rendering");
+            }
         }
     }
 }
