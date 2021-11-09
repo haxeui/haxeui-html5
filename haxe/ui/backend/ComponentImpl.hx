@@ -449,9 +449,11 @@ class ComponentImpl extends ComponentBase {
             case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
                 MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DBL_CLICK:
                 if (_eventMap.exists(type) == false) {
+                    #if !haxeui_notouch
                     if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
                         element.addEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
                     }
+                    #end
                     
                     _eventMap.set(type, listener);
                     element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
@@ -492,9 +494,11 @@ class ComponentImpl extends ComponentBase {
                 MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DBL_CLICK:
                 _eventMap.remove(type);
                 element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
+                #if !haxeui_notouch
                 if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
                     element.removeEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
                 }
+                #end
             case MouseEvent.RIGHT_CLICK:    
                 _eventMap.remove(type);
                 element.removeEventListener("contextmenu", __onContextMenu);
