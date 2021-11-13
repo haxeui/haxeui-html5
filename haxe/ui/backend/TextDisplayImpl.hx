@@ -133,16 +133,11 @@ class TextDisplayImpl extends TextBase {
             style.height = HtmlUtils.px(_height);
         }
         if (allowFixed == false) {
-            //_fixedHeight = false;
+            _fixedHeight = false;
         }
     }
 
     private override function measureText() {
-        if (forceStaticSize == true) {
-            if (_textWidth > 0 && _textHeight > 0) {
-                return;
-            }
-        }
         if (_fixedWidth == true && _fixedHeight == true) {
             return;
         }
