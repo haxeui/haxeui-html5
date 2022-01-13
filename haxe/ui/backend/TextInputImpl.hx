@@ -2,6 +2,7 @@ package haxe.ui.backend;
 
 import haxe.ui.backend.html5.HtmlUtils;
 import js.Browser;
+import js.html.CSSStyleDeclaration;
 import js.html.Element;
 import js.html.InputElement;
 import js.html.TextAreaElement;
@@ -167,8 +168,8 @@ class TextInputImpl extends TextDisplayImpl {
             el.style.position = "absolute";
             el.style.backgroundColor = "inherit";
             el.style.padding = "0px";
-            el.style.marginLeft = "-1px";
-            el.style.marginTop = "-1px";
+            //el.style.marginLeft = "-1px";
+            //el.style.marginTop = "-1px";
             el.spellcheck = false;
         } else {
             el = Browser.document.createTextAreaElement();
@@ -211,6 +212,22 @@ class TextInputImpl extends TextDisplayImpl {
         return el;
     }
 
+    private override function validatePosition() {
+        var x = _left;
+        var y = _top;
+        if (_displayData.multiline == false && parentComponent != null && parentComponent.style != null) {
+            if (parentComponent.style.borderLeftSize != null) {
+                x -= parentComponent.style.borderLeftSize;
+            }
+            if (parentComponent.style.borderTopSize != null) {
+                y -= parentComponent.style.borderTopSize;
+            }
+        }
+        var style:CSSStyleDeclaration = element.style;
+        style.left = HtmlUtils.px(x);
+        style.top = HtmlUtils.px(y);
+    }
+    
     private override function setTempDivData(div:Element) {
         var t:String = _text;
         if (t == null || t.length == 0) {
