@@ -451,7 +451,7 @@ class ComponentImpl extends ComponentBase {
                 if (_eventMap.exists(type) == false) {
                     #if !haxeui_notouch
                     if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
-                        element.addEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
+                        element.addEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent, { passive: true } );
                     }
                     #end
                     
