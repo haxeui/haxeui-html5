@@ -452,9 +452,9 @@ class ComponentImpl extends ComponentBase {
                     #if !haxeui_notouch
                     if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
                         #if (haxe_ver <= 4.0)
-                        element.addEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
+                        //element.addEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
                         #else
-                        element.addEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent, { passive: true } );
+                        //element.addEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent, { passive: true } );
                         #end
                     }
                     #end
@@ -564,6 +564,7 @@ class ComponentImpl extends ComponentBase {
         }
     }
 
+    private var _over:Bool = false;
 	@:noCompletion 
     @:access(haxe.ui.core.Screen)
     private function __onMouseEvent(event:js.html.Event) {
@@ -601,6 +602,19 @@ class ComponentImpl extends ComponentBase {
                     mouseEvent.screenY = (me.pageY - Screen.instance.container.offsetTop) / Toolkit.scaleY;
                     mouseEvent.ctrlKey = me.ctrlKey;
                     mouseEvent.shiftKey = me.shiftKey;
+                }
+                
+                // js dom events fire mouse outs when you mouse over a child, lets fix that
+                if (type == MouseEvent.MOUSE_OUT && hitTest(mouseEvent.screenX, mouseEvent.screenY) == true) {
+                    return;
+                } else if (type == MouseEvent.MOUSE_OVER && _over == true) {
+                    return;
+                }
+                
+                if (type == MouseEvent.MOUSE_OVER) {
+                    _over = true;
+                } else if (type == MouseEvent.MOUSE_OUT) {
+                    _over = false;
                 }
                 
                 fn(mouseEvent);
