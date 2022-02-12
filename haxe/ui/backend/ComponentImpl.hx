@@ -619,7 +619,6 @@ class ComponentImpl extends ComponentBase {
                 } else if (type == MouseEvent.MOUSE_OUT) {
                     _over = false;
                 }
-                */
                 
                 fn(mouseEvent);
             }
