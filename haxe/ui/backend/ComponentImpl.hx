@@ -226,6 +226,7 @@ class ComponentImpl extends ComponentBase {
     private override function handleClipRect(value:Rectangle) {
         var c:Component = cast(this, Component);
         var parent:Component = c.parentComponent;
+        value.toInts();
         if (value != null && parent != null) {
             element.style.clip = 'rect(${HtmlUtils.px(value.top)},${HtmlUtils.px(value.right - 1)},${HtmlUtils.px(value.bottom)},${HtmlUtils.px(value.left)})';
             element.style.left = '${HtmlUtils.px(Std.int(c.left - value.left))}';
@@ -605,11 +606,13 @@ class ComponentImpl extends ComponentBase {
                 }
                 
                 // js dom events fire mouse outs when you mouse over a child, lets fix that
+                /*
                 if (type == MouseEvent.MOUSE_OUT && hitTest(mouseEvent.screenX, mouseEvent.screenY) == true) {
                     return;
                 } else if (type == MouseEvent.MOUSE_OVER && _over == true) {
                     return;
                 }
+                */
                 
                 if (type == MouseEvent.MOUSE_OVER) {
                     _over = true;
