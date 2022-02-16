@@ -238,12 +238,17 @@ class TextInputImpl extends TextDisplayImpl {
         div.style.fontSize = element.style.fontSize;
         div.style.whiteSpace = element.style.whiteSpace;
         div.style.lineHeight = element.style.lineHeight;
+        if ((element is TextAreaElement)) {
+            div.style.wordBreak = element.style.wordBreak;
+        }
         if (autoWidth == false) {
             div.style.width = (_width > 0) ? '${HtmlUtils.px(_width)}' : "";
         } else {
             div.style.width = "";
         }
         var normalizedText = super.normalizeText(t);
+        normalizedText = StringTools.replace(normalizedText, "<", "&lt;");
+        normalizedText = StringTools.replace(normalizedText, ">", "&gt;");
         if (_displayData.multiline == true) {
             normalizedText += "<br>";
         }
