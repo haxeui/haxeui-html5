@@ -197,6 +197,9 @@ class ScreenImpl extends ScreenBase {
         }
         if (c.id != "haxeui-container") {
             c.id = "haxeui-container";
+            if (options.container != null) {
+                c.style.position = "relative";
+            }
             if (c.parentElement != null && c.parentElement.id != "haxeui-container-parent") {
                 c.parentElement.id = "haxeui-container-parent";
             }
