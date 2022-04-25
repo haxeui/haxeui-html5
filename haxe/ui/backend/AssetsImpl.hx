@@ -88,6 +88,14 @@ class AssetsImpl extends AssetsBase {
         });
     }
     
+    public override function imageInfoFromImageData(imageData:ImageData):ImageInfo {
+        return {
+            data: imageData,
+            width: imageData.width,
+            height: imageData.height
+        }
+    }
+    
     private override function getFontFromHaxeResource(resourceId:String, callback:String->FontInfo->Void) {
         var bytes = Resource.getBytes(resourceId);
         if (bytes == null) {
