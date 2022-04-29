@@ -14,4 +14,8 @@
             <style resource="styles/native/main.css" />
         </native>
     </themes>
+    
+    <defines>
+        <define name="haxeui_allow_subpixels" />
+    </defines>
 </module>
