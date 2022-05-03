@@ -238,15 +238,21 @@ class ScreenImpl extends ScreenBase {
             _width = null;
             _height = null;
             resizeRootComponents();
+            if (_mapping.exists(UIEvent.RESIZE)) {
+                var event = new UIEvent(UIEvent.RESIZE);
+                var fn = _mapping.get(UIEvent.RESIZE);
+                if (fn != null) {
+                    fn(event);
+                }
+            }
         });
-
     }
 
     //***********************************************************************************************************
     // Events
     //***********************************************************************************************************
     private override function supportsEvent(type:String):Bool {
-        return EventMapper.HAXEUI_TO_DOM.get(type) != null;
+        return (type == UIEvent.RESIZE) || EventMapper.HAXEUI_TO_DOM.get(type) != null;
     }
 
     private override function mapEvent(type:String, listener:UIEvent->Void) {
@@ -297,6 +303,11 @@ class ScreenImpl extends ScreenBase {
                     _mapping.set(type, listener);
                     container.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onKeyEvent);
                 }
+                
+            case UIEvent.RESIZE:
+                if (_mapping.exists(type) == false) {
+                    _mapping.set(type, listener);
+                }
         }
     }
 
@@ -316,6 +327,9 @@ class ScreenImpl extends ScreenBase {
             case KeyboardEvent.KEY_DOWN | KeyboardEvent.KEY_UP:
                 _mapping.remove(type);
                 container.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onKeyEvent);
+                
+            case UIEvent.RESIZE:
+                _mapping.remove(type);
         }
     }
 
