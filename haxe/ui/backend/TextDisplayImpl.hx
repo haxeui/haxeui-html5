@@ -150,10 +150,10 @@ class TextDisplayImpl extends TextBase {
         setTempDivData(div);
 
         if (_fixedWidth == false) {
-            _textWidth = div.clientWidth + 1;
+            _textWidth = div.clientWidth;
         }
         if (_fixedHeight == false) {
-            _textHeight = div.clientHeight;
+            _textHeight = div.clientHeight + 4;
         }
     }
 
@@ -164,8 +164,10 @@ class TextDisplayImpl extends TextBase {
     private function createElement():Element {
         var el:Element = Browser.document.createDivElement();
         //el.style.display = "inline";
+        el.style.marginTop = "2px";
         el.style.position = "absolute";
         el.style.cursor = "inherit";
+        el.style.lineHeight = "1em";
 
         return el;
     }
@@ -185,7 +187,7 @@ class TextDisplayImpl extends TextBase {
         div.style.fontSize = element.style.fontSize;
         div.style.whiteSpace = element.style.whiteSpace;
         div.style.wordBreak = element.style.wordBreak;
-        div.style.lineHeight = null;
+        div.style.lineHeight = "1em";
         if (autoWidth == false) {
             div.style.width = (_width > 0) ? '${HtmlUtils.px(_width)}' : "";
         } else {
