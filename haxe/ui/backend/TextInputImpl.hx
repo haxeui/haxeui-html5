@@ -254,8 +254,4 @@ class TextInputImpl extends TextDisplayImpl {
         }
         div.innerHTML = normalizedText;
     }
-
-    private override function normalizeText(text:String, escape:Bool = true):String {
-        return StringTools.replace(text, "\\n", "\n");
-    }
 }

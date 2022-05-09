@@ -27,7 +27,7 @@ class TextDisplayImpl extends TextBase {
             html = normalizeText(_text);
             _isHTML = false;
         } else if (_htmlText != null) {
-            html = normalizeText(_htmlText, false);
+            html = normalizeHtmlText(_htmlText, false);
             _isHTML = true;
         }
         if (html != null && _html != html) {
@@ -177,7 +177,7 @@ class TextDisplayImpl extends TextBase {
         if (_text != null) {
             t = normalizeText(_text);
         } else if (_htmlText != null) {
-            t = normalizeText(_htmlText, false);
+            t = normalizeHtmlText(_htmlText, false);
         }
         if (t == null || t.length == 0) {
             t = "|";
@@ -201,8 +201,12 @@ class TextDisplayImpl extends TextBase {
         }
     }
 
-    private function normalizeText(text:String, escape:Bool = true):String {
+    private function normalizeText(text:String):String {
+        text = StringTools.replace(text, "\\n", "\n");
         return text;
+    }
+    
+    private function normalizeHtmlText(text:String, escape:Bool = true):String {
         var html = text;
         if (escape == true) {
             html = HtmlUtils.escape(text);
