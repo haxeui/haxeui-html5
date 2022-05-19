@@ -1,8 +1,8 @@
 package haxe.ui.backend;
 
 import haxe.ui.backend.OpenFileDialogBase;
-import haxe.ui.backend.html5.FileSelector;
 import haxe.ui.containers.dialogs.Dialogs.SelectedFileInfo;
+import haxe.ui.util.html5.FileSelector;
 
 using StringTools;
 
