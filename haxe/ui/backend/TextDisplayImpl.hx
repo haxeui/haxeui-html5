@@ -167,7 +167,7 @@ class TextDisplayImpl extends TextBase {
         el.style.marginTop = "2px";
         el.style.position = "absolute";
         el.style.cursor = "inherit";
-        el.style.lineHeight = "1em";
+        //el.style.lineHeight = "1em";
 
         return el;
     }
@@ -187,7 +187,7 @@ class TextDisplayImpl extends TextBase {
         div.style.fontSize = element.style.fontSize;
         div.style.whiteSpace = element.style.whiteSpace;
         div.style.wordBreak = element.style.wordBreak;
-        div.style.lineHeight = "1em";
+        //div.style.lineHeight = "1em";
         if (autoWidth == false) {
             div.style.width = (_width > 0) ? '${HtmlUtils.px(_width)}' : "";
         } else {
