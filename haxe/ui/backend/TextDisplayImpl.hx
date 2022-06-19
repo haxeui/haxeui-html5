@@ -165,6 +165,7 @@ class TextDisplayImpl extends TextBase {
         var el:Element = Browser.document.createDivElement();
         //el.style.display = "inline";
         el.style.marginTop = "1px";
+        el.style.marginLeft = "1px";
         el.style.position = "absolute";
         el.style.cursor = "inherit";
         //el.style.lineHeight = "1em";
