@@ -153,7 +153,7 @@ class TextDisplayImpl extends TextBase {
             _textWidth = div.clientWidth + 2;
         }
         if (_fixedHeight == false) {
-            _textHeight = div.clientHeight + 4;
+            _textHeight = div.clientHeight + 2;
         }
     }
 
@@ -164,7 +164,7 @@ class TextDisplayImpl extends TextBase {
     private function createElement():Element {
         var el:Element = Browser.document.createDivElement();
         //el.style.display = "inline";
-        el.style.marginTop = "2px";
+        el.style.marginTop = "1px";
         el.style.position = "absolute";
         el.style.cursor = "inherit";
         //el.style.lineHeight = "1em";
