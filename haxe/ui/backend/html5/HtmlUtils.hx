@@ -7,6 +7,11 @@ import js.Browser;
 import js.html.DivElement;
 import js.html.Element;
 
+typedef DivHelper = {
+    var div:DivElement;
+    var claimed:Bool;
+}
+
 class HtmlUtils {
     public static inline function px(value:Float):String {
         return '${value}px';
@@ -47,53 +52,69 @@ class HtmlUtils {
         return el;
     }
     
-    public static var DIV_HELPER:DivElement;
-
-    public static function __init__():Void {
-        ValidationManager.instance.registerEvent(ValidationEvent.STOP, onValidationStop);
-    }
-
-    private static function onValidationStop(e:ValidationEvent):Void {
-        if (DIV_HELPER != null) {
-            /*
-            removeElement(DIV_HELPER);
-            DIV_HELPER = null;
-            */
-        }
-    }
-
-    public static function createDivHelper():Void
-    {
-        if (DIV_HELPER == null) {
-            DIV_HELPER = Browser.document.createDivElement();
-            DIV_HELPER.style.position = "absolute";
-            DIV_HELPER.style.top = "-99999px"; // position off-screen!
-            DIV_HELPER.style.left = "-99999px"; // position off-screen!
-            //DIV_HELPER.style.height = "1.05em";
-            Browser.document.body.appendChild(DIV_HELPER);
-        }
-    }
-
-    public static function measureText(text:String, addWidth:Float = 0, addHeight:Float = 0, fontSize:Float = -1, fontName:String = null):Size {
-        if (DIV_HELPER == null) {
-            createDivHelper();
-        }
-
-        DIV_HELPER.style.width = "";
-        DIV_HELPER.style.height = "";
-        if (fontSize > 0) {
-            DIV_HELPER.style.fontSize = px(fontSize);
+    private static var _divHelpers:Map<DivElement, DivHelper> = new Map<DivElement, DivHelper>();
+    private static var _divHelpersId:Map<String, DivHelper> = new Map<String, DivHelper>();
+    public static function getDivHelper(id:String = null):DivElement {
+        var div = null;
+        if (id != null) {
+            var helper = _divHelpersId.get(id);
+            if (helper != null) {
+                div = helper.div;
+            }
         } else {
-            DIV_HELPER.style.fontSize = "";
+            for (key in _divHelpers.keys()) {
+                var value = _divHelpers.get(key);
+                if (value.claimed == false) {
+                    div = value.div;
+                    break;
+                }
+            }
+        }
+        
+        if (div == null) {
+            div = Browser.document.createDivElement();
+            div.style.position = "absolute";
+            div.style.top = "-99999px"; // position off-screen!
+            div.style.left = "-99999px"; // position off-screen!
+            Browser.document.body.appendChild(div);
+            var helper:DivHelper = {
+                div: div,
+                claimed: true
+            };
+            if (id != null) {
+                _divHelpersId.set(id, helper);
+            } else {
+                _divHelpers.set(div, helper);
+            }
+        }
+        
+        return div;
+    }
+    
+    public static function releaseDivHelper(div:DivElement) {
+        if (_divHelpers.exists(div)) {
+            _divHelpers.get(div).claimed = false;
+        }
+    }
+    
+    public static function measureText(text:String, addWidth:Float = 0, addHeight:Float = 0, fontSize:Float = -1, fontName:String = null):Size {
+        var div = getDivHelper();
+
+        div.style.width = "";
+        div.style.height = "";
+        if (fontSize > 0) {
+            div.style.fontSize = px(fontSize);
+        } else {
+            div.style.fontSize = "";
         }
         if (fontName != null) {
-            DIV_HELPER.style.fontFamily = fontName;
+            div.style.fontFamily = fontName;
         } else {
-            DIV_HELPER.style.fontFamily = "";
+            div.style.fontFamily = "";
         }
-        DIV_HELPER.innerHTML = text;
+        div.innerHTML = text;
 
-        return new Size(DIV_HELPER.clientWidth + addWidth, DIV_HELPER.clientHeight + addHeight);
+        return new Size(div.clientWidth + addWidth, div.clientHeight + addHeight);
     }
 
     private static var _dpi:Float = 0;

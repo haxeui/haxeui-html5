@@ -129,12 +129,9 @@ class TextInputImpl extends TextDisplayImpl {
     }
 
     private override function measureText() {
-        if (HtmlUtils.DIV_HELPER == null) {
-            HtmlUtils.createDivHelper();
-        }
-
-        var div = HtmlUtils.DIV_HELPER;
+        var div = HtmlUtils.getDivHelper("haxeui-text-input-div-helper");
         setTempDivData(div);
+        HtmlUtils.releaseDivHelper(div);
 
         _textWidth = div.clientWidth;
         _textHeight = div.clientHeight;

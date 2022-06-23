@@ -142,12 +142,9 @@ class TextDisplayImpl extends TextBase {
             return;
         }
 
-        if (HtmlUtils.DIV_HELPER == null) {
-            HtmlUtils.createDivHelper();
-        }
-
-        var div = HtmlUtils.DIV_HELPER;
+        var div = HtmlUtils.getDivHelper();
         setTempDivData(div);
+        HtmlUtils.releaseDivHelper(div);
 
         if (_fixedWidth == false) {
             _textWidth = div.clientWidth + 2;
@@ -240,14 +237,12 @@ class TextDisplayImpl extends TextBase {
     }
     
     public override function measureTextWidth():Float {
-        if (HtmlUtils.DIV_HELPER == null) {
-            HtmlUtils.createDivHelper();
-        }
-
-        var div = HtmlUtils.DIV_HELPER;
+        var div = HtmlUtils.getDivHelper();
         setTempDivData(div);
         div.style.width = "";
+        var cx = div.clientWidth;
+        HtmlUtils.releaseDivHelper(div);
      
-        return div.clientWidth;
+        return cx;
     }
 }
