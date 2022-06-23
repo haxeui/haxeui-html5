@@ -128,7 +128,7 @@ class TextDisplayImpl extends TextBase {
             _fixedWidth = true;
             style.width = HtmlUtils.px(_width);
         }
-        if (_height > 0 && autoWidth == false) {
+        if (_height > 0 && autoHeight == false) {
             _fixedHeight = true;
             style.height = HtmlUtils.px(_height);
         }
