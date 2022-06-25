@@ -1,8 +1,6 @@
 package haxe.ui.backend.html5;
 
-import haxe.ui.events.ValidationEvent;
 import haxe.ui.geom.Size;
-import haxe.ui.validation.ValidationManager;
 import js.Browser;
 import js.html.DivElement;
 import js.html.Element;
@@ -117,6 +115,14 @@ class HtmlUtils {
         return new Size(div.clientWidth + addWidth, div.clientHeight + addHeight);
     }
 
+    public static inline function addEventListener(element:Element, type:String, listener:haxe.Constraints.Function, passive:Bool = true) {
+        #if (haxe_ver <= 4.0)
+        element.addEventListener(type, listener);
+        #else
+        element.addEventListener(type, listener, { passive: passive } );
+        #end
+    }
+    
     private static var _dpi:Float = 0;
     public static var dpi(get, null):Float;
     public static function get_dpi():Float {

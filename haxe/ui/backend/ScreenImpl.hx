@@ -264,6 +264,7 @@ class ScreenImpl extends ScreenBase {
                 MouseEvent.RIGHT_MOUSE_DOWN | MouseEvent.RIGHT_MOUSE_UP | MouseEvent.RIGHT_CLICK:
 
                 // chrome sends a spurious mouse move event even if the mouse hasnt moved, lets consume that first
+                /* not sure this is still needed 
                 if (type == MouseEvent.MOUSE_MOVE && _mapping.exists(type) == false && UserAgent.instance.chrome == true) {
                     var fn = null;
                     fn = function(e) {
@@ -274,28 +275,30 @@ class ScreenImpl extends ScreenBase {
 
                         if (_mapping.exists(type) == false) {
                             if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
-                                container.addEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
+                                HtmlUtils.addEventListener(container, EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent, false);
                             }
 
                             _mapping.set(type, listener);
-                            container.addEventListener(EventMapper.HAXEUI_TO_DOM.get(MouseEvent.MOUSE_MOVE), __onMouseEvent);
+                            HtmlUtils.addEventListener(container, EventMapper.HAXEUI_TO_DOM.get(MouseEvent.MOUSE_MOVE), __onMouseEvent, false);
                         }
                     }
 
-                    container.addEventListener(EventMapper.HAXEUI_TO_DOM.get(MouseEvent.MOUSE_MOVE), fn);
+                    //container.addEventListener(EventMapper.HAXEUI_TO_DOM.get(MouseEvent.MOUSE_MOVE), fn, {passive: false});
+                    HtmlUtils.addEventListener(container, EventMapper.HAXEUI_TO_DOM.get(MouseEvent.MOUSE_MOVE), fn, false);
                     if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
-                        container.addEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), fn);
+                        HtmlUtils.addEventListener(container, EventMapper.MOUSE_TO_TOUCH.get(type), fn, false);
                     }
                     return;
                 }
+                */
 
                 if (_mapping.exists(type) == false) {
                     if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
-                        container.addEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
+                        HtmlUtils.addEventListener(container, EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent, false);
                     }
 
                     _mapping.set(type, listener);
-                    container.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
+                    HtmlUtils.addEventListener(container, EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent, false);
                 }
 
             case KeyboardEvent.KEY_DOWN | KeyboardEvent.KEY_UP:
