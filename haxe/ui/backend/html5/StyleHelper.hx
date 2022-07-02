@@ -248,19 +248,29 @@ class StyleHelper {
 
                 if (slice == null) {
                     if (imageRect.width == imageInfo.width && imageRect.height == imageInfo.height) {
+                        var backgroundRepeat = null;
+                        var backgroundSize = null;
                         background.push('url(${imageInfo.data.src})');
                         if (style.backgroundImageRepeat == null) {
-                            css.backgroundRepeat = "no-repeat";
-                            css.removeProperty("background-size");
+                            backgroundRepeat = "no-repeat";
                         } else if (style.backgroundImageRepeat == "repeat") {
-                            css.backgroundRepeat = "repeat";
-                            css.removeProperty("background-size");
+                            backgroundRepeat = "repeat";
                         } else if (style.backgroundImageRepeat == "stretch") {
-                            css.backgroundRepeat = "no-repeat";
-                            css.backgroundSize = '100% 100%';
+                            backgroundRepeat = "no-repeat";
+                            backgroundSize = '100% 100%';
                         }
                         background.reverse();
                         css.background = background.join(",");
+                        if (backgroundSize != null) {
+                            css.backgroundSize = "100% 100%";
+                        } else {
+                            css.removeProperty("background-size");
+                        }
+                        if (backgroundRepeat != null) {
+                            css.backgroundRepeat = "100% 100%";
+                        } else {
+                            css.removeProperty("background-repeat");
+                        }
                     } else {
                         var canvas = component.getCanvas(width, height);
                         var ctx:CanvasRenderingContext2D = canvas.getContext2d();
