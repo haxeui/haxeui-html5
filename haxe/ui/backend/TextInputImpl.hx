@@ -134,7 +134,7 @@ class TextInputImpl extends TextDisplayImpl {
         HtmlUtils.releaseDivHelper(div);
 
         _textWidth = div.clientWidth;
-        _textHeight = div.clientHeight;
+        _textHeight = div.clientHeight + 2;
         
         _inputData.hscrollMax = _textWidth - _width;
         _inputData.hscrollPageSize = (_width * _inputData.hscrollMax) / _textWidth;
