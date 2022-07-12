@@ -15,6 +15,8 @@ import js.html.CSSStyleSheet;
 import js.html.Element;
 import js.html.TouchEvent;
 
+using StringTools;
+
 class ScreenImpl extends ScreenBase {
     private var _mapping:Map<String, UIEvent->Void>;
 
@@ -136,10 +138,19 @@ class ScreenImpl extends ScreenBase {
         _percentContainerWidthAdded = true;
         
         var sheet:CSSStyleSheet = StyleSheetHelper.getValidStyleSheet();
-        sheet.insertRule("#haxeui-container-parent {
-            margin: 0;
-            width: 100%;
-        }", sheet.cssRules.length);
+        
+        var w = containerParent.getAttribute("width");
+        if (w == null) {
+            w = "";
+        }
+        w = w.trim();
+        
+        if (!w.endsWith("%") && !w.endsWith("px")) {
+            sheet.insertRule("#haxeui-container-parent {
+                margin: 0;
+                width: 100%;
+            }", sheet.cssRules.length);
+        }
         sheet.insertRule("#haxeui-container {
             margin: 0;
             width: 100%;
@@ -154,10 +165,19 @@ class ScreenImpl extends ScreenBase {
         _percentContainerHeightAdded = true;
         
         var sheet:CSSStyleSheet = StyleSheetHelper.getValidStyleSheet();
-        sheet.insertRule("#haxeui-container-parent {
-            margin: 0;
-            height: 100%;
-        }", sheet.cssRules.length);
+        
+        var h = containerParent.getAttribute("height");
+        if (h == null) {
+            h = "";
+        }
+        h = h.trim();
+        
+        if (!h.endsWith("%") && !h.endsWith("px")) {
+            sheet.insertRule("#haxeui-container-parent {
+                margin: 0;
+                height: 100%;
+            }", sheet.cssRules.length);
+        }
         sheet.insertRule("#haxeui-container {
             margin: 0;
             height: 100%;
@@ -226,6 +246,22 @@ class ScreenImpl extends ScreenBase {
         }
         return r;
     }
+    
+    private var _containerParent:Element = null;
+    private var containerParent(get, null):Element;
+    private function get_containerParent():Element {
+        if (_containerParent != null) {
+            return _containerParent;
+        }
+        
+        var c = container;
+        if (c != null) {
+            _containerParent = c.parentElement;
+        }
+        
+        return _containerParent;
+    }
+    
     
     private var _hasListener:Bool = false;
     private function addResizeListener() {

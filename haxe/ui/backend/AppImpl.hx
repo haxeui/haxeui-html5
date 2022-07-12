@@ -16,9 +16,9 @@ class AppImpl extends AppBase {
         if (Browser.document.readyState == "complete") {
             onReady();
         } else {
-            Browser.document.body.onload = function(e) {
+            Browser.window.addEventListener("load", function(e) {
                 onReady();
-            }
+            });
         }
     }
 
