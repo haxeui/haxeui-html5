@@ -8,7 +8,6 @@ import js.Browser;
 import js.html.CanvasElement;
 import js.html.CanvasRenderingContext2D;
 import js.html.ImageData;
-import js.lib.Uint8ClampedArray;
 
 class CanvasGraphicsImpl extends ComponentGraphicsBase {
     private var _canvas:CanvasElement = null;
@@ -58,7 +57,11 @@ class CanvasGraphicsImpl extends ComponentGraphicsBase {
             return super.setPixels(pixels);
         }
         
-        var imageData = new ImageData(new Uint8ClampedArray(pixels.getData()), _ctx.canvas.width, _ctx.canvas.height);
+        #if (haxe_ver < 4.0)
+        var imageData = new ImageData(new js.html.Uint8ClampedArray(pixels.getData()), _ctx.canvas.width, _ctx.canvas.height);
+        #else
+        var imageData = new ImageData(new js.lib.Uint8ClampedArray(pixels.getData()), _ctx.canvas.width, _ctx.canvas.height);
+        #end
         
         /*
         var imageData = _ctx.createImageData(_ctx.canvas.width, _ctx.canvas.height);
