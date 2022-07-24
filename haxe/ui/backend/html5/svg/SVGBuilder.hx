@@ -83,7 +83,7 @@ class SVGBuilder {
         builder.start(x1, y1);
         builder.end(x2, y2);
         builder.stroke(currentStrokeStyle);
-        element.append(builder.element);
+        element.appendChild(builder.element);
         return builder;
     }
     
@@ -93,7 +93,7 @@ class SVGBuilder {
         builder.size(width, height);
         builder.stroke(currentStrokeStyle);
         builder.fill(currentFillStyle);
-        element.append(builder.element);
+        element.appendChild(builder.element);
         return builder;
     }
     
@@ -103,7 +103,7 @@ class SVGBuilder {
         builder.radius(r);
         builder.stroke(currentStrokeStyle);
         builder.fill(currentFillStyle);
-        element.append(builder.element);
+        element.appendChild(builder.element);
         return builder;
     }
     
@@ -114,7 +114,7 @@ class SVGBuilder {
         builder.stroke(currentStrokeStyle);
         builder.fill(currentFillStyle);
         builder.font(currentFontStyle);
-        element.append(builder.element);
+        element.appendChild(builder.element);
         return builder;
     }
     
@@ -123,7 +123,7 @@ class SVGBuilder {
         if (x != null && y != null) {
             builder.moveTo(x, y, absolute);
         }
-        element.append(builder.element);
+        element.appendChild(builder.element);
         builder.stroke(currentStrokeStyle);
         builder.fill(currentFillStyle);
         return builder;
@@ -138,7 +138,7 @@ class SVGBuilder {
             builder.size(width, height);
         }
         builder.href(href);
-        element.append(builder.element);
+        element.appendChild(builder.element);
         return builder;
     }
 }
