@@ -143,6 +143,42 @@ class TextInputImpl extends TextDisplayImpl {
         _inputData.vscrollPageSize = (_height * _inputData.vscrollMax) / _textHeight;
     }
 
+    private var _selectionStartIndex:Int = 0;
+    private override function get_selectionStartIndex():Int {
+        return _selectionStartIndex;
+    }
+    private override function set_selectionStartIndex(value:Int):Int {
+        _selectionStartIndex = value;
+        applySelection();
+        return value;
+    }
+    
+    private var _selectedEndIndex = -1;
+    private override function get_selectionEndIndex():Int {
+        return _selectedEndIndex;
+    }
+    private override function set_selectionEndIndex(value:Int):Int {
+        _selectedEndIndex = value;
+        applySelection();
+        return value;
+    }
+    
+    private function applySelection() {
+        if (_selectionStartIndex < 0 || _selectedEndIndex < 0) {
+            return;
+        }
+        
+        if (_text != null && _selectedEndIndex > _text.length) {
+            _selectedEndIndex = _text.length;
+        }
+        
+        if ((element is InputElement)) {
+            cast(element, InputElement).setSelectionRange(_selectionStartIndex, _selectedEndIndex);
+        } else if ((element is TextAreaElement)) {
+            cast(element, TextAreaElement).setSelectionRange(_selectionStartIndex, _selectedEndIndex);
+        }
+    }
+    
     //***********************************************************************************************************
     // Util functions
     //***********************************************************************************************************
