@@ -1,6 +1,6 @@
 .button, .label, .textarea, .textfield {
     font-name: "Arial";
-    font-size: 13px;
+    __font-size: 13px;
 }
 
 .component:disabled {
