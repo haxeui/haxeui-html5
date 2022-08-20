@@ -73,20 +73,32 @@ class TextDisplayImpl extends TextBase {
             if (_textStyle.fontBold == true && element.style.fontWeight != "bold") {
                 element.style.fontWeight = "bold";
                 measureTextRequired = true;
+            } else if ((_textStyle.fontBold == null || _textStyle.fontBold == false) && element.style.fontWeight == "bold") {
+                element.style.removeProperty("font-weight");
+                measureTextRequired = true;
             }
             
             if (_textStyle.fontItalic == true && element.style.fontStyle != "italic") {
                 element.style.fontStyle = "italic";
+                measureTextRequired = true;
+            } else if ((_textStyle.fontItalic == null || _textStyle.fontItalic == false) && element.style.fontStyle == "italic") {
+                element.style.removeProperty("font-style");
                 measureTextRequired = true;
             }
             
             if (_textStyle.fontUnderline == true && element.style.textDecoration != "underline") {
                 element.style.textDecoration = "underline";
                 measureTextRequired = true;
+            } else if ((_textStyle.fontUnderline == null || _textStyle.fontUnderline == false) && element.style.textDecoration == "underline") {
+                element.style.removeProperty("text-decoration");
+                measureTextRequired = true;
             }
             
             if (_textStyle.fontStrikeThrough == true && element.style.textDecoration != "line-through") {
                 element.style.textDecoration = "line-through";
+                measureTextRequired = true;
+            } else if ((_textStyle.fontStrikeThrough == null || _textStyle.fontStrikeThrough == false) && element.style.textDecoration == "line-through") {
+                element.style.removeProperty("text-decoration");
                 measureTextRequired = true;
             }
             
