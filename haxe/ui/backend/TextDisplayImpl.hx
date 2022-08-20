@@ -85,6 +85,11 @@ class TextDisplayImpl extends TextBase {
                 measureTextRequired = true;
             }
             
+            if (_textStyle.fontStrikeThrough == true && element.style.textDecoration != "line-through") {
+                element.style.textDecoration = "line-through";
+                measureTextRequired = true;
+            }
+            
             var colorValue = HtmlUtils.color(_textStyle.color);
             if (element.style.color != colorValue) {
                 element.style.color = colorValue;
