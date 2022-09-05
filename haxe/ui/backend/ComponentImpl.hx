@@ -568,6 +568,7 @@ class ComponentImpl extends ComponentBase {
         }
     }
 
+	@:noCompletion 
     private var _over:Bool = false;
 	@:noCompletion 
     @:access(haxe.ui.core.Screen)
