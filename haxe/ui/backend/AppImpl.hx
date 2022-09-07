@@ -1,8 +1,10 @@
 package haxe.ui.backend;
 
+import haxe.ui.ToolkitAssets;
 import haxe.ui.core.Screen;
 import js.Browser;
 import js.html.Element;
+import js.html.LinkElement;
 
 class AppImpl extends AppBase {
     public function new() {
@@ -41,5 +43,27 @@ class AppImpl extends AppBase {
         }
         el.style.overflow = "hidden";
         return el;
+    }
+    
+    private override function set_icon(value:String):String {
+        if (_icon == value) {
+            return value;
+        }
+        _icon = value;
+        
+        var link:LinkElement = cast Browser.document.querySelector("link[rel~='icon']");
+        if (link == null) {
+            link = Browser.document.createLinkElement();
+            link.rel = "icon";
+            Browser.document.getElementsByTagName('head')[0].appendChild(link);
+        }
+        ToolkitAssets.instance.getImage(_icon, function(imageInfo) {
+            if (imageInfo != null) {
+                link.href = imageInfo.data.src;
+            }
+        });
+        
+        
+        return value;
     }
 }
