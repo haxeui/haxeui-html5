@@ -336,6 +336,9 @@ class ScreenImpl extends ScreenBase {
                     _mapping.set(type, listener);
                     HtmlUtils.addEventListener(container, EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent, false);
                 }
+                if (type == MouseEvent.RIGHT_MOUSE_DOWN || type == MouseEvent.RIGHT_MOUSE_UP) {
+                    disableContextMenu(true);
+                }
 
             case KeyboardEvent.KEY_DOWN | KeyboardEvent.KEY_UP:
                 if (_mapping.exists(type) == false) {
@@ -361,6 +364,9 @@ class ScreenImpl extends ScreenBase {
                 container.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
                 if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
                     container.removeEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
+                }
+                if (type == MouseEvent.RIGHT_MOUSE_DOWN || type == MouseEvent.RIGHT_MOUSE_UP) {
+                    disableContextMenu(false);
                 }
 
             case KeyboardEvent.KEY_DOWN | KeyboardEvent.KEY_UP:
@@ -395,6 +401,22 @@ class ScreenImpl extends ScreenBase {
             event.preventDefault();
             r = false;
         }
+        if (event.type == "mousedown") { // handle right button mouse events better
+            var which:Int = Reflect.field(event, "which");
+            switch (which) {
+                case 1: type = MouseEvent.MOUSE_DOWN;
+                case 2: type = MouseEvent.MOUSE_DOWN; // should be mouse middle, but there is no haxe equiv (yet);
+                case 3: type = MouseEvent.RIGHT_MOUSE_DOWN;
+            }
+        } else if (event.type == "mouseup") { // handle right button mouse events better
+            var which:Int = Reflect.field(event, "which");
+            switch (which) {
+                case 1: type = MouseEvent.MOUSE_UP;
+                case 2: type = MouseEvent.MOUSE_UP; // should be mouse middle, but there is no haxe equiv (yet);
+                case 3: type = MouseEvent.RIGHT_MOUSE_UP;
+            }
+        }
+
         
         if (type != null) {
             var fn = _mapping.get(type);
@@ -441,5 +463,31 @@ class ScreenImpl extends ScreenBase {
                 fn(keyboardEvent);
             }
         }
+    }
+
+    private var _contextMenuDisabledCount:Int = 0;
+    private function disableContextMenu(disable:Bool) {
+        var container = Browser.document.body;
+
+        if (disable == true) {
+            _contextMenuDisabledCount++;
+        } else {
+            _contextMenuDisabledCount--;
+            if (_contextMenuDisabledCount < 0) {
+                _contextMenuDisabledCount = 0;
+            }
+        }
+
+        if (_contextMenuDisabledCount == 1) {
+            container.addEventListener("contextmenu", __preventContextMenu);
+        } else if (_contextMenuDisabledCount == 0) {
+            container.removeEventListener("contextmenu", __preventContextMenu);
+        }
+    }
+
+    @:noCompletion 
+    private function __preventContextMenu(event:js.html.UIEvent) {
+        event.preventDefault();
+        return false;
     }
 }

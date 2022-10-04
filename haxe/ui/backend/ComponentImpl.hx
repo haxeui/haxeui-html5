@@ -448,7 +448,8 @@ class ComponentImpl extends ComponentBase {
     private override function mapEvent(type:String, listener:UIEvent->Void) {
         switch (type) {
             case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
-                MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DBL_CLICK:
+                MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DBL_CLICK |
+                MouseEvent.RIGHT_MOUSE_DOWN | MouseEvent.RIGHT_MOUSE_UP:
                 if (_eventMap.exists(type) == false) {
                     #if !haxeui_notouch
                     if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
@@ -465,6 +466,9 @@ class ComponentImpl extends ComponentBase {
                     
                     _eventMap.set(type, listener);
                     element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
+                    if (type == MouseEvent.RIGHT_MOUSE_DOWN || type == MouseEvent.RIGHT_MOUSE_UP) {
+                        disableContextMenu(true);
+                    }
                 }
             case MouseEvent.RIGHT_CLICK:    
                 if (_eventMap.exists(type) == false) {
@@ -499,7 +503,8 @@ class ComponentImpl extends ComponentBase {
     private override function unmapEvent(type:String, listener:UIEvent->Void) {
         switch (type) {
             case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
-                MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DBL_CLICK:
+                MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DBL_CLICK |
+                MouseEvent.RIGHT_MOUSE_DOWN | MouseEvent.RIGHT_MOUSE_UP:
                 _eventMap.remove(type);
                 element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
                 #if !haxeui_notouch
@@ -507,6 +512,9 @@ class ComponentImpl extends ComponentBase {
                     element.removeEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
                 }
                 #end
+                if (type == MouseEvent.RIGHT_MOUSE_DOWN || type == MouseEvent.RIGHT_MOUSE_UP) {
+                    disableContextMenu(false);
+                }
             case MouseEvent.RIGHT_CLICK:    
                 _eventMap.remove(type);
                 element.removeEventListener("contextmenu", __onContextMenu);
@@ -531,6 +539,30 @@ class ComponentImpl extends ComponentBase {
     //***********************************************************************************************************
     // Event Handlers
     //***********************************************************************************************************
+    private var _contextMenuDisabledCount:Int = 0;
+    private function disableContextMenu(disable:Bool) {
+        if (disable == true) {
+            _contextMenuDisabledCount++;
+        } else {
+            _contextMenuDisabledCount--;
+            if (_contextMenuDisabledCount < 0) {
+                _contextMenuDisabledCount = 0;
+            }
+        }
+
+        if (_contextMenuDisabledCount == 1) {
+            element.addEventListener("contextmenu", __preventContextMenu);
+        } else if (_contextMenuDisabledCount == 0) {
+            element.removeEventListener("contextmenu", __preventContextMenu);
+        }
+    }
+
+    @:noCompletion 
+    private function __preventContextMenu(event:js.html.UIEvent) {
+        event.preventDefault();
+        return false;
+    }
+
     @:noCompletion 
     private function __onContextMenu(event:js.html.UIEvent) {
         event.preventDefault();
@@ -577,6 +609,21 @@ class ComponentImpl extends ComponentBase {
         // especially for scrolls
         var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
         if (type != null) {
+            if (event.type == "mousedown") { // handle right button mouse events better
+                var which:Int = Reflect.field(event, "which");
+                switch (which) {
+                    case 1: type = MouseEvent.MOUSE_DOWN;
+                    case 2: type = MouseEvent.MOUSE_DOWN; // should be mouse middle, but there is no haxe equiv (yet);
+                    case 3: type = MouseEvent.RIGHT_MOUSE_DOWN;
+                }
+            } else if (event.type == "mouseup") { // handle right button mouse events better
+                var which:Int = Reflect.field(event, "which");
+                switch (which) {
+                    case 1: type = MouseEvent.MOUSE_UP;
+                    case 2: type = MouseEvent.MOUSE_UP; // should be mouse middle, but there is no haxe equiv (yet);
+                    case 3: type = MouseEvent.RIGHT_MOUSE_UP;
+                }
+            }
             try { // set/releaseCapture isnt currently supported in chrome
                 if (type == MouseEvent.MOUSE_DOWN) {
                     //element.setCapture();
@@ -584,6 +631,16 @@ class ComponentImpl extends ComponentBase {
                     //element.releaseCapture();
                 }
             } catch (e:Dynamic) {
+            }
+
+            // we want to (temporarily) globally disable the context menu for right mouse events
+            // the reason is that you may wish to show another component over the top of this 
+            // component, and if the global context menu is active, that component will get
+            // the context menu (so the browser menu will show)
+            if (type == MouseEvent.RIGHT_MOUSE_DOWN) {
+                //Screen.instance.disableContextMenu(true);
+            } else if (type == MouseEvent.RIGHT_MOUSE_UP) {
+                //Screen.instance.disableContextMenu(false);
             }
 
             var fn = _eventMap.get(type);
