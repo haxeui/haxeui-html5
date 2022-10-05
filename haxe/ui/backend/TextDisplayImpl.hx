@@ -1,6 +1,7 @@
 package haxe.ui.backend;
 
 import haxe.ui.backend.html5.HtmlUtils;
+import haxe.ui.backend.html5.text.TextMeasurer;
 import haxe.ui.components.Label;
 import js.Browser;
 import js.html.CSSStyleDeclaration;
@@ -159,15 +160,36 @@ class TextDisplayImpl extends TextBase {
             return;
         }
 
-        var div = HtmlUtils.getDivHelper();
-        setTempDivData(div);
-        HtmlUtils.releaseDivHelper(div);
+        var t:String = null;
+        var isHtml = false;
+        if (_text != null) {
+            t = normalizeText(_text);
+        } else if (_htmlText != null) {
+            t = normalizeHtmlText(_htmlText, false);
+            isHtml = true;
+        }
+        if (t == null || t.length == 0) {
+            t = "|";
+        }
+        var w = null;
+        if (autoWidth == false) {
+            w = (_width > 0) ? _width : null;
+        }
+        var size = TextMeasurer.instance.measureText({
+            text: t,
+            width: w,
+            fontFamily: element.style.fontFamily,
+            fontSize: element.style.fontSize,
+            whiteSpace: element.style.whiteSpace,
+            wordBreak: element.style.wordBreak,
+            isHtml: isHtml
+        });
 
         if (_fixedWidth == false) {
-            _textWidth = div.clientWidth + 2;
+            _textWidth = size.width + 2;
         }
         if (_fixedHeight == false) {
-            _textHeight = div.clientHeight + 2;
+            _textHeight = size.height + 2;
         }
     }
 
@@ -185,35 +207,6 @@ class TextDisplayImpl extends TextBase {
         //el.style.lineHeight = "1em";
 
         return el;
-    }
-
-    private function setTempDivData(div:Element) {
-        var t:String = null;
-        if (_text != null) {
-            t = normalizeText(_text);
-        } else if (_htmlText != null) {
-            t = normalizeHtmlText(_htmlText, false);
-        }
-        if (t == null || t.length == 0) {
-            t = "|";
-        }
-
-        div.style.fontFamily = element.style.fontFamily;
-        div.style.fontSize = element.style.fontSize;
-        div.style.whiteSpace = element.style.whiteSpace;
-        div.style.wordBreak = element.style.wordBreak;
-        //div.style.lineHeight = "1em";
-        if (autoWidth == false) {
-            div.style.width = (_width > 0) ? '${HtmlUtils.px(_width)}' : "";
-        } else {
-            div.style.width = "";
-        }
-        
-        if (_isHTML == false) {
-            div.textContent = t;
-        } else {
-            div.innerHTML = t;
-        }
     }
 
     private function normalizeText(text:String):String {
@@ -251,15 +244,5 @@ class TextDisplayImpl extends TextBase {
     
     private override function get_supportsHtml():Bool {
         return true;
-    }
-    
-    public override function measureTextWidth():Float {
-        var div = HtmlUtils.getDivHelper();
-        setTempDivData(div);
-        div.style.width = "";
-        var cx = div.clientWidth;
-        HtmlUtils.releaseDivHelper(div);
-     
-        return cx;
     }
 }

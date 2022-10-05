@@ -261,7 +261,7 @@ class TextInputImpl extends TextDisplayImpl {
         style.top = HtmlUtils.px(y);
     }
     
-    private override function setTempDivData(div:Element) {
+    private function setTempDivData(div:Element) {
         var t:String = _text;
         if (t == null || t.length == 0) {
             t = "|";
