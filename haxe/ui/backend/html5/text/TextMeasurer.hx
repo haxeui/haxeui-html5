@@ -6,7 +6,6 @@ import js.html.CanvasElement;
 import js.html.CanvasRenderingContext2D;
 import js.html.DivElement;
 import js.html.TextMetrics;
-import js.lib.Set;
 
 using StringTools;
 
