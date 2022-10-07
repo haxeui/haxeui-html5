@@ -248,11 +248,11 @@ private class CanvasTextMeasurer implements ITextMeasurer {
     */
 
     // B2 Break Opportunity Before and After - http://www.unicode.org/reports/tr14/#B2
-    private static var B2:Set<String> = new Set(['\u2014']);
-    private static var SHY:Set<String> = new Set(['\u00AD']);
+    private static var B2 = ['\u2014'];
+    private static var SHY = ['\u00AD'];
 
     // BA: Break After (remove on break) - http://www.unicode.org/reports/tr14/#BA
-    private static var BAI:Set<String> = new Set([
+    private static var BAI = [
         // Spaces
         '\u0020',
         '\u1680',
@@ -275,9 +275,9 @@ private class CanvasTextMeasurer implements ITextMeasurer {
         // Mandatory breaks not interpreted by html
         '\u2028',
         '\u2029',
-    ]);
+    ];
 
-    private static var BA:Set<String> = new Set([
+    private static var BA = [
         // Hyphen
         '\u058A',
         '\u2010',
@@ -315,26 +315,26 @@ private class CanvasTextMeasurer implements ITextMeasurer {
         '\u103D0',
         '\u1091F',
         '\u12470',
-    ]);
+    ];
 
     // BB: Break Before - http://www.unicode.org/reports/tr14/#BB
-    private static var BB:Set<String> = new Set(['\u00B4', '\u1FFD']);
+    private static var BB = ['\u00B4', '\u1FFD'];
 
     // BK: Mandatory Break (A) (Non-tailorable) - http://www.unicode.org/reports/tr14/#BK
-    private static var BK:Set<String> = new Set(['\u000A']);
+    private static var BK = ['\u000A'];
 
     private static function checkBreak(chr:String):String {
-        if (B2.has(chr)) {
+        if (B2.indexOf(chr) != -1) {
             return "B2";
-        } else if (BAI.has(chr)) {
+        } else if (BAI.indexOf(chr) != -1) {
             return "BAI";
-        } else if (SHY.has(chr)) {
+        } else if (SHY.indexOf(chr) != -1) {
             return "SHY";
-        } else if (BA.has(chr)) {
+        } else if (BA.indexOf(chr) != -1) {
             return "BA";
-        } else if (BB.has(chr)) {
+        } else if (BB.indexOf(chr) != -1) {
             return "BB";
-        } else if (BK.has(chr)) {
+        } else if (BK.indexOf(chr) != -1) {
             return "BK";
         }
         return null;
