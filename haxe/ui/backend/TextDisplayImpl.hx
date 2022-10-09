@@ -7,6 +7,15 @@ import js.Browser;
 import js.html.CSSStyleDeclaration;
 import js.html.Element;
 
+#if cache_text_metrics
+typedef TextMetricsCache = {
+    var text:String;
+    var width:Float;
+    var textWidth:Float;
+    var textHeight:Float;
+}
+#end
+
 class TextDisplayImpl extends TextBase {
     public var element:Element;
 
@@ -155,10 +164,23 @@ class TextDisplayImpl extends TextBase {
         }
     }
 
+    #if cache_text_metrics
+    private var _cachedMetrics:TextMetricsCache = null;
+    #end
     private override function measureText() {
         if (_fixedWidth == true && _fixedHeight == true) {
             return;
         }
+
+        #if cache_text_metrics
+        if (_cachedMetrics != null) {
+            if (_cachedMetrics.width == _width && _cachedMetrics.text == _text) {
+                _textWidth = _cachedMetrics.textWidth;
+                _textHeight = _cachedMetrics.textHeight;
+                return;
+            }
+        }
+        #end
 
         var t:String = null;
         var isHtml = false;
@@ -191,6 +213,15 @@ class TextDisplayImpl extends TextBase {
         if (_fixedHeight == false) {
             _textHeight = size.height + 2;
         }
+
+        #if cache_text_metrics
+        _cachedMetrics = {
+            text: _text,
+            width: _width,
+            textWidth: _textWidth,
+            textHeight: _textHeight
+        }
+        #end
     }
 
     //***********************************************************************************************************
