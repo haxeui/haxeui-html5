@@ -64,7 +64,7 @@ class ScreenImpl extends ScreenBase {
     
     private var _width:Null<Float> = null;
     private override function get_width():Float {
-        if (_width != null) {
+        if (_width != null && _width > 0) {
             return _width;
         }
         var cx:Float = container.offsetWidth;
@@ -81,7 +81,7 @@ class ScreenImpl extends ScreenBase {
 
     private var _height:Null<Float> = null;
     private override function get_height():Float {
-        if (_height != null) {
+        if (_height != null && _height > 0) {
             return _height;
         }
         var cy:Float = container.offsetHeight;
