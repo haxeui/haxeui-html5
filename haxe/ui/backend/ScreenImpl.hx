@@ -127,7 +127,7 @@ class ScreenImpl extends ScreenBase {
         #if haxeui_html5_set_zindex
         component.element.style.zIndex = "10000";
         #end
-		return component;
+        return component;
     }
 
     private var _percentContainerWidthAdded:Bool = false;
@@ -189,7 +189,7 @@ class ScreenImpl extends ScreenBase {
         if (container.contains(component.element) == true) {
             container.removeChild(component.element);
         }
-		return component;
+        return component;
     }
 
     private override function handleSetComponentIndex(child:Component, index:Int) {

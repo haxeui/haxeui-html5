@@ -239,11 +239,11 @@ private class CanvasTextMeasurer implements ITextMeasurer {
     }
 
     /*
-    B2	Break Opportunity Before and After	Em dash	Provide a line break opportunity before and after the character
-    BA	Break After	Spaces, hyphens	Generally provide a line break opportunity after the character
-    BB	Break Before	Punctuation used in dictionaries	Generally provide a line break opportunity before the character
-    HY	Hyphen	HYPHEN-MINUS	Provide a line break opportunity after the character, except in numeric context
-    CB	Contingent Break Opportunity	Inline objects	Provide a line break opportunity contingent on additional information
+    B2  Break Opportunity Before and After  Em dash Provide a line break opportunity before and after the character
+    BA  Break After Spaces, hyphens Generally provide a line break opportunity after the character
+    BB  Break Before    Punctuation used in dictionaries    Generally provide a line break opportunity before the character
+    HY  Hyphen  HYPHEN-MINUS    Provide a line break opportunity after the character, except in numeric context
+    CB  Contingent Break Opportunity    Inline objects  Provide a line break opportunity contingent on additional information
     */
 
     // B2 Break Opportunity Before and After - http://www.unicode.org/reports/tr14/#B2

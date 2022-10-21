@@ -482,11 +482,11 @@ class ComponentImpl extends ComponentBase {
                 } else {
                     element.addEventListener("mousewheel", __onMouseWheelEvent);
                 }
-			case KeyboardEvent.KEY_DOWN | KeyboardEvent.KEY_UP:
-				if (_eventMap.exists(type) == false) {
-					_eventMap.set(type, listener);
-					element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onKeyboardEvent);
-				}
+            case KeyboardEvent.KEY_DOWN | KeyboardEvent.KEY_UP:
+                if (_eventMap.exists(type) == false) {
+                    _eventMap.set(type, listener);
+                    element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onKeyboardEvent);
+                }
             case UIEvent.CHANGE:
                 if (_eventMap.exists(type) == false) {
                     if (hasTextInput() == true) {
@@ -525,8 +525,8 @@ class ComponentImpl extends ComponentBase {
                 } else {
                     element.removeEventListener("mousewheel", __onMouseWheelEvent);
                 }
-			case KeyboardEvent.KEY_DOWN | KeyboardEvent.KEY_UP:
-				_eventMap.remove(type);
+            case KeyboardEvent.KEY_DOWN | KeyboardEvent.KEY_UP:
+                _eventMap.remove(type);
                 element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onKeyboardEvent);
             case UIEvent.CHANGE:
                 if (hasTextInput()) {
@@ -591,7 +591,7 @@ class ComponentImpl extends ComponentBase {
         }
     }
 
-	@:noCompletion 
+    @:noCompletion 
     private function __onTextFieldChangeEvent(event:js.html.UIEvent) {
         var fn = _eventMap.get(UIEvent.CHANGE);
         if (fn != null) {
@@ -600,9 +600,9 @@ class ComponentImpl extends ComponentBase {
         }
     }
 
-	@:noCompletion 
+    @:noCompletion 
     private var _over:Bool = false;
-	@:noCompletion 
+    @:noCompletion 
     @:access(haxe.ui.core.Screen)
     private function __onMouseEvent(event:js.html.Event) {
         // TODO: conditionally implement: https://developer.mozilla.org/en-US/docs/Web/API/Element/setPointerCapture
@@ -721,10 +721,10 @@ class ComponentImpl extends ComponentBase {
         mouseEvent.delta = delta;
         fn(mouseEvent);
     }
-	
-	@:noCompletion 
-	private function __onKeyboardEvent(event:js.html.Event) {
-		var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
+    
+    @:noCompletion 
+    private function __onKeyboardEvent(event:js.html.Event) {
+        var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
         if (type != null) {
             var fn = _eventMap.get(type);
             if (fn != null) {
@@ -733,16 +733,16 @@ class ComponentImpl extends ComponentBase {
                 
                 if ((event is js.html.KeyboardEvent)) {
                     var me:js.html.KeyboardEvent = cast(event, js.html.KeyboardEvent);
-					keyboardEvent.keyCode = me.keyCode;
-					keyboardEvent.altKey = me.altKey;
-					keyboardEvent.ctrlKey = me.ctrlKey;
-					keyboardEvent.shiftKey = me.shiftKey;
+                    keyboardEvent.keyCode = me.keyCode;
+                    keyboardEvent.altKey = me.altKey;
+                    keyboardEvent.ctrlKey = me.ctrlKey;
+                    keyboardEvent.shiftKey = me.shiftKey;
                 }
                 
                 fn(keyboardEvent);
             }
         }
-	}
+    }
     
     @:noCompletion 
     private function __onScrollEvent(event:js.html.MouseScrollEvent) {
