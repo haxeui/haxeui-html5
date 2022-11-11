@@ -270,18 +270,62 @@ class ScreenImpl extends ScreenBase {
         }
 
         _hasListener = true;
-        Browser.window.addEventListener("resize", function(e) {
-            _width = null;
-            _height = null;
-            resizeRootComponents();
-            if (_mapping.exists(UIEvent.RESIZE)) {
-                var event = new UIEvent(UIEvent.RESIZE);
-                var fn = _mapping.get(UIEvent.RESIZE);
-                if (fn != null) {
-                    fn(event);
-                }
+        Browser.window.addEventListener("load", onFullyLoaded);
+        if (container == Browser.document.body) {
+            Browser.window.addEventListener("resize", function(e) {
+                containerResized();
+            });
+        } else { // haxeui app is in a container html element, lets use mutation observer to listen for size changes 
+            var observer = resizeObserver(onElementResized);
+            if (observer != null) {
+                observer.observe(container);
             }
-        });
+        }
+    }
+
+    private function onElementResized(entries:Array<Dynamic>) {
+        containerResized();
+    }
+
+    private function resizeObserver(cb:Array<Dynamic>->Void):Dynamic {
+        var ro:Dynamic = null;
+        try {
+            #if (haxe_ver > 4.1) 
+            ro = js.Syntax.code("ResizeObserver");
+            #else
+            ro = untyped __js__("ResizeObserver");
+            #end
+        } catch(e:Dynamic) {
+            return null;
+        }
+
+        if (ro == null) {
+            return null;
+        }
+
+        #if (haxe_ver > 4.1) 
+        return js.Syntax.code("new ResizeObserver({0})", cb);
+        #else
+        return untyped __js__("new ResizeObserver({0})", cb);
+        #end
+    }
+
+    private function onFullyLoaded() {
+        Browser.window.removeEventListener("load", onFullyLoaded);
+        containerResized();
+    }
+
+    private function containerResized() {
+        _width = null;
+        _height = null;
+        resizeRootComponents();
+        if (_mapping.exists(UIEvent.RESIZE)) {
+            var event = new UIEvent(UIEvent.RESIZE);
+            var fn = _mapping.get(UIEvent.RESIZE);
+            if (fn != null) {
+                fn(event);
+            }
+        }
     }
 
     //***********************************************************************************************************
