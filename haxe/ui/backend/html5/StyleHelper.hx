@@ -249,25 +249,39 @@ class StyleHelper {
                 if (slice == null) {
                     if (imageRect.width == imageInfo.width && imageRect.height == imageInfo.height) {
                         var backgroundRepeat = null;
-                        var backgroundSize = null;
+                        var backgroundSizeX = null;
+                        var backgroundSizeY = null;
                         background.push('url(${imageInfo.data.src})');
-                        if (style.backgroundImageRepeat == null) {
+                        if (style.backgroundImageRepeat == null || style.backgroundImageRepeat == "no-repeat") {
                             backgroundRepeat = "no-repeat";
                         } else if (style.backgroundImageRepeat == "repeat") {
                             backgroundRepeat = "repeat";
                         } else if (style.backgroundImageRepeat == "stretch") {
                             backgroundRepeat = "no-repeat";
-                            backgroundSize = '100% 100%';
+                            backgroundSizeX = "100%";
+                            backgroundSizeY = "100%";
                         }
+
+                        if (style.backgroundWidth != null) {
+                            backgroundSizeX = style.backgroundWidth + "px";
+                        } else if (style.backgroundWidthPercent != null) {
+                            backgroundSizeX = style.backgroundWidthPercent + "%";
+                        }
+                        if (style.backgroundHeight != null) {
+                            backgroundSizeY = style.backgroundHeight + "px";
+                        } else if (style.backgroundHeightPercent != null) {
+                            backgroundSizeY = style.backgroundHeightPercent + "%";
+                        }
+                        
                         background.reverse();
                         css.background = background.join(",");
-                        if (backgroundSize != null) {
-                            css.backgroundSize = "100% 100%";
+                        if (backgroundSizeX != null || backgroundSizeY != null) {
+                            css.backgroundSize = backgroundSizeX + " " + backgroundSizeY;
                         } else {
                             css.removeProperty("background-size");
                         }
                         if (backgroundRepeat != null) {
-                            css.backgroundRepeat = "100% 100%";
+                            css.backgroundRepeat = backgroundRepeat;
                         } else {
                             css.removeProperty("background-repeat");
                         }
