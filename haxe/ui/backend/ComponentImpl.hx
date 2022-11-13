@@ -609,14 +609,14 @@ class ComponentImpl extends ComponentBase {
         // especially for scrolls
         var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
         if (type != null) {
-            if (event.type == "mousedown") { // handle right button mouse events better
+            if (event.type == "pointerdown") { // handle right button mouse events better
                 var which:Int = Reflect.field(event, "which");
                 switch (which) {
                     case 1: type = MouseEvent.MOUSE_DOWN;
                     case 2: type = MouseEvent.MOUSE_DOWN; // should be mouse middle, but there is no haxe equiv (yet);
                     case 3: type = MouseEvent.RIGHT_MOUSE_DOWN;
                 }
-            } else if (event.type == "mouseup") { // handle right button mouse events better
+            } else if (event.type == "pointerup") { // handle right button mouse events better
                 var which:Int = Reflect.field(event, "which");
                 switch (which) {
                     case 1: type = MouseEvent.MOUSE_UP;
@@ -624,11 +624,12 @@ class ComponentImpl extends ComponentBase {
                     case 3: type = MouseEvent.RIGHT_MOUSE_UP;
                 }
             }
-            try { // set/releaseCapture isnt currently supported in chrome
+            try { // use setPointerCapture instead of setCapture, the latter is deprecated
+                var pe:js.html.PointerEvent = cast(event, js.html.PointerEvent);
                 if (type == MouseEvent.MOUSE_DOWN) {
-                    //element.setCapture();
+                    element.setPointerCapture(pe.pointerId);
                 } else if (type == MouseEvent.MOUSE_UP) {
-                    //element.releaseCapture();
+                    element.releasePointerCapture(pe.pointerId);
                 }
             } catch (e:Dynamic) {
             }
@@ -647,23 +648,20 @@ class ComponentImpl extends ComponentBase {
             if (fn != null) {
                 var mouseEvent = new MouseEvent(type);
                 mouseEvent._originalEvent = event;
-                var touchEvent = false;
-                try {
-                    touchEvent = (event is js.html.TouchEvent);
-                } catch (e:Dynamic) { }
                 
-                if (touchEvent == true) {
-                    var te:js.html.TouchEvent = cast(event, js.html.TouchEvent);
-                    mouseEvent.screenX = (te.changedTouches[0].pageX - Screen.instance.container.offsetLeft) / Toolkit.scaleX;
-                    mouseEvent.screenY = (te.changedTouches[0].pageY - Screen.instance.container.offsetTop) / Toolkit.scaleY;
-                    mouseEvent.touchEvent = true;
-                } else if ((event is js.html.MouseEvent)) {
-                    var me:js.html.MouseEvent = cast(event, js.html.MouseEvent);
-                    mouseEvent.buttonDown = (me.buttons != 0);
-                    mouseEvent.screenX = (me.pageX - Screen.instance.container.offsetLeft) / Toolkit.scaleX;
-                    mouseEvent.screenY = (me.pageY - Screen.instance.container.offsetTop) / Toolkit.scaleY;
-                    mouseEvent.ctrlKey = me.ctrlKey;
-                    mouseEvent.shiftKey = me.shiftKey;
+                // if (touchEvent == true) {
+                //     var te:js.html.TouchEvent = cast(event, js.html.TouchEvent);
+                //     mouseEvent.screenX = (te.changedTouches[0].pageX - Screen.instance.container.offsetLeft) / Toolkit.scaleX;
+                //     mouseEvent.screenY = (te.changedTouches[0].pageY - Screen.instance.container.offsetTop) / Toolkit.scaleY;
+                //     mouseEvent.touchEvent = true;
+                // } else if ((event is js.html.MouseEvent)) {
+                if ((event is js.html.PointerEvent)) {
+                    var pe:js.html.PointerEvent = cast(event, js.html.PointerEvent);
+                    mouseEvent.buttonDown = (pe.buttons != 0);
+                    mouseEvent.screenX = (pe.pageX - Screen.instance.container.offsetLeft) / Toolkit.scaleX;
+                    mouseEvent.screenY = (pe.pageY - Screen.instance.container.offsetTop) / Toolkit.scaleY;
+                    mouseEvent.ctrlKey = pe.ctrlKey;
+                    mouseEvent.shiftKey = pe.shiftKey;
                 }
                 
                 // js dom events fire mouse outs when you mouse over a child, lets fix that
