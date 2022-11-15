@@ -55,6 +55,7 @@ private class DivTextMeasurer implements ITextMeasurer {
     }
 }
 
+#if rapid_text_metrics
 private class CanvasTextMeasurer implements ITextMeasurer {
     // somewhat ported from: https://github.com/bezoerb/text-metrics
 
@@ -343,6 +344,8 @@ private class CanvasTextMeasurer implements ITextMeasurer {
         return null;
     }
 }
+
+#end
 
 class TextMeasurer {
     private static var _instance:ITextMeasurer = null;
