@@ -272,8 +272,12 @@ private class CanvasTextMeasurer implements ITextMeasurer {
         // ZW Zero Width Space - http://www.unicode.org/reports/tr14/#ZW
         '\u200B',
         // Mandatory breaks not interpreted by html
+        // orginally:
+        //'\u2028',
+        //'\u2029',
+        // new, to fix issues with es5 and obsfucators
         '\n',
-        '\u2029',
+        '\r\n'
     ];
 
     private static var BA = [
