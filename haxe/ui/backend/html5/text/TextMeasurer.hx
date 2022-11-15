@@ -272,7 +272,7 @@ private class CanvasTextMeasurer implements ITextMeasurer {
         // ZW Zero Width Space - http://www.unicode.org/reports/tr14/#ZW
         '\u200B',
         // Mandatory breaks not interpreted by html
-        '\u2028',
+        '\n',
         '\u2029',
     ];
 
