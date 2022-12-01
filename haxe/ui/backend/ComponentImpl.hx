@@ -607,25 +607,39 @@ class ComponentImpl extends ComponentBase {
     private function __onMouseEvent(event:js.html.Event) {
         // TODO: conditionally implement: https://developer.mozilla.org/en-US/docs/Web/API/Element/setPointerCapture
         // especially for scrolls
+        var pe:js.html.PointerEvent = cast(event, js.html.PointerEvent);
+
         var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
         if (type != null) {
+            // if (event.type == "pointerdown") { // handle right button mouse events better
+            //     var which:Int = Reflect.field(event, "which");
+            //     switch (which) {
+            //         case 1: type = MouseEvent.MOUSE_DOWN;
+            //         case 2: type = MouseEvent.MOUSE_DOWN; // should be mouse middle, but there is no haxe equiv (yet);
+            //         case 3: type = MouseEvent.RIGHT_MOUSE_DOWN;
+            //     }
+            // } else if (event.type == "pointerup") { // handle right button mouse events better
+            //     var which:Int = Reflect.field(event, "which");
+            //     switch (which) {
+            //         case 1: type = MouseEvent.MOUSE_UP;
+            //         case 2: type = MouseEvent.MOUSE_UP; // should be mouse middle, but there is no haxe equiv (yet);
+            //         case 3: type = MouseEvent.RIGHT_MOUSE_UP;
+            //     }
+            // }
+
             if (event.type == "pointerdown") { // handle right button mouse events better
-                var which:Int = Reflect.field(event, "which");
-                switch (which) {
-                    case 1: type = MouseEvent.MOUSE_DOWN;
-                    case 2: type = MouseEvent.MOUSE_DOWN; // should be mouse middle, but there is no haxe equiv (yet);
-                    case 3: type = MouseEvent.RIGHT_MOUSE_DOWN;
+                switch (pe.button) {
+                    case 0: type = MouseEvent.MOUSE_DOWN;
+                    case 2: type = MouseEvent.RIGHT_MOUSE_DOWN;
                 }
             } else if (event.type == "pointerup") { // handle right button mouse events better
-                var which:Int = Reflect.field(event, "which");
-                switch (which) {
-                    case 1: type = MouseEvent.MOUSE_UP;
-                    case 2: type = MouseEvent.MOUSE_UP; // should be mouse middle, but there is no haxe equiv (yet);
-                    case 3: type = MouseEvent.RIGHT_MOUSE_UP;
+                switch (pe.button) {
+                    case 0: type = MouseEvent.MOUSE_UP;
+                    case 2: type = MouseEvent.RIGHT_MOUSE_UP;
                 }
             }
+
             try { // use setPointerCapture instead of setCapture, the latter is deprecated
-                var pe:js.html.PointerEvent = cast(event, js.html.PointerEvent);
                 if (type == MouseEvent.MOUSE_DOWN) {
                     element.setPointerCapture(pe.pointerId);
                 } else if (type == MouseEvent.MOUSE_UP) {
