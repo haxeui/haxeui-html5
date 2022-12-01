@@ -3,7 +3,7 @@ package haxe.ui.backend.html5;
 class EventMapper {
     public static var HAXEUI_TO_DOM:Map<String, String> = [
         haxe.ui.events.MouseEvent.MOUSE_MOVE => "pointermove",
-        haxe.ui.events.MouseEvent.MOUSE_OVER => "pointerenter",
+        haxe.ui.events.MouseEvent.MOUSE_OVER => "pointerover",
         haxe.ui.events.MouseEvent.MOUSE_OUT => "pointerout",
         haxe.ui.events.MouseEvent.MOUSE_DOWN => "pointerdown",
         haxe.ui.events.MouseEvent.MOUSE_UP => "pointerup",
@@ -20,7 +20,7 @@ class EventMapper {
 
     public static var DOM_TO_HAXEUI:Map<String, String> = [
         "pointermove" => haxe.ui.events.MouseEvent.MOUSE_MOVE,
-        "pointerenter" => haxe.ui.events.MouseEvent.MOUSE_OVER,
+        "pointerover" => haxe.ui.events.MouseEvent.MOUSE_OVER,
         "pointerout" => haxe.ui.events.MouseEvent.MOUSE_OUT,
         "pointerdown" => haxe.ui.events.MouseEvent.MOUSE_DOWN,
         "pointerup" => haxe.ui.events.MouseEvent.MOUSE_UP,
