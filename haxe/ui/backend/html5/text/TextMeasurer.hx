@@ -114,6 +114,11 @@ private class CanvasTextMeasurer implements ITextMeasurer {
         var actualHeight = tm.actualBoundingBoxAscent + tm.actualBoundingBoxDescent;
         var fontHeight:Float = tm.fontBoundingBoxAscent + tm.fontBoundingBoxDescent;
         //fontHeight = Math.ceil(fontHeight);
+        if (Math.isNaN(fontHeight)) {
+            // fallback, fontBoundingBoxAscent / fontBoundingBoxDescent hidden behind a setting on FF... fun! 
+            fontHeight = Std.parseInt(options.fontSize) * 1.2;
+        }
+
         if (options.width != null) {
             var lines = computeLinesDefault(normalizedText, options.width);
             width = options.width;
