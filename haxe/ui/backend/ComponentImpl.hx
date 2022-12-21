@@ -392,6 +392,9 @@ class ComponentImpl extends ComponentBase {
             if (hasImageDisplay()) {
                 getImageDisplay().element.style.removeProperty("cursor");
             }
+            if (hasTextDisplay()) {
+                getTextDisplay().element.style.removeProperty("cursor");
+            }
         } else {
             element.style.cursor = cursor;
             if (hasImageDisplay()) {
