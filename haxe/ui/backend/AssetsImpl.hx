@@ -60,7 +60,7 @@ class AssetsImpl extends AssetsBase {
             callback(null);
         }
         
-        var blob = new Blob([bytes.getData()]);
+        var blob = new Blob([bytes.getData()], getBlobOptionsFromBytes(bytes));
         var blobUrl = URL.createObjectURL(blob);
         image.src = blobUrl;
         /*
@@ -69,6 +69,16 @@ class AssetsImpl extends AssetsBase {
         */
     }
     
+    private function getBlobOptionsFromBytes(bytes:Bytes):js.html.BlobPropertyBag {
+        if (bytes.get(0) == '<'.charCodeAt(0) && // could be brittle?
+            bytes.get(1) == 's'.charCodeAt(0) &&
+            bytes.get(2) == 'v'.charCodeAt(0) &&
+            bytes.get(3) == 'g'.charCodeAt(0)) {
+            return { type: "image/svg+xml"};
+        }
+        return null;        
+    }
+
     private override function getFontInternal(resourceId:String, callback:FontInfo->Void) {
         var bytes = Resource.getBytes(resourceId);
         if (bytes == null) {
