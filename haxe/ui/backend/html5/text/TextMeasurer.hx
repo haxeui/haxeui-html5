@@ -107,6 +107,10 @@ private class CanvasTextMeasurer implements ITextMeasurer {
             options.fontSize = "13px";
         }
 
+        if (normalizedText.trim() == "|") {
+            return { width:0, height: Std.parseInt(options.fontSize) * 1.2};
+        }
+
         _ctx.font = options.fontSize + " " + options.fontFamily;
         var tm:Dynamic = _ctx.measureText(normalizedText);
 
