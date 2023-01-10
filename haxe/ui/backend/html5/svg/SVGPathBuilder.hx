@@ -116,6 +116,9 @@ class SVGPathBuilder {
         if (fillStyle.color != null) {
             element.setAttribute("fill", fillStyle.color);
         }
+        if (fillStyle.opacity != null) {
+            element.setAttribute("fill-opacity", fillStyle.opacity);
+        }
         return this;
     }
 }
