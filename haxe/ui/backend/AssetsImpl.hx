@@ -35,7 +35,11 @@ class AssetsImpl extends AssetsBase {
 
     private override function getImageFromHaxeResource(resourceId:String, callback:String->ImageInfo->Void) {
         var bytes = Resource.getBytes(resourceId);
+
         imageFromBytes(bytes, function(imageInfo) {
+            if (imageInfo == null) {
+                trace("WARNING: problem loading image from haxe resource: " + resourceId);
+            }
             callback(resourceId, imageInfo);
         });
     }
@@ -69,14 +73,32 @@ class AssetsImpl extends AssetsBase {
         */
     }
     
+    private static var SVG_BYTE_SEQUENCE:Array<Int> = ['<'.charCodeAt(0),
+                                                       's'.charCodeAt(0),
+                                                       'v'.charCodeAt(0),
+                                                       'g'.charCodeAt(0)];
     private function getBlobOptionsFromBytes(bytes:Bytes):js.html.BlobPropertyBag {
-        if (bytes.get(0) == '<'.charCodeAt(0) && // could be brittle?
-            bytes.get(1) == 's'.charCodeAt(0) &&
-            bytes.get(2) == 'v'.charCodeAt(0) &&
-            bytes.get(3) == 'g'.charCodeAt(0)) {
+        if (bytes.get(0) == '<'.charCodeAt(0) && // could be an svg?
+            containsByteSequence(bytes, SVG_BYTE_SEQUENCE)) {
             return { type: "image/svg+xml"};
         }
         return null;        
+    }
+
+    private function containsByteSequence(bytes:Bytes, seq:Array<Int>) {
+        for (i in 0...bytes.length - seq.length) {
+            var match = true;
+            for (j in 0...seq.length) {
+                if (bytes.get(i + j) != seq[j]) {
+                    match = false;
+                    break;
+                }
+            }
+            if (match == true) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private override function getFontInternal(resourceId:String, callback:FontInfo->Void) {
