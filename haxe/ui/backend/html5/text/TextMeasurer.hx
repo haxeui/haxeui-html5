@@ -102,6 +102,9 @@ private class CanvasTextMeasurer implements ITextMeasurer {
             }
 
         var normalizedText = normalizeText(options.text);
+        if (options.isHtml) {
+            normalizedText = normalizedText.replace("<br>", "\n");
+        }
         _ctx.textBaseline = 'top';
         if (options.fontSize == null || options.fontSize == "") {
             options.fontSize = "13px";
@@ -126,7 +129,9 @@ private class CanvasTextMeasurer implements ITextMeasurer {
         if (options.width != null) {
             var lines = computeLinesDefault(normalizedText, options.width);
             width = options.width;
-            fontHeight = (lines.length * fontHeight) + lines.length;
+            // original:
+            // fontHeight = (lines.length * fontHeight) + lines.length;
+            fontHeight = (lines.length * fontHeight);
         } else if (normalizedText.indexOf("\n") != -1) {
             var lines = computeLinesDefault(normalizedText, Std.int(0xffffff));
             var max:Float = 0;
@@ -137,7 +142,9 @@ private class CanvasTextMeasurer implements ITextMeasurer {
                 }
             }
             width = max;
-            fontHeight = (lines.length * fontHeight) + lines.length;
+            // original:
+            // fontHeight = (lines.length * fontHeight) + lines.length;
+            fontHeight = (lines.length * fontHeight);
         }
 
         width = Math.ceil(width);
@@ -286,8 +293,8 @@ private class CanvasTextMeasurer implements ITextMeasurer {
         //'\u2028',
         //'\u2029',
         // new, to fix issues with es5 and obsfucators
-        '\n',
-        '\r\n'
+        //'\n',
+        //'\r\n'
     ];
 
     private static var BA = [
@@ -334,7 +341,7 @@ private class CanvasTextMeasurer implements ITextMeasurer {
     private static var BB = ['\u00B4', '\u1FFD'];
 
     // BK: Mandatory Break (A) (Non-tailorable) - http://www.unicode.org/reports/tr14/#BK
-    private static var BK = ['\u000A'];
+    private static var BK = ['\u000A', '\n', '\r', '\r\n'];
 
     private static function checkBreak(chr:String):String {
         if (B2.indexOf(chr) != -1) {
