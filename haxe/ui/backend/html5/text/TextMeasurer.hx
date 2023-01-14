@@ -14,6 +14,8 @@ typedef MeasureTextOptions = {
     @:optional var width:Null<Float>;
     @:optional var fontFamily:String;
     @:optional var fontSize:String;
+    @:optional var fontBold:Bool;
+    @:optional var fontItalic:Bool;
     @:optional var whiteSpace:String;
     @:optional var wordBreak:String;
     @:optional var isHtml:Bool;
@@ -93,6 +95,8 @@ private class CanvasTextMeasurer implements ITextMeasurer {
     public function measureText(options:MeasureTextOptions):{width:Float, height:Float} {
         if (_lastOptions != null && options.fontFamily == _lastOptions.fontFamily
                                  && options.fontSize == _lastOptions.fontSize
+                                 && options.fontBold == _lastOptions.fontBold
+                                 && options.fontItalic == _lastOptions.fontItalic
                                  && options.isHtml == _lastOptions.isHtml
                                  && options.text == _lastOptions.text
                                  && options.whiteSpace == _lastOptions.whiteSpace
@@ -114,7 +118,15 @@ private class CanvasTextMeasurer implements ITextMeasurer {
             return { width:0, height: Std.parseInt(options.fontSize) * 1.2};
         }
 
-        _ctx.font = options.fontSize + " " + options.fontFamily;
+        var fontString = "";
+        if (options.fontItalic) {
+            fontString += "italic ";
+        }
+        if (options.fontBold) {
+            fontString += "bold ";
+        }
+        fontString += options.fontSize + " " + options.fontFamily;
+        _ctx.font = fontString;
         var tm:Dynamic = _ctx.measureText(normalizedText);
 
         var width = tm.width;

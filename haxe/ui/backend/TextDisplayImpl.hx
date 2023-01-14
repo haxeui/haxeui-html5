@@ -202,6 +202,8 @@ class TextDisplayImpl extends TextBase {
             width: w,
             fontFamily: element.style.fontFamily,
             fontSize: element.style.fontSize,
+            fontBold: (element.style.fontWeight == "bold"),
+            fontItalic: (element.style.fontStyle == "italic"),
             whiteSpace: element.style.whiteSpace,
             wordBreak: element.style.wordBreak,
             isHtml: isHtml
