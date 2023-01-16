@@ -1,6 +1,7 @@
 package haxe.ui.backend;
 
 import haxe.ui.backend.html5.HtmlUtils;
+import haxe.ui.events.UIEvent;
 import js.Browser;
 import js.html.CSSStyleDeclaration;
 import js.html.Element;
@@ -201,6 +202,15 @@ class TextInputImpl extends TextDisplayImpl {
             el.style.position = "absolute";
             el.style.backgroundColor = "inherit";
             el.style.padding = "0px";
+            el.onkeydown = function(e) {
+                if (e.keyCode == 13 || e.which == 13) {
+                    e.preventDefault();
+                    e.stopImmediatePropagation();
+                    e.stopPropagation();
+                    parentComponent.dispatch(new UIEvent(UIEvent.USER_SUBMIT));
+                }
+                return true;
+            }
             //el.style.marginLeft = "-1px";
             //el.style.marginTop = "-1px";
             el.spellcheck = false;
