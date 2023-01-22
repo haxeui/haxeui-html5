@@ -1,5 +1,6 @@
 package haxe.ui.backend;
 
+import haxe.ui.util.Timer;
 import haxe.ui.backend.html5.HtmlUtils;
 import js.Browser;
 import js.html.CSSStyleDeclaration;
@@ -9,11 +10,13 @@ import js.html.TextAreaElement;
 
 class TextInputImpl extends TextDisplayImpl {
     public override function focus() {
-        #if (haxe_ver >= 4)
-        js.Syntax.code('{0}.focus({preventScroll: true})', element);
-        #else
-        untyped __js__('{0}.focus({preventScroll: true})', element);
-        #end
+        Timer.delay(function() {
+            #if (haxe_ver >= 4)
+            js.Syntax.code('{0}.focus({preventScroll: true})', element);
+            #else
+            untyped __js__('{0}.focus({preventScroll: true})', element);
+            #end
+        }, 50);
         //element.focus();
     }
     
