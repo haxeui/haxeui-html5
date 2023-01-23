@@ -115,7 +115,8 @@ private class CanvasTextMeasurer implements ITextMeasurer {
         }
 
         if (normalizedText.trim() == "|") {
-            return { width:0, height: Std.parseInt(options.fontSize) * 1.2};
+            normalizedText = "X";
+            //return { width:0, height: Std.parseInt(options.fontSize) * 1.2};
         }
 
         var fontString = "";
