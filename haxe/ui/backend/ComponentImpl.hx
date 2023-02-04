@@ -465,10 +465,13 @@ class ComponentImpl extends ComponentBase {
                         */
                         HtmlUtils.addEventListener(element, EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent, false);
                     }
+                    else
+                        element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
+                    #else
+                    element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);    
                     #end
                     
                     _eventMap.set(type, listener);
-                    element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
                     if (type == MouseEvent.RIGHT_MOUSE_DOWN || type == MouseEvent.RIGHT_MOUSE_UP) {
                         disableContextMenu(true);
                     }
