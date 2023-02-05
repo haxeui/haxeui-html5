@@ -454,21 +454,19 @@ class ComponentImpl extends ComponentBase {
                 MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DBL_CLICK |
                 MouseEvent.RIGHT_MOUSE_DOWN | MouseEvent.RIGHT_MOUSE_UP:
                 if (_eventMap.exists(type) == false) {
-                    #if !haxeui_notouch
-                    if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
-                        /*
-                        #if (haxe_ver <= 4.0)
-                        element.addEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
-                        #else
-                        element.addEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent, { passive: false } );
-                        #end
-                        */
-                        HtmlUtils.addEventListener(element, EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent, false);
-                    }
-                    #end
-                    
                     _eventMap.set(type, listener);
-                    element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
+                    if (type == MouseEvent.CLICK) {
+                        // were going to add any click events shortly after, this is because, on mobiles
+                        // click events are _always_ sent after the pointer up event, this has unwanted
+                        // side effects - for example, dialogs cancelling themselves because a click
+                        // was spuriously sent to the modal overlay after the pointer up event that
+                        // initiated the dialog
+                        Timer.delay(function() {
+                            element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
+                        }, 50);
+                    } else {
+                        element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
+                    }
                     if (type == MouseEvent.RIGHT_MOUSE_DOWN || type == MouseEvent.RIGHT_MOUSE_UP) {
                         disableContextMenu(true);
                     }
@@ -510,11 +508,6 @@ class ComponentImpl extends ComponentBase {
                 MouseEvent.RIGHT_MOUSE_DOWN | MouseEvent.RIGHT_MOUSE_UP:
                 _eventMap.remove(type);
                 element.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
-                #if !haxeui_notouch
-                if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
-                    element.removeEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
-                }
-                #end
                 if (type == MouseEvent.RIGHT_MOUSE_DOWN || type == MouseEvent.RIGHT_MOUSE_UP) {
                     disableContextMenu(false);
                 }
@@ -604,36 +597,24 @@ class ComponentImpl extends ComponentBase {
     }
 
     @:noCompletion 
-    private var _over:Bool = false;
-    @:noCompletion 
     @:access(haxe.ui.core.Screen)
     private function __onMouseEvent(event:js.html.Event) {
-        // TODO: conditionally implement: https://developer.mozilla.org/en-US/docs/Web/API/Element/setPointerCapture
-        // especially for scrolls
+        var pe:js.html.PointerEvent = cast(event, js.html.PointerEvent);
+
         var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
         if (type != null) {
-            if (event.type == "mousedown") { // handle right button mouse events better
-                var which:Int = Reflect.field(event, "which");
-                switch (which) {
+            if (event.type == "pointerdown") { // handle right button mouse events better
+                switch (pe.which) {
                     case 1: type = MouseEvent.MOUSE_DOWN;
                     case 2: type = MouseEvent.MOUSE_DOWN; // should be mouse middle, but there is no haxe equiv (yet);
                     case 3: type = MouseEvent.RIGHT_MOUSE_DOWN;
                 }
-            } else if (event.type == "mouseup") { // handle right button mouse events better
-                var which:Int = Reflect.field(event, "which");
-                switch (which) {
+            } else if (event.type == "pointerup") { // handle right button mouse events better
+                switch (pe.which) {
                     case 1: type = MouseEvent.MOUSE_UP;
                     case 2: type = MouseEvent.MOUSE_UP; // should be mouse middle, but there is no haxe equiv (yet);
                     case 3: type = MouseEvent.RIGHT_MOUSE_UP;
                 }
-            }
-            try { // set/releaseCapture isnt currently supported in chrome
-                if (type == MouseEvent.MOUSE_DOWN) {
-                    //element.setCapture();
-                } else if (type == MouseEvent.MOUSE_UP) {
-                    //element.releaseCapture();
-                }
-            } catch (e:Dynamic) {
             }
 
             // we want to (temporarily) globally disable the context menu for right mouse events
@@ -650,39 +631,11 @@ class ComponentImpl extends ComponentBase {
             if (fn != null) {
                 var mouseEvent = new MouseEvent(type);
                 mouseEvent._originalEvent = event;
-                var touchEvent = false;
-                try {
-                    touchEvent = (event is js.html.TouchEvent);
-                } catch (e:Dynamic) { }
-                
-                if (touchEvent == true) {
-                    var te:js.html.TouchEvent = cast(event, js.html.TouchEvent);
-                    mouseEvent.screenX = (te.changedTouches[0].pageX - Screen.instance.container.offsetLeft) / Toolkit.scaleX;
-                    mouseEvent.screenY = (te.changedTouches[0].pageY - Screen.instance.container.offsetTop) / Toolkit.scaleY;
-                    mouseEvent.touchEvent = true;
-                } else if ((event is js.html.MouseEvent)) {
-                    var me:js.html.MouseEvent = cast(event, js.html.MouseEvent);
-                    mouseEvent.buttonDown = (me.buttons != 0);
-                    mouseEvent.screenX = (me.pageX - Screen.instance.container.offsetLeft) / Toolkit.scaleX;
-                    mouseEvent.screenY = (me.pageY - Screen.instance.container.offsetTop) / Toolkit.scaleY;
-                    mouseEvent.ctrlKey = me.ctrlKey;
-                    mouseEvent.shiftKey = me.shiftKey;
-                }
-                
-                // js dom events fire mouse outs when you mouse over a child, lets fix that
-                /*
-                if (type == MouseEvent.MOUSE_OUT && hitTest(mouseEvent.screenX, mouseEvent.screenY) == true) {
-                    return;
-                } else if (type == MouseEvent.MOUSE_OVER && _over == true) {
-                    return;
-                }
-                */
-                
-                if (type == MouseEvent.MOUSE_OVER) {
-                    _over = true;
-                } else if (type == MouseEvent.MOUSE_OUT) {
-                    _over = false;
-                }
+                mouseEvent.buttonDown = (pe.buttons != 0);
+                mouseEvent.screenX = (pe.pageX - Screen.instance.container.offsetLeft) / Toolkit.scaleX;
+                mouseEvent.screenY = (pe.pageY - Screen.instance.container.offsetTop) / Toolkit.scaleY;
+                mouseEvent.ctrlKey = pe.ctrlKey;
+                mouseEvent.shiftKey = pe.shiftKey;
                 
                 fn(mouseEvent);
             }

@@ -312,6 +312,7 @@ class ScreenImpl extends ScreenBase {
 
     private function onFullyLoaded() {
         Browser.window.removeEventListener("load", onFullyLoaded);
+        container.style.touchAction = "none";
         containerResized();
     }
 
@@ -343,40 +344,7 @@ class ScreenImpl extends ScreenBase {
                 MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DBL_CLICK |
                 MouseEvent.RIGHT_MOUSE_DOWN | MouseEvent.RIGHT_MOUSE_UP | MouseEvent.RIGHT_CLICK:
 
-                // chrome sends a spurious mouse move event even if the mouse hasnt moved, lets consume that first
-                /* not sure this is still needed 
-                if (type == MouseEvent.MOUSE_MOVE && _mapping.exists(type) == false && UserAgent.instance.chrome == true) {
-                    var fn = null;
-                    fn = function(e) {
-                        container.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(MouseEvent.MOUSE_MOVE), fn);
-                        if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
-                            container.removeEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), fn);
-                        }
-
-                        if (_mapping.exists(type) == false) {
-                            if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
-                                HtmlUtils.addEventListener(container, EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent, false);
-                            }
-
-                            _mapping.set(type, listener);
-                            HtmlUtils.addEventListener(container, EventMapper.HAXEUI_TO_DOM.get(MouseEvent.MOUSE_MOVE), __onMouseEvent, false);
-                        }
-                    }
-
-                    //container.addEventListener(EventMapper.HAXEUI_TO_DOM.get(MouseEvent.MOUSE_MOVE), fn, {passive: false});
-                    HtmlUtils.addEventListener(container, EventMapper.HAXEUI_TO_DOM.get(MouseEvent.MOUSE_MOVE), fn, false);
-                    if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
-                        HtmlUtils.addEventListener(container, EventMapper.MOUSE_TO_TOUCH.get(type), fn, false);
-                    }
-                    return;
-                }
-                */
-
                 if (_mapping.exists(type) == false) {
-                    if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
-                        HtmlUtils.addEventListener(container, EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent, false);
-                    }
-
                     _mapping.set(type, listener);
                     HtmlUtils.addEventListener(container, EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent, false);
                 }
@@ -399,16 +367,13 @@ class ScreenImpl extends ScreenBase {
 
     private override function unmapEvent(type:String, listener:UIEvent->Void) {
         var container = Browser.document.body;
-        
+
         switch (type) {
             case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
                 MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DBL_CLICK |
                 MouseEvent.RIGHT_MOUSE_DOWN | MouseEvent.RIGHT_MOUSE_UP | MouseEvent.RIGHT_CLICK:
                 _mapping.remove(type);
                 container.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
-                if (EventMapper.MOUSE_TO_TOUCH.get(type) != null) {
-                    container.removeEventListener(EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent);
-                }
                 if (type == MouseEvent.RIGHT_MOUSE_DOWN || type == MouseEvent.RIGHT_MOUSE_UP) {
                     disableContextMenu(false);
                 }
@@ -426,17 +391,7 @@ class ScreenImpl extends ScreenBase {
     // Event Handlers
     //***********************************************************************************************************
     private function __onMouseEvent(event:js.html.Event) {
-        //event.preventDefault();
-
-        var button:Int = -1;
-        var touchEvent = false;
-        try {
-            touchEvent = (event is js.html.TouchEvent);
-        } catch (e:Dynamic) { }
-        if (touchEvent == false && (event is js.html.MouseEvent)) {
-            var me:js.html.MouseEvent = cast(event, js.html.MouseEvent);
-            button = me.which;
-        }
+        var pe:js.html.PointerEvent = cast(event, js.html.PointerEvent);
         
         var r = true;
         var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
@@ -445,42 +400,30 @@ class ScreenImpl extends ScreenBase {
             event.preventDefault();
             r = false;
         }
-        if (event.type == "mousedown") { // handle right button mouse events better
-            var which:Int = Reflect.field(event, "which");
-            switch (which) {
+        if (event.type == "pointerdown") { // handle right button mouse events better
+            switch (pe.which) {
                 case 1: type = MouseEvent.MOUSE_DOWN;
                 case 2: type = MouseEvent.MOUSE_DOWN; // should be mouse middle, but there is no haxe equiv (yet);
                 case 3: type = MouseEvent.RIGHT_MOUSE_DOWN;
             }
-        } else if (event.type == "mouseup") { // handle right button mouse events better
-            var which:Int = Reflect.field(event, "which");
-            switch (which) {
+        } else if (event.type == "pointerup") { // handle right button mouse events better
+            switch (pe.which) {
                 case 1: type = MouseEvent.MOUSE_UP;
                 case 2: type = MouseEvent.MOUSE_UP; // should be mouse middle, but there is no haxe equiv (yet);
                 case 3: type = MouseEvent.RIGHT_MOUSE_UP;
             }
         }
 
-        
         if (type != null) {
             var fn = _mapping.get(type);
             if (fn != null) {
                 var mouseEvent = new MouseEvent(type);
                 mouseEvent._originalEvent = event;
-
-                if (touchEvent == true) {
-                    var te:js.html.TouchEvent = cast(event, js.html.TouchEvent);
-                    mouseEvent.screenX = (te.changedTouches[0].pageX - Screen.instance.container.offsetLeft) / Toolkit.scaleX;
-                    mouseEvent.screenY = (te.changedTouches[0].pageY - Screen.instance.container.offsetTop) / Toolkit.scaleY;
-                    mouseEvent.touchEvent = true;
-                } else if ((event is js.html.MouseEvent)) {
-                    var me:js.html.MouseEvent = cast(event, js.html.MouseEvent);
-                    mouseEvent.buttonDown = (me.buttons != 0);
-                    mouseEvent.screenX = (me.pageX - Screen.instance.container.offsetLeft) / Toolkit.scaleX;
-                    mouseEvent.screenY = (me.pageY - Screen.instance.container.offsetTop) / Toolkit.scaleY;
-                    mouseEvent.ctrlKey = me.ctrlKey;
-                    mouseEvent.shiftKey = me.shiftKey;
-                }
+                mouseEvent.buttonDown = (pe.buttons != 0);
+                mouseEvent.screenX = (pe.pageX - Screen.instance.container.offsetLeft) / Toolkit.scaleX;
+                mouseEvent.screenY = (pe.pageY - Screen.instance.container.offsetTop) / Toolkit.scaleY;
+                mouseEvent.ctrlKey = pe.ctrlKey;
+                mouseEvent.shiftKey = pe.shiftKey;
 
                 fn(mouseEvent);
             }

@@ -2,15 +2,15 @@ package haxe.ui.backend.html5;
 
 class EventMapper {
     public static var HAXEUI_TO_DOM:Map<String, String> = [
-        haxe.ui.events.MouseEvent.MOUSE_MOVE => "mousemove",
-        haxe.ui.events.MouseEvent.MOUSE_OVER => "mouseover",
-        haxe.ui.events.MouseEvent.MOUSE_OUT => "mouseout",
-        haxe.ui.events.MouseEvent.MOUSE_DOWN => "mousedown",
-        haxe.ui.events.MouseEvent.MOUSE_UP => "mouseup",
+        haxe.ui.events.MouseEvent.MOUSE_MOVE => "pointermove",
+        haxe.ui.events.MouseEvent.MOUSE_OVER => "pointerover",
+        haxe.ui.events.MouseEvent.MOUSE_OUT => "pointerout",
+        haxe.ui.events.MouseEvent.MOUSE_DOWN => "pointerdown",
+        haxe.ui.events.MouseEvent.MOUSE_UP => "pointerup",
         haxe.ui.events.MouseEvent.CLICK => "click",
         haxe.ui.events.MouseEvent.DBL_CLICK => "dblclick",
-        haxe.ui.events.MouseEvent.RIGHT_MOUSE_DOWN => "mousedown",
-        haxe.ui.events.MouseEvent.RIGHT_MOUSE_UP => "mouseup",
+        haxe.ui.events.MouseEvent.RIGHT_MOUSE_DOWN => "pointerdown",
+        haxe.ui.events.MouseEvent.RIGHT_MOUSE_UP => "pointerup",
         haxe.ui.events.MouseEvent.RIGHT_CLICK => "contextmenu",
         haxe.ui.events.UIEvent.CHANGE => "change",
         haxe.ui.events.KeyboardEvent.KEY_DOWN => "keydown",
@@ -19,14 +19,11 @@ class EventMapper {
     ];
 
     public static var DOM_TO_HAXEUI:Map<String, String> = [
-        "mousemove" => haxe.ui.events.MouseEvent.MOUSE_MOVE,
-        "mouseover" => haxe.ui.events.MouseEvent.MOUSE_OVER,
-        "mouseout" => haxe.ui.events.MouseEvent.MOUSE_OUT,
-        "mousedown" => haxe.ui.events.MouseEvent.MOUSE_DOWN,
-        "mouseup" => haxe.ui.events.MouseEvent.MOUSE_UP,
-        "touchmove" => haxe.ui.events.MouseEvent.MOUSE_MOVE,
-        "touchstart" => haxe.ui.events.MouseEvent.MOUSE_DOWN,
-        "touchend" => haxe.ui.events.MouseEvent.MOUSE_UP,
+        "pointermove" => haxe.ui.events.MouseEvent.MOUSE_MOVE,
+        "pointerover" => haxe.ui.events.MouseEvent.MOUSE_OVER,
+        "pointerout" => haxe.ui.events.MouseEvent.MOUSE_OUT,
+        "pointerdown" => haxe.ui.events.MouseEvent.MOUSE_DOWN,
+        "pointerup" => haxe.ui.events.MouseEvent.MOUSE_UP,
         "click" => haxe.ui.events.MouseEvent.CLICK,
         "contextmenu" => haxe.ui.events.MouseEvent.RIGHT_CLICK,
         "dblclick" => haxe.ui.events.MouseEvent.DBL_CLICK,
@@ -34,17 +31,5 @@ class EventMapper {
         "keydown" => haxe.ui.events.KeyboardEvent.KEY_DOWN,
         "keyup" => haxe.ui.events.KeyboardEvent.KEY_UP,
         "scroll" => haxe.ui.events.ScrollEvent.CHANGE
-    ];
-    
-    public static var MOUSE_TO_TOUCH:Map<String, String> = [
-        haxe.ui.events.MouseEvent.MOUSE_MOVE => "touchmove",
-        haxe.ui.events.MouseEvent.MOUSE_DOWN => "touchstart",
-        haxe.ui.events.MouseEvent.MOUSE_UP => "touchend"
-    ];
-    
-    public static var TOUCH_TO_MOUSE:Map<String, String> = [
-        "touchmove" => haxe.ui.events.MouseEvent.MOUSE_MOVE,
-        "touchstart" => haxe.ui.events.MouseEvent.MOUSE_OUT,
-        "touchend" => haxe.ui.events.MouseEvent.MOUSE_DOWN
     ];
 }
