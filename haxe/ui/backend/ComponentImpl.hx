@@ -599,18 +599,41 @@ class ComponentImpl extends ComponentBase {
     @:noCompletion 
     @:access(haxe.ui.core.Screen)
     private function __onMouseEvent(event:js.html.Event) {
-        var pe:js.html.PointerEvent = cast(event, js.html.PointerEvent);
+        var which:Int = -1;
+        var sx:Float = -1;
+        var sy:Float = -1;
+        var buttonDown:Bool = false;
+        var ctrlKey:Bool = false;
+        var shiftKey:Bool = false;
+
+        if ((event is js.html.PointerEvent)) {
+            var pe:js.html.PointerEvent = cast(event, js.html.PointerEvent);
+            which = pe.which;
+            buttonDown = (pe.buttons != 0);
+            sx = (pe.pageX - Screen.instance.container.offsetLeft) / Toolkit.scaleX;
+            sy = (pe.pageY - Screen.instance.container.offsetTop) / Toolkit.scaleY;
+            ctrlKey = pe.ctrlKey;
+            shiftKey = pe.shiftKey;
+        } else if ((event is js.html.MouseEvent)) {
+            var me:js.html.MouseEvent = cast(event, js.html.MouseEvent);
+            which = me.which;
+            buttonDown = (me.buttons != 0);
+            sx = (me.pageX - Screen.instance.container.offsetLeft) / Toolkit.scaleX;
+            sy = (me.pageY - Screen.instance.container.offsetTop) / Toolkit.scaleY;
+            ctrlKey = me.ctrlKey;
+            shiftKey = me.shiftKey;
+        }
 
         var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
         if (type != null) {
             if (event.type == "pointerdown") { // handle right button mouse events better
-                switch (pe.which) {
+                switch (which) {
                     case 1: type = MouseEvent.MOUSE_DOWN;
                     case 2: type = MouseEvent.MOUSE_DOWN; // should be mouse middle, but there is no haxe equiv (yet);
                     case 3: type = MouseEvent.RIGHT_MOUSE_DOWN;
                 }
             } else if (event.type == "pointerup") { // handle right button mouse events better
-                switch (pe.which) {
+                switch (which) {
                     case 1: type = MouseEvent.MOUSE_UP;
                     case 2: type = MouseEvent.MOUSE_UP; // should be mouse middle, but there is no haxe equiv (yet);
                     case 3: type = MouseEvent.RIGHT_MOUSE_UP;
@@ -631,11 +654,11 @@ class ComponentImpl extends ComponentBase {
             if (fn != null) {
                 var mouseEvent = new MouseEvent(type);
                 mouseEvent._originalEvent = event;
-                mouseEvent.buttonDown = (pe.buttons != 0);
-                mouseEvent.screenX = (pe.pageX - Screen.instance.container.offsetLeft) / Toolkit.scaleX;
-                mouseEvent.screenY = (pe.pageY - Screen.instance.container.offsetTop) / Toolkit.scaleY;
-                mouseEvent.ctrlKey = pe.ctrlKey;
-                mouseEvent.shiftKey = pe.shiftKey;
+                mouseEvent.buttonDown = buttonDown;
+                mouseEvent.screenX = sx;
+                mouseEvent.screenY = sy;
+                mouseEvent.ctrlKey = ctrlKey;
+                mouseEvent.shiftKey = shiftKey;
                 
                 fn(mouseEvent);
             }
