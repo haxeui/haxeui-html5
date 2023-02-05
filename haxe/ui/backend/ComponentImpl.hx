@@ -465,13 +465,10 @@ class ComponentImpl extends ComponentBase {
                         */
                         HtmlUtils.addEventListener(element, EventMapper.MOUSE_TO_TOUCH.get(type), __onMouseEvent, false);
                     }
-                    else
-                        element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
-                    #else
-                    element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);    
                     #end
                     
                     _eventMap.set(type, listener);
+                    element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
                     if (type == MouseEvent.RIGHT_MOUSE_DOWN || type == MouseEvent.RIGHT_MOUSE_UP) {
                         disableContextMenu(true);
                     }
@@ -616,6 +613,11 @@ class ComponentImpl extends ComponentBase {
         var type:String = EventMapper.DOM_TO_HAXEUI.get(event.type);
         if (type != null) {
             if (event.type == "mousedown") { // handle right button mouse events better
+                var sourceCapabilities = Reflect.field(event, "sourceCapabilities");
+                if (sourceCapabilities != null && Reflect.field(sourceCapabilities, "firesTouchEvents") == true) {
+                    return; //this is a fake event synthesized when tapping
+                }
+
                 var which:Int = Reflect.field(event, "which");
                 switch (which) {
                     case 1: type = MouseEvent.MOUSE_DOWN;
@@ -623,6 +625,11 @@ class ComponentImpl extends ComponentBase {
                     case 3: type = MouseEvent.RIGHT_MOUSE_DOWN;
                 }
             } else if (event.type == "mouseup") { // handle right button mouse events better
+                var sourceCapabilities = Reflect.field(event, "sourceCapabilities");
+                if (sourceCapabilities != null && Reflect.field(sourceCapabilities, "firesTouchEvents") == true) {
+                    return; //this is a fake event synthesized when tapping
+                }
+                
                 var which:Int = Reflect.field(event, "which");
                 switch (which) {
                     case 1: type = MouseEvent.MOUSE_UP;
