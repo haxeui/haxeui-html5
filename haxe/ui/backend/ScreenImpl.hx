@@ -312,7 +312,7 @@ class ScreenImpl extends ScreenBase {
 
     private function onFullyLoaded() {
         Browser.window.removeEventListener("load", onFullyLoaded);
-        container.style.touchAction = "none";
+        container.style.setProperty("touch-action", "none");
         containerResized();
     }
 
