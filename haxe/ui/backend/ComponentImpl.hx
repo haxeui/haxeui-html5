@@ -228,10 +228,14 @@ class ComponentImpl extends ComponentBase {
         var parent:Component = c.parentComponent;
         value.toInts();
         if (value != null && parent != null) {
+            parent.element.style.overflow = "hidden";
             element.style.clip = 'rect(${HtmlUtils.px(value.top)},${HtmlUtils.px(value.right)},${HtmlUtils.px(value.bottom)},${HtmlUtils.px(value.left)})';
             element.style.left = '${HtmlUtils.px(Std.int(c.left - value.left))}';
             element.style.top = '${HtmlUtils.px(Std.int(c.top - value.top))}';
         } else {
+            if (parent != null) {
+                parent.element.style.removeProperty("overflow");
+            }
             element.style.removeProperty("clip");
         }
     }
