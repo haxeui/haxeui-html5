@@ -4,8 +4,8 @@ import haxe.ui.backend.ComponentGraphicsBase;
 import haxe.ui.backend.html5.svg.SVGBuilder;
 import haxe.ui.core.Component;
 import haxe.ui.geom.Point;
+import haxe.ui.loaders.image.ImageLoader;
 import haxe.ui.util.Color;
-import haxe.ui.util.ImageLoader;
 import haxe.ui.util.Variant;
 
 class SVGGraphicsImpl extends ComponentGraphicsBase {
@@ -86,7 +86,7 @@ class SVGGraphicsImpl extends ComponentGraphicsBase {
     }
     
     public override function image(resource:Variant, x:Null<Float> = null, y:Null<Float> = null, width:Null<Float> = null, height:Null<Float> = null) {
-        new ImageLoader(resource).load(function(imageInfo) {
+        ImageLoader.instance.load(resource, function(imageInfo) {
             if (imageInfo != null) {
                 if (x == null) x = 0;
                 if (y == null) y = 0;
