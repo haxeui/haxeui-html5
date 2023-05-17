@@ -114,7 +114,7 @@ private class CanvasTextMeasurer implements ITextMeasurer {
             options.fontSize = "13px";
         }
 
-        if (normalizedText.trim() == "|") {
+        if (normalizedText.trim() == "|" || normalizedText.trim() == "-") {
             normalizedText = "X";
             //return { width:0, height: Std.parseInt(options.fontSize) * 1.2};
         }
@@ -170,6 +170,9 @@ private class CanvasTextMeasurer implements ITextMeasurer {
     }
 
     private function normalizeText(text:String):String {
+        if (text == "-") {
+            return text;
+        }
         return text.replace("_", " ").replace("-", " ");
     }
 
