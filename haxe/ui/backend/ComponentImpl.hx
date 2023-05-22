@@ -17,6 +17,7 @@ import haxe.ui.events.MouseEvent;
 import haxe.ui.events.ScrollEvent;
 import haxe.ui.events.UIEvent;
 import haxe.ui.filters.Blur;
+import haxe.ui.filters.BoxShadow;
 import haxe.ui.filters.DropShadow;
 import haxe.ui.filters.Grayscale;
 import haxe.ui.geom.Point;
@@ -330,6 +331,13 @@ class ComponentImpl extends ComponentBase {
                     element.style.boxShadow = '${dropShadow.distance}px ${dropShadow.distance + 2}px ${dropShadow.blurX - 1}px ${dropShadow.blurY - 1}px ${HtmlUtils.rgba(dropShadow.color, dropShadow.alpha)}';
                 } else {
                     element.style.boxShadow = 'inset ${dropShadow.distance}px ${dropShadow.distance}px ${dropShadow.blurX}px 0px ${HtmlUtils.rgba(dropShadow.color, dropShadow.alpha)}';
+                }
+            } else if ((style.filter[0] is BoxShadow)) {
+                var boxShadow:BoxShadow = cast style.filter[0];
+                if (boxShadow.inset == false) {
+                    element.style.boxShadow = '${boxShadow.offsetX}px ${boxShadow.offsetY}px ${boxShadow.blurRadius}px ${boxShadow.spreadRadius}px ${HtmlUtils.rgba(boxShadow.color, boxShadow.alpha)}';
+                } else {
+                    element.style.boxShadow = 'inset ${boxShadow.offsetX}px ${boxShadow.offsetY}px ${boxShadow.blurRadius}px ${boxShadow.spreadRadius}px ${HtmlUtils.rgba(boxShadow.color, boxShadow.alpha)}';
                 }
             } else if ((style.filter[0] is Blur)) {
                 var blur:Blur = cast style.filter[0];
