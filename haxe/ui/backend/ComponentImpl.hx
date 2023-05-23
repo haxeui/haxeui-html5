@@ -118,6 +118,10 @@ class ComponentImpl extends ComponentBase {
             //element.style.overflow = "hidden";
             element.classList.add("haxeui-component");
             elementToComponent.set(element, cast(this, Component));
+
+            Toolkit.callLater(function() {
+                elementToComponent.remove(this.element);
+            });
             return;
         }
 
@@ -140,6 +144,10 @@ class ComponentImpl extends ComponentBase {
         elementToComponent.set(element, cast(this, Component));
 
         remapEvents();
+
+        Toolkit.callLater(function() {
+            elementToComponent.remove(this.element);
+        });
     }
 
     private function remapEvents() {
@@ -207,6 +215,7 @@ class ComponentImpl extends ComponentBase {
     }
 
     private override function handleReady() {
+        elementToComponent.remove(element);
         if (cast(this, Component).id != null) {
             element.id = cast(this, Component).id;
         }
@@ -307,12 +316,14 @@ class ComponentImpl extends ComponentBase {
     }
 
     private override function handleRemoveComponent(child:Component, dispose:Bool = true):Component {
+        elementToComponent.remove(child.element);
         HtmlUtils.removeElement(child.element);
         return child;
     }
 
     private override function handleRemoveComponentAt(index:Int, dispose:Bool = true):Component {
         var child = cast(this, Component)._children[index];
+        elementToComponent.remove(child.element);
         HtmlUtils.removeElement(child.element);
         return child;
     }
