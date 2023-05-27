@@ -29,14 +29,16 @@ private class DivTextMeasurer implements ITextMeasurer {
     private var _div:DivElement = null;
 
     public function new() {
-        _div = Browser.document.createDivElement();
-        _div.style.position = "absolute";
-        _div.style.top = "-99999px"; // position off-screen!
-        _div.style.left = "-99999px"; // position off-screen!
-        Browser.document.body.appendChild(_div);
     }
 
     public function measureText(options:MeasureTextOptions):{width:Float, height:Float} {
+        if (_div == null) {
+            _div = Browser.document.createDivElement();
+            _div.style.position = "absolute";
+            _div.style.top = "-99999px"; // position off-screen!
+            _div.style.left = "-99999px"; // position off-screen!
+            Browser.document.body.appendChild(_div);
+        }
         _div.style.fontFamily = options.fontFamily;
         _div.style.fontSize = options.fontSize;
         _div.style.whiteSpace = options.whiteSpace;
@@ -58,7 +60,7 @@ private class DivTextMeasurer implements ITextMeasurer {
 }
 
 #if rapid_text_metrics
-private class CanvasTextMeasurer implements ITextMeasurer {
+private class CanvasTextMeasurer extends DivTextMeasurer {
     // somewhat ported from: https://github.com/bezoerb/text-metrics
 
     private static var _canvas:CanvasElement = null;
@@ -66,6 +68,7 @@ private class CanvasTextMeasurer implements ITextMeasurer {
     private static var _lastOptions:MeasureTextOptions = null;
     private static var _lastResult:{width:Float, height:Float} = null;
     public function new() {
+        super();
         if (_canvas == null) {
             _canvas = Browser.document.createCanvasElement();
             _canvas.style.position = "absolute";
@@ -92,7 +95,7 @@ private class CanvasTextMeasurer implements ITextMeasurer {
         }
     }
 
-    public function measureText(options:MeasureTextOptions):{width:Float, height:Float} {
+    public override function measureText(options:MeasureTextOptions):{width:Float, height:Float} {
         if (_lastOptions != null && options.fontFamily == _lastOptions.fontFamily
                                  && options.fontSize == _lastOptions.fontSize
                                  && options.fontBold == _lastOptions.fontBold
@@ -105,10 +108,10 @@ private class CanvasTextMeasurer implements ITextMeasurer {
                 return _lastResult;
             }
 
-        var normalizedText = normalizeText(options.text);
         if (options.isHtml) {
-            normalizedText = normalizedText.replace("<br>", "\n");
+            return super.measureText(options);
         }
+        var normalizedText = normalizeText(options.text);
         _ctx.textBaseline = 'top';
         if (options.fontSize == null || options.fontSize == "") {
             options.fontSize = "13px";
