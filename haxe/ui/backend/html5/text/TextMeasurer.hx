@@ -173,10 +173,7 @@ private class CanvasTextMeasurer extends DivTextMeasurer {
     }
 
     private function normalizeText(text:String):String {
-        if (text == "-") {
-            return text;
-        }
-        return text.replace("_", " ").replace("-", " ");
+        return text.replace("_", " ");
     }
 
     private static function computeLinesDefault(text:String, max:Float):Array<String> {
@@ -269,6 +266,11 @@ private class CanvasTextMeasurer extends DivTextMeasurer {
 
         if (line.length > 0) {
             lines.push(line);
+        }
+        if (lines.length > 0) { 
+            if (_ctx.measureText(lines[lines.length - 1]).width > max) { 
+                lines.push(""); 
+            } 
         }
         
         return lines;
