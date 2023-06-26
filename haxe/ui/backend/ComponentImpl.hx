@@ -2,6 +2,7 @@ package haxe.ui.backend;
 
 import haxe.ui.Toolkit;
 import haxe.ui.backend.html5.EventMapper;
+import haxe.ui.backend.html5.FilterHelper;
 import haxe.ui.backend.html5.HtmlUtils;
 import haxe.ui.backend.html5.StyleHelper;
 import haxe.ui.backend.html5.UserAgent;
@@ -17,9 +18,6 @@ import haxe.ui.events.MouseEvent;
 import haxe.ui.events.ScrollEvent;
 import haxe.ui.events.UIEvent;
 import haxe.ui.filters.Blur;
-import haxe.ui.filters.BoxShadow;
-import haxe.ui.filters.DropShadow;
-import haxe.ui.filters.Grayscale;
 import haxe.ui.geom.Point;
 import haxe.ui.geom.Rectangle;
 import haxe.ui.styles.Style;
@@ -335,45 +333,7 @@ class ComponentImpl extends ComponentBase {
 
         setCursor(style.cursor);
 
-        if (style.filter != null) {
-            if ((style.filter[0] is DropShadow)) {
-                var dropShadow:DropShadow = cast style.filter[0];
-                if (dropShadow.inner == false) {
-                    element.style.boxShadow = '${dropShadow.distance}px ${dropShadow.distance + 2}px ${dropShadow.blurX - 1}px ${dropShadow.blurY - 1}px ${HtmlUtils.rgba(dropShadow.color, dropShadow.alpha)}';
-                } else {
-                    element.style.boxShadow = 'inset ${dropShadow.distance}px ${dropShadow.distance}px ${dropShadow.blurX}px 0px ${HtmlUtils.rgba(dropShadow.color, dropShadow.alpha)}';
-                }
-            } else if ((style.filter[0] is BoxShadow)) {
-                var boxShadow:BoxShadow = cast style.filter[0];
-                if (boxShadow.inset == false) {
-                    element.style.boxShadow = '${boxShadow.offsetX}px ${boxShadow.offsetY}px ${boxShadow.blurRadius}px ${boxShadow.spreadRadius}px ${HtmlUtils.rgba(boxShadow.color, boxShadow.alpha)}';
-                } else {
-                    element.style.boxShadow = 'inset ${boxShadow.offsetX}px ${boxShadow.offsetY}px ${boxShadow.blurRadius}px ${boxShadow.spreadRadius}px ${HtmlUtils.rgba(boxShadow.color, boxShadow.alpha)}';
-                }
-            } else if ((style.filter[0] is Blur)) {
-                var blur:Blur = cast style.filter[0];
-                element.style.setProperty("-webkit-filter", 'blur(${blur.amount}px)');
-                element.style.setProperty("-moz-filter", 'blur(${blur.amount}px)');
-                element.style.setProperty("-o-filter", 'blur(${blur.amount}px)');
-                //element.style.setProperty("-ms-filter", 'blur(${blur.amount}px)');
-                element.style.setProperty("filter", 'blur(${blur.amount}px)');
-            } else if ((style.filter[0] is Grayscale)) {
-                var grayscale:Grayscale = cast style.filter[0];
-                element.style.setProperty("-webkit-filter", 'grayscale(${grayscale.amount}%)');
-                element.style.setProperty("-moz-filter", 'grayscale(${grayscale.amount}%)');
-                element.style.setProperty("-o-filter", 'grayscale(${grayscale.amount}%)');
-                element.style.setProperty("filter", 'grayscale(${grayscale.amount}%)');
-            }
-        } else {
-            element.style.filter = null;
-            element.style.boxShadow = null;
-            element.style.removeProperty("box-shadow");
-            element.style.removeProperty("-webkit-filter");
-            element.style.removeProperty("-moz-filter");
-            element.style.removeProperty("-o-filter");
-            //element.style.removeProperty("-ms-filter");
-            element.style.removeProperty("filter");
-        }
+        FilterHelper.applyFilters(this.element, style.filter);
 
         if (style.backdropFilter != null) {
             if ((style.backdropFilter[0] is Blur)) {
