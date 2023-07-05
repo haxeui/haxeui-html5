@@ -24,4 +24,5 @@ jobs:
         haxelib dev haxeui-core haxeui-core
         cp .github/workflows/build.hxml build.hxml
         haxelib install build.hxml --always --quiet
+        haxelib list
         haxe build.hxml
