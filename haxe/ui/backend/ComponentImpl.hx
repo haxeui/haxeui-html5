@@ -286,16 +286,23 @@ class ComponentImpl extends ComponentBase {
     }
 
     private override function handleSetComponentIndex(child:Component, index:Int) {
+        var currentIndex = this.childComponents.indexOf(child);
+        if (index == currentIndex) {
+            return;
+        }
+        var delta = index - currentIndex;
+        trace(index, currentIndex, index - currentIndex);
         if (index == this.childComponents.length - 1) {
             element.appendChild(child.element);
-        } else {
-            if (index == this.childComponents.indexOf(child) - 1) {
-                var before = this.childComponents[index];
-                HtmlUtils.insertBefore(before.element, child.element);
-            } else {
-                var before = this.childComponents[index + 1];
-                HtmlUtils.insertBefore(before.element, child.element);
+        } else if (delta >= 0) {
+            if (currentIndex == 0) {
+                delta++;
             }
+            var before = this.childComponents[currentIndex + delta];
+            HtmlUtils.insertBefore(before.element, child.element);
+        } else {
+            var before = this.childComponents[currentIndex + delta];
+            HtmlUtils.insertBefore(before.element, child.element);
         }
     }
 
