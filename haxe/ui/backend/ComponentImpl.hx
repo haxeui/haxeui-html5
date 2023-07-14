@@ -291,7 +291,6 @@ class ComponentImpl extends ComponentBase {
             return;
         }
         var delta = index - currentIndex;
-        trace(index, currentIndex, index - currentIndex);
         if (index == this.childComponents.length - 1) {
             element.appendChild(child.element);
         } else if (delta >= 0) {
