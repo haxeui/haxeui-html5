@@ -5,7 +5,7 @@ import haxe.ui.events.UIEvent;
 @:allow(haxe.ui.backend.ScreenImpl)
 @:allow(haxe.ui.backend.ComponentImpl)
 class EventImpl extends EventBase {
-    private var _originalEvent:js.html.Event;
+    @:noCompletion private var _originalEvent:js.html.Event;
     
     public override function cancel() {
         if (_originalEvent != null) {
@@ -15,7 +15,7 @@ class EventImpl extends EventBase {
         }
     }
     
-    private override function postClone(event:UIEvent) {
+    @:noCompletion private override function postClone(event:UIEvent) {
         event._originalEvent = this._originalEvent;
     }
 }
