@@ -14,4 +14,9 @@
             <style resource="styles/native/main.css" />
         </native>
     </themes>
+
+    <properties>
+        <property name="haxe.ui.containers.menus.menubar.style" value="rounded" />
+        <property name="haxe.ui.containers.menus.menu.style" value="rounded" />
+    </properties>
 </module>
