@@ -1,7 +1,7 @@
 package haxe.ui.backend;
 
-import haxe.ui.util.Timer;
 import haxe.ui.backend.html5.HtmlUtils;
+import haxe.ui.util.Timer;
 import js.Browser;
 import js.html.CSSStyleDeclaration;
 import js.html.Element;
@@ -202,7 +202,7 @@ class TextInputImpl extends TextDisplayImpl {
             el.style.overflow = "hidden";
             el.style.cursor = "initial";
             el.style.position = "absolute";
-            el.style.backgroundColor = "inherit";
+            el.style.backgroundColor = "transparent";
             el.style.padding = "0px";
             //el.style.marginLeft = "-1px";
             //el.style.marginTop = "-1px";
@@ -220,7 +220,7 @@ class TextInputImpl extends TextDisplayImpl {
             el.style.overflow = "hidden";
             el.style.cursor = "initial";
             el.style.position = "absolute";
-            el.style.backgroundColor = "inherit";
+            el.style.backgroundColor = "transparent";
             el.style.whiteSpace = "pre-wrap";
             el.id = "textArea";
             el.spellcheck = false;
