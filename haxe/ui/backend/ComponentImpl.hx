@@ -619,13 +619,13 @@ class ComponentImpl extends ComponentBase {
             if (event.type == "pointerdown") { // handle right button mouse events better
                 switch (which) {
                     case 1: type = MouseEvent.MOUSE_DOWN;
-                    case 2: type = MouseEvent.MOUSE_DOWN; // should be mouse middle, but there is no haxe equiv (yet);
+                    case 2: type = MouseEvent.MIDDLE_MOUSE_DOWN;
                     case 3: type = MouseEvent.RIGHT_MOUSE_DOWN;
                 }
             } else if (event.type == "pointerup") { // handle right button mouse events better
                 switch (which) {
                     case 1: type = MouseEvent.MOUSE_UP;
-                    case 2: type = MouseEvent.MOUSE_UP; // should be mouse middle, but there is no haxe equiv (yet);
+                    case 2: type = MouseEvent.MIDDLE_MOUSE_UP;
                     case 3: type = MouseEvent.RIGHT_MOUSE_UP;
                 }
             }
