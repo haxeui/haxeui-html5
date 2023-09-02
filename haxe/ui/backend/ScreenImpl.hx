@@ -342,7 +342,8 @@ class ScreenImpl extends ScreenBase {
         switch (type) {
             case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
                 MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DBL_CLICK |
-                MouseEvent.RIGHT_MOUSE_DOWN | MouseEvent.RIGHT_MOUSE_UP | MouseEvent.RIGHT_CLICK:
+                MouseEvent.RIGHT_MOUSE_DOWN | MouseEvent.RIGHT_MOUSE_UP | MouseEvent.RIGHT_CLICK |
+                MouseEvent.MIDDLE_MOUSE_DOWN | MouseEvent.MIDDLE_MOUSE_UP:
 
                 if (_mapping.exists(type) == false) {
                     _mapping.set(type, listener);
@@ -371,7 +372,8 @@ class ScreenImpl extends ScreenBase {
         switch (type) {
             case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
                 MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DBL_CLICK |
-                MouseEvent.RIGHT_MOUSE_DOWN | MouseEvent.RIGHT_MOUSE_UP | MouseEvent.RIGHT_CLICK:
+                MouseEvent.RIGHT_MOUSE_DOWN | MouseEvent.RIGHT_MOUSE_UP | MouseEvent.RIGHT_CLICK |
+                MouseEvent.MIDDLE_MOUSE_DOWN | MouseEvent.MIDDLE_MOUSE_UP:
                 _mapping.remove(type);
                 container.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
                 if (type == MouseEvent.RIGHT_MOUSE_DOWN || type == MouseEvent.RIGHT_MOUSE_UP) {
@@ -426,13 +428,13 @@ class ScreenImpl extends ScreenBase {
         if (event.type == "pointerdown") { // handle right button mouse events better
             switch (which) {
                 case 1: type = MouseEvent.MOUSE_DOWN;
-                case 2: type = MouseEvent.MOUSE_DOWN; // should be mouse middle, but there is no haxe equiv (yet);
+                case 2: type = MouseEvent.MIDDLE_MOUSE_DOWN; // should be mouse middle, but there is no haxe equiv (yet);
                 case 3: type = MouseEvent.RIGHT_MOUSE_DOWN;
             }
         } else if (event.type == "pointerup") { // handle right button mouse events better
             switch (which) {
                 case 1: type = MouseEvent.MOUSE_UP;
-                case 2: type = MouseEvent.MOUSE_UP; // should be mouse middle, but there is no haxe equiv (yet);
+                case 2: type = MouseEvent.MIDDLE_MOUSE_UP; // should be mouse middle, but there is no haxe equiv (yet);
                 case 3: type = MouseEvent.RIGHT_MOUSE_UP;
             }
         }
