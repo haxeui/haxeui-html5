@@ -12,6 +12,8 @@ class EventMapper {
         haxe.ui.events.MouseEvent.RIGHT_MOUSE_DOWN => "pointerdown",
         haxe.ui.events.MouseEvent.RIGHT_MOUSE_UP => "pointerup",
         haxe.ui.events.MouseEvent.RIGHT_CLICK => "contextmenu",
+        haxe.ui.events.MouseEvent.MIDDLE_MOUSE_DOWN => "pointerdown",
+        haxe.ui.events.MouseEvent.MIDDLE_MOUSE_UP => "pointerup",
         haxe.ui.events.UIEvent.CHANGE => "change",
         haxe.ui.events.KeyboardEvent.KEY_DOWN => "keydown",
         haxe.ui.events.KeyboardEvent.KEY_UP => "keyup",
