@@ -69,6 +69,13 @@ class TextDisplayImpl extends TextBase {
             measureTextRequired = true;
         }
 
+        if (_displayData.selectable == true && element.style.userSelect != "text") {
+            element.style.userSelect = "text";
+        } else if (_displayData.selectable == false && element.style.userSelect != null) {
+            element.style.removeProperty("user-select");
+            element.style.userSelect = null;
+        }
+
         if (_textStyle != null) {
             if (element.style.textAlign != _textStyle.textAlign) {
                 element.style.textAlign = _textStyle.textAlign;
