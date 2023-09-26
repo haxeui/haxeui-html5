@@ -38,7 +38,7 @@ class ColorMatrixFilter implements ISVGFilter {
         }
 
         var s:StringBuf = new StringBuf();
-        s.add("tint_");
+        s.add("color_matrix_");
         for (v in values) {
             s.add(v);
             s.add("_");
