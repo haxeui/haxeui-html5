@@ -482,16 +482,6 @@ class ComponentImpl extends ComponentBase {
                     _eventMap.set(type, listener);
                     element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onKeyboardEvent);
                 }
-            case UIEvent.CHANGE:
-                if (_eventMap.exists(type) == false) {
-                    if (hasTextInput() == true) {
-                        _eventMap.set(type, listener);
-                        getTextInput().element.addEventListener(EventMapper.HAXEUI_TO_DOM.get(KeyboardEvent.KEY_UP), __onTextFieldChangeEvent);
-                    }
-                }
-            case ScrollEvent.CHANGE:
-                _eventMap.set(type, listener);
-                element.addEventListener("scroll", __onScrollEvent);
         }
     }
 
