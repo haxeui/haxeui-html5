@@ -15,7 +15,6 @@ import js.html.Element;
 class FilterHelper {
     public static function applyFilters(element:Element, filters:Array<Filter>) {
         if (filters != null && filters.length > 0) {
-            trace(filters.length);
             var cssProperties:Map<String, Array<String>> = new Map<String, Array<String>>();
             for (filter in filters) {
                 if ((filter is DropShadow)) {
