@@ -16,6 +16,7 @@ class FilterHelper {
     public static function applyFilters(element:Element, filters:Array<Filter>) {
         if (filters != null && filters.length > 0) {
             var cssProperties:Map<String, Array<String>> = new Map<String, Array<String>>();
+            var hasBoxShadow = false;
             for (filter in filters) {
                 if ((filter is DropShadow)) {
                     var dropShadow:DropShadow = cast filter;
@@ -25,6 +26,7 @@ class FilterHelper {
                         addProp(cssProperties, 'inset ${dropShadow.distance}px ${dropShadow.distance}px ${dropShadow.blurX}px 0px ${HtmlUtils.rgba(dropShadow.color, dropShadow.alpha)}', "box-shadow");
                     }
                 } else if ((filter is BoxShadow)) {
+                    hasBoxShadow = true;
                     var boxShadow:BoxShadow = cast filter;
                     if (boxShadow.inset == false) {
                         addProp(cssProperties, '${boxShadow.offsetX}px ${boxShadow.offsetY}px ${boxShadow.blurRadius}px ${boxShadow.spreadRadius}px ${HtmlUtils.rgba(boxShadow.color, boxShadow.alpha)}', "box-shadow");
@@ -52,6 +54,10 @@ class FilterHelper {
                 }
             }
 
+            if (!hasBoxShadow) {
+                element.style.boxShadow = null;
+                element.style.removeProperty("box-shadow");
+            }
             for (key in cssProperties.keys()) {
                 var values = cssProperties.get(key);
                 element.style.setProperty(key, values.join(" "));
