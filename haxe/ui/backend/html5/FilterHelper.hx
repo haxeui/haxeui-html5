@@ -60,7 +60,11 @@ class FilterHelper {
             }
             for (key in cssProperties.keys()) {
                 var values = cssProperties.get(key);
-                element.style.setProperty(key, values.join(" "));
+                if (key == "box-shadow") {
+                    element.style.setProperty(key, values.join(", "));
+                } else {
+                    element.style.setProperty(key, values.join(" "));
+                }
             }
         } else {
             element.style.filter = null;
