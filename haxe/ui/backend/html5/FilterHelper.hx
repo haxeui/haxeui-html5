@@ -57,7 +57,7 @@ class FilterHelper {
                     addProps(cssProperties, 'contrast(${contrast.multiplier})', ["-webkit-filter", "-moz-filter", "-o-filter", "filter"]);
                 } else if ((filter is HueRotate)) {
                     var hueRotate:HueRotate = cast filter;
-                    addProps(cssProperties, 'hue-rotate(${hueRotate.angle}deg)', ["-webkit-filter", "-moz-filter", "-o-filter", "filter"]);
+                    addProps(cssProperties, 'hue-rotate(${hueRotate.angleDegree}deg)', ["-webkit-filter", "-moz-filter", "-o-filter", "filter"]);
                 } else if ((filter is Saturate)) {
                     var saturate:Saturate = cast filter;
                     addProps(cssProperties, 'saturate(${saturate.multiplier})', ["-webkit-filter", "-moz-filter", "-o-filter", "filter"]);
