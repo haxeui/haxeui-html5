@@ -105,10 +105,30 @@ class ComponentImpl extends ComponentBase {
         }
     }
 
+    private var _elementType:String = "div";
+    private var elementType(get, set):String;
+    private function get_elementType() {
+        return _elementType;
+    }
+    private function set_elementType(value:String) {
+        if (_elementType == value) {
+            return value;
+        }
+        
+        _elementType = value;
+        createElement();
+
+        return value;
+    }
+
     private override function handleCreate(native:Bool) {
+        createElement();
+    }
+
+    private function createElement() {
         if (this.isScroller) {
             if (element == null) {
-                element = Browser.document.createDivElement();
+                element = Browser.document.createElement(elementType);
             }
 
             element.scrollTop = 0;
@@ -123,7 +143,7 @@ class ComponentImpl extends ComponentBase {
             return;
         }
 
-        var newElement = Browser.document.createDivElement();
+        var newElement = Browser.document.createElement(elementType);
         newElement.classList.add("haxeui-component");
 
         if ((this is Image)) {
