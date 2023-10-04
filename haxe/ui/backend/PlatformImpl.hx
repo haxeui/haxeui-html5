@@ -18,7 +18,16 @@ class PlatformImpl extends PlatformBase {
     }
     
     public override function getSystemLocale():String {
-        return Browser.navigator.language;
+        var systemLocale = null;
+        var htmlTag = Browser.document.body.parentElement;
+        if (htmlTag != null) {
+            systemLocale = htmlTag.lang;
+        }
+
+        if (systemLocale == null) {
+            systemLocale = Browser.navigator.language;
+        }
+        return systemLocale;
     }
 
     private static var _vscrollWidth:Float = -1;
