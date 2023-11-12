@@ -340,17 +340,25 @@ class ScreenImpl extends ScreenBase {
         var container = Browser.document.body;
         
         switch (type) {
-            case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
-                MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DBL_CLICK |
-                MouseEvent.RIGHT_MOUSE_DOWN | MouseEvent.RIGHT_MOUSE_UP | MouseEvent.RIGHT_CLICK |
-                MouseEvent.MIDDLE_MOUSE_DOWN | MouseEvent.MIDDLE_MOUSE_UP:
-
+            case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT | MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DBL_CLICK:
                 if (_mapping.exists(type) == false) {
                     _mapping.set(type, listener);
-                    HtmlUtils.addEventListener(container, EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent, false);
+                    HtmlUtils.addEventListener(container, EventMapper.HAXEUI_TO_DOM.get(type), __onLeftMouseEvent);
+                }
+
+            case MouseEvent.RIGHT_MOUSE_DOWN | MouseEvent.RIGHT_MOUSE_UP | MouseEvent.RIGHT_CLICK:
+                if (_mapping.exists(type) == false) {
+                    _mapping.set(type, listener);
+                    HtmlUtils.addEventListener(container, EventMapper.HAXEUI_TO_DOM.get(type), __onRightMouseEvent);
                 }
                 if (type == MouseEvent.RIGHT_MOUSE_DOWN || type == MouseEvent.RIGHT_MOUSE_UP) {
                     disableContextMenu(true);
+                }
+
+            case MouseEvent.MIDDLE_MOUSE_DOWN | MouseEvent.MIDDLE_MOUSE_UP:
+                if (_mapping.exists(type) == false) {
+                    _mapping.set(type, listener);
+                    HtmlUtils.addEventListener(container, EventMapper.HAXEUI_TO_DOM.get(type), __onMiddleMouseEvent);
                 }
 
             case KeyboardEvent.KEY_DOWN | KeyboardEvent.KEY_UP:
@@ -370,15 +378,20 @@ class ScreenImpl extends ScreenBase {
         var container = Browser.document.body;
 
         switch (type) {
-            case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT |
-                MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DBL_CLICK |
-                MouseEvent.RIGHT_MOUSE_DOWN | MouseEvent.RIGHT_MOUSE_UP | MouseEvent.RIGHT_CLICK |
-                MouseEvent.MIDDLE_MOUSE_DOWN | MouseEvent.MIDDLE_MOUSE_UP:
+            case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT | MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DBL_CLICK:
                 _mapping.remove(type);
-                container.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMouseEvent);
+                container.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onLeftMouseEvent);
+
+            case MouseEvent.RIGHT_MOUSE_DOWN | MouseEvent.RIGHT_MOUSE_UP | MouseEvent.RIGHT_CLICK:
+                _mapping.remove(type);
+                container.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onRightMouseEvent);
                 if (type == MouseEvent.RIGHT_MOUSE_DOWN || type == MouseEvent.RIGHT_MOUSE_UP) {
                     disableContextMenu(false);
                 }
+
+            case MouseEvent.MIDDLE_MOUSE_DOWN | MouseEvent.MIDDLE_MOUSE_UP:
+                _mapping.remove(type);
+                container.removeEventListener(EventMapper.HAXEUI_TO_DOM.get(type), __onMiddleMouseEvent);
 
             case KeyboardEvent.KEY_DOWN | KeyboardEvent.KEY_UP:
                 _mapping.remove(type);
@@ -392,6 +405,18 @@ class ScreenImpl extends ScreenBase {
     //***********************************************************************************************************
     // Event Handlers
     //***********************************************************************************************************
+    private function __onLeftMouseEvent(event:js.html.Event) {
+        return __onMouseEvent(event); 
+    }
+
+    private function __onMiddleMouseEvent(event:js.html.Event) {
+        return __onMouseEvent(event); 
+    }
+
+    private function __onRightMouseEvent(event:js.html.Event) {
+        return __onMouseEvent(event); 
+    }
+
     private function __onMouseEvent(event:js.html.Event) {
         var which:Int = -1;
         var sx:Float = -1;
