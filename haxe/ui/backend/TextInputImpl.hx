@@ -212,7 +212,7 @@ class TextInputImpl extends TextDisplayImpl {
             el.style.border = "none";
             el.style.resize = "none";
             el.style.outline = "none";
-            el.style.lineHeight = "1.4";
+            el.style.lineHeight = "1.5";
             el.style.padding = "0px";
             el.style.margin = "0px";
             el.style.bottom = "0px"; // chrome only?
