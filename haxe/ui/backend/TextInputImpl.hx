@@ -45,11 +45,11 @@ class TextInputImpl extends TextDisplayImpl {
         _inputData.hscrollPos = element.scrollLeft;
         _inputData.vscrollPos = element.scrollTop;
         
-        _inputData.hscrollMax = _textWidth - _width;
-        _inputData.hscrollPageSize = (_width * _inputData.hscrollMax) / _textWidth;
-        
-        _inputData.vscrollMax = _textHeight - _height;
-        _inputData.vscrollPageSize = (_height * _inputData.vscrollMax) / _textHeight;
+        _inputData.hscrollMax = element.scrollWidth - _width;
+        _inputData.hscrollPageSize = (_width * _inputData.hscrollMax) / element.scrollWidth;
+
+        _inputData.vscrollMax = element.scrollHeight - _height;
+        _inputData.vscrollPageSize = (_height * _inputData.vscrollMax) / element.scrollHeight;
         
         if (_inputData.onScrollCallback != null) {
             _inputData.onScrollCallback();
@@ -139,11 +139,11 @@ class TextInputImpl extends TextDisplayImpl {
         _textWidth = div.clientWidth;
         _textHeight = div.clientHeight + 2;
         
-        _inputData.hscrollMax = _textWidth - _width;
-        _inputData.hscrollPageSize = (_width * _inputData.hscrollMax) / _textWidth;
-        
-        _inputData.vscrollMax = _textHeight - _height;
-        _inputData.vscrollPageSize = (_height * _inputData.vscrollMax) / _textHeight;
+        _inputData.hscrollMax = element.scrollWidth - _width;
+        _inputData.hscrollPageSize = (_width * _inputData.hscrollMax) / element.scrollWidth;
+
+        _inputData.vscrollMax = element.scrollHeight - _height;
+        _inputData.vscrollPageSize = (_height * _inputData.vscrollMax) / element.scrollHeight;
     }
 
     private var _selectionStartIndex:Int = 0;
