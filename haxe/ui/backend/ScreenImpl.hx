@@ -343,13 +343,13 @@ class ScreenImpl extends ScreenBase {
             case MouseEvent.MOUSE_MOVE | MouseEvent.MOUSE_OVER | MouseEvent.MOUSE_OUT | MouseEvent.MOUSE_DOWN | MouseEvent.MOUSE_UP | MouseEvent.CLICK | MouseEvent.DBL_CLICK:
                 if (_mapping.exists(type) == false) {
                     _mapping.set(type, listener);
-                    HtmlUtils.addEventListener(container, EventMapper.HAXEUI_TO_DOM.get(type), __onLeftMouseEvent);
+                    HtmlUtils.addEventListener(container, EventMapper.HAXEUI_TO_DOM.get(type), __onLeftMouseEvent, false);
                 }
 
             case MouseEvent.RIGHT_MOUSE_DOWN | MouseEvent.RIGHT_MOUSE_UP | MouseEvent.RIGHT_CLICK:
                 if (_mapping.exists(type) == false) {
                     _mapping.set(type, listener);
-                    HtmlUtils.addEventListener(container, EventMapper.HAXEUI_TO_DOM.get(type), __onRightMouseEvent);
+                    HtmlUtils.addEventListener(container, EventMapper.HAXEUI_TO_DOM.get(type), __onRightMouseEvent, false);
                 }
                 if (type == MouseEvent.RIGHT_MOUSE_DOWN || type == MouseEvent.RIGHT_MOUSE_UP) {
                     disableContextMenu(true);
@@ -358,7 +358,7 @@ class ScreenImpl extends ScreenBase {
             case MouseEvent.MIDDLE_MOUSE_DOWN | MouseEvent.MIDDLE_MOUSE_UP:
                 if (_mapping.exists(type) == false) {
                     _mapping.set(type, listener);
-                    HtmlUtils.addEventListener(container, EventMapper.HAXEUI_TO_DOM.get(type), __onMiddleMouseEvent);
+                    HtmlUtils.addEventListener(container, EventMapper.HAXEUI_TO_DOM.get(type), __onMiddleMouseEvent, false);
                 }
 
             case KeyboardEvent.KEY_DOWN | KeyboardEvent.KEY_UP:
