@@ -43,6 +43,8 @@ private class DivTextMeasurer implements ITextMeasurer {
         _div.style.fontSize = options.fontSize;
         _div.style.whiteSpace = options.whiteSpace;
         _div.style.wordBreak = options.wordBreak;
+        _div.style.fontWeight = (options.fontBold ? "bold" : null);
+        _div.style.fontStyle = (options.fontItalic ? "italic" : null);
         if (options.width != null) {
             _div.style.width = HtmlUtils.px(options.width);
         } else {
