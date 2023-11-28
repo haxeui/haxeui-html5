@@ -15,6 +15,12 @@
         </native>
     </themes>
 
+    <loaders>
+        <image-loaders>
+            <image-loader prefix="svg" pattern="^&lt;svg.*&gt;.*&lt;\/svg&gt;$" class="haxe.ui.backend.html5.loaders.image.SvgImageLoader" singleInstance="true" />
+        </image-loaders>
+    </loaders>
+
     <properties>
         <property name="haxe.ui.containers.menus.menubar.style" value="rounded" />
         <property name="haxe.ui.containers.menus.menu.style" value="rounded" />
