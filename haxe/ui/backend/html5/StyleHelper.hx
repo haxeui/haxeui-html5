@@ -1,25 +1,43 @@
 package haxe.ui.backend.html5;
 
 import haxe.ui.assets.ImageInfo;
-import haxe.ui.backend.ComponentBase;
+import haxe.ui.backend.ComponentImpl;
+import haxe.ui.geom.Rectangle;
+import haxe.ui.geom.Slice9;
 import haxe.ui.styles.Style;
-import haxe.ui.util.Rectangle;
-import haxe.ui.util.Slice9;
-import js.Browser;
 import js.html.CSSStyleDeclaration;
-import js.html.CanvasElement;
 import js.html.CanvasRenderingContext2D;
 import js.html.Element;
 import js.html.Image;
 
 class StyleHelper {
-    @:access(haxe.ui.core.ComponentBase)
-    public static function apply(component:ComponentBase, width:Float, height:Float, style:Style) {
+    @:access(haxe.ui.backend.ComponentImpl)
+    public static function apply(component:ComponentImpl, width:Float, height:Float, style:Style) {
         var element:Element = component.element;
         var css:CSSStyleDeclaration = element.style;
 
+        var slice:Rectangle = null;
+        if (style.backgroundImageSliceTop != null &&
+            style.backgroundImageSliceLeft != null &&
+            style.backgroundImageSliceBottom != null &&
+            style.backgroundImageSliceRight != null) {
+            slice = new Rectangle(style.backgroundImageSliceLeft,
+                                  style.backgroundImageSliceTop,
+                                  style.backgroundImageSliceRight - style.backgroundImageSliceLeft,
+                                  style.backgroundImageSliceBottom - style.backgroundImageSliceTop);
+        }
+
+        if (slice != null) {
+            width = Math.fround(width);
+            height = Math.fround(height);
+        }
+
         css.width = HtmlUtils.px(width);
         css.height = HtmlUtils.px(height);
+        var borderStyle = style.borderStyle;
+        if (borderStyle == null) {
+            borderStyle = "solid";
+        }
 
         // border size
         if (style.borderLeftSize != null &&
@@ -29,7 +47,7 @@ class StyleHelper {
 
             if (style.borderLeftSize > 0) {
                 css.borderWidth = HtmlUtils.px(style.borderLeftSize);
-                css.borderStyle = "solid";
+                css.borderStyle = borderStyle;
             } else {
                 css.removeProperty("border-width");
                 css.removeProperty("border-style");
@@ -43,7 +61,7 @@ class StyleHelper {
         } else { // compound border
             if (style.borderTopSize != null && style.borderTopSize > 0) {
                css.borderTopWidth = HtmlUtils.px(style.borderTopSize);
-               css.borderTopStyle = "solid";
+               css.borderTopStyle = borderStyle;
             } else {
                 css.removeProperty("border-top-width");
                 css.removeProperty("border-top-style");
@@ -51,7 +69,7 @@ class StyleHelper {
 
             if (style.borderLeftSize != null && style.borderLeftSize > 0) {
                css.borderLeftWidth = HtmlUtils.px(style.borderLeftSize);
-               css.borderLeftStyle = "solid";
+               css.borderLeftStyle = borderStyle;
             } else {
                 css.removeProperty("border-left-width");
                 css.removeProperty("border-left-style");
@@ -59,7 +77,7 @@ class StyleHelper {
 
             if (style.borderBottomSize != null && style.borderBottomSize > 0) {
                css.borderBottomWidth = HtmlUtils.px(style.borderBottomSize);
-               css.borderBottomStyle = "solid";
+               css.borderBottomStyle = borderStyle;
             } else {
                 css.removeProperty("border-bottom-width");
                 css.removeProperty("border-bottom-style");
@@ -67,7 +85,7 @@ class StyleHelper {
 
             if (style.borderRightSize != null && style.borderRightSize > 0) {
                css.borderRightWidth = HtmlUtils.px(style.borderRightSize);
-               css.borderRightStyle = "solid";
+               css.borderRightStyle = borderStyle;
             } else {
                 css.removeProperty("border-right-width");
                 css.removeProperty("border-right-style");
@@ -80,39 +98,68 @@ class StyleHelper {
             style.borderLeftColor == style.borderBottomColor &&
             style.borderLeftColor == style.borderTopColor) {
 
-            css.borderColor = HtmlUtils.color(style.borderLeftColor);
+            if (style.borderOpacity == null) {
+                css.borderColor = HtmlUtils.color(style.borderLeftColor);
+            } else {
+                css.borderColor = HtmlUtils.rgba(style.borderLeftColor, style.borderOpacity);
+            }
         } else if (style.borderLeftColor == null &&
             style.borderRightColor == null &&
             style.borderBottomColor == null &&
             style.borderTopColor == null) {
             css.removeProperty("border-color");
         } else {
-            if (style.borderTopColor != null) {
-               css.borderTopColor = HtmlUtils.color(style.borderTopColor);
+            if (style.borderTopColor != null && style.borderTopSize != null) {
+                if (style.borderOpacity == null) {
+                    css.borderTopColor = HtmlUtils.color(style.borderTopColor);
+                } else {
+                    css.borderTopColor = HtmlUtils.rgba(style.borderTopColor, style.borderOpacity);
+                }
+            } else if (style.borderTopColor == null && style.borderTopSize != null) {
+                css.borderTopColor = HtmlUtils.color(style.borderTopColor);
             } else {
                 css.removeProperty("border-top-color");
             }
 
-            if (style.borderLeftColor != null) {
-               css.borderLeftColor = HtmlUtils.color(style.borderLeftColor);
+            if (style.borderLeftColor != null && style.borderLeftSize != null) {
+                if (style.borderOpacity == null) {
+                    css.borderLeftColor = HtmlUtils.color(style.borderLeftColor);
+                } else {
+                    css.borderLeftColor = HtmlUtils.rgba(style.borderLeftColor, style.borderOpacity);
+                }
+            } else if (style.borderLeftColor == null && style.borderLeftSize != null) {
+                css.borderLeftColor = HtmlUtils.color(style.borderLeftColor);
             } else {
                 css.removeProperty("border-left-color");
             }
 
-            if (style.borderBottomColor != null) {
-               css.borderBottomColor = HtmlUtils.color(style.borderBottomColor);
+            if (style.borderBottomColor != null && style.borderBottomSize != null) {
+                if (style.borderOpacity == null) {
+                    css.borderBottomColor = HtmlUtils.color(style.borderBottomColor);
+                } else {
+                    css.borderBottomColor = HtmlUtils.rgba(style.borderBottomColor, style.borderOpacity);
+                }
+            } else if (style.borderBottomColor == null && style.borderBottomSize != null) {
+                css.borderBottomColor = HtmlUtils.color(style.borderBottomColor);
             } else {
                 css.removeProperty("border-bottom-color");
             }
 
-            if (style.borderRightColor != null) {
-               css.borderRightColor = HtmlUtils.color(style.borderRightColor);
+            if (style.borderRightColor != null && style.borderRightSize != null) {
+                if (style.borderOpacity == null) {
+                    css.borderRightColor = HtmlUtils.color(style.borderRightColor);
+                } else {
+                    css.borderRightColor = HtmlUtils.rgba(style.borderRightColor, style.borderOpacity);
+                }
+            } else if (style.borderRightColor == null && style.borderRightSize != null) {
+                css.borderRightColor = HtmlUtils.color(style.borderRightColor);
             } else {
                 css.removeProperty("border-right-color");
             }
         }
 
         // background
+        var background:Array<String> = [];
         if (style.backgroundColor != null) {
             if (style.backgroundColorEnd != null && style.backgroundColorEnd != style.backgroundColor) {
                 css.removeProperty("background-color");
@@ -123,15 +170,15 @@ class StyleHelper {
 
                 if (style.backgroundOpacity != null) {
                     if (gradientStyle == "vertical") {
-                        css.background = 'linear-gradient(to bottom, ${HtmlUtils.rgba(style.backgroundColor, style.backgroundOpacity)}, ${HtmlUtils.rgba(style.backgroundColorEnd, style.backgroundOpacity)})';
+                        background.push('linear-gradient(to bottom, ${HtmlUtils.rgba(style.backgroundColor, style.backgroundOpacity)}, ${HtmlUtils.rgba(style.backgroundColorEnd, style.backgroundOpacity)})');
                     } else if (gradientStyle == "horizontal") {
-                        css.background = 'linear-gradient(to right, ${HtmlUtils.rgba(style.backgroundColor, style.backgroundOpacity)}, ${HtmlUtils.rgba(style.backgroundColorEnd, style.backgroundOpacity)})';
+                        background.push('linear-gradient(to right, ${HtmlUtils.rgba(style.backgroundColor, style.backgroundOpacity)}, ${HtmlUtils.rgba(style.backgroundColorEnd, style.backgroundOpacity)})');
                     }
                 } else {
                     if (gradientStyle == "vertical") {
-                        css.background = 'linear-gradient(to bottom, ${HtmlUtils.color(style.backgroundColor)}, ${HtmlUtils.color(style.backgroundColorEnd)})';
+                        background.push('linear-gradient(to bottom, ${HtmlUtils.color(style.backgroundColor)}, ${HtmlUtils.color(style.backgroundColorEnd)})');
                     } else if (gradientStyle == "horizontal") {
-                        css.background = 'linear-gradient(to right, ${HtmlUtils.color(style.backgroundColor)}, ${HtmlUtils.color(style.backgroundColorEnd)})';
+                        background.push('linear-gradient(to right, ${HtmlUtils.color(style.backgroundColor)}, ${HtmlUtils.color(style.backgroundColorEnd)})');
                     }
                 }
             } else {
@@ -147,18 +194,42 @@ class StyleHelper {
             css.removeProperty("background-color");
         }
 
-        if (style.borderRadius != null && style.borderRadius > 0) {
+        if (style.borderRadius != null && style.borderRadius > 0
+            && (style.borderRadiusTopLeft == null || style.borderRadiusTopLeft == style.borderRadius)
+            && (style.borderRadiusTopRight == null || style.borderRadiusTopRight == style.borderRadius)
+            && (style.borderRadiusBottomLeft == null || style.borderRadiusBottomLeft == style.borderRadius)
+            && (style.borderRadiusBottomRight == null || style.borderRadiusBottomRight == style.borderRadius)) {
             css.borderRadius = HtmlUtils.px(style.borderRadius);
+        } else if ((style.borderRadiusTopLeft != null && style.borderRadiusTopLeft > 0)
+            || (style.borderRadiusTopRight != null && style.borderRadiusTopRight > 0)
+            || (style.borderRadiusBottomLeft != null && style.borderRadiusBottomLeft > 0)
+            || (style.borderRadiusBottomRight != null && style.borderRadiusBottomRight > 0)) {
+                if (style.borderRadiusTopLeft != null && style.borderRadiusTopLeft > 0) {
+                    css.borderTopLeftRadius = HtmlUtils.px(style.borderRadiusTopLeft);
+                } else {
+                    css.removeProperty("border-top-left-radius");
+                }
+                if (style.borderRadiusTopRight != null && style.borderRadiusTopRight > 0) {
+                    css.borderTopRightRadius = HtmlUtils.px(style.borderRadiusTopRight);
+                } else {
+                    css.removeProperty("border-top-right-radius");
+                }
+                if (style.borderRadiusBottomLeft != null && style.borderRadiusBottomLeft > 0) {
+                    css.borderBottomLeftRadius = HtmlUtils.px(style.borderRadiusBottomLeft);
+                } else {
+                    css.removeProperty("border-bottom-left-radius");
+                }
+                if (style.borderRadiusBottomRight != null && style.borderRadiusBottomRight > 0) {
+                    css.borderBottomRightRadius = HtmlUtils.px(style.borderRadiusBottomRight);
+                } else {
+                    css.removeProperty("border-bottom-right-radius");
+                }
         } else {
             css.removeProperty("border-radius");
         }
 
         // background image
         if (style.backgroundImage != null) {
-            if (component.element.nodeName == "BUTTON") {
-                css.border = "none";
-            }
-
             Toolkit.assets.getImage(style.backgroundImage, function(imageInfo:ImageInfo) {
                 if (imageInfo == null) {
                     return;
@@ -175,46 +246,60 @@ class StyleHelper {
                                                   style.backgroundImageClipBottom - style.backgroundImageClipTop);
                 }
 
-                var slice:Rectangle = null;
-                if (style.backgroundImageSliceTop != null &&
-                    style.backgroundImageSliceLeft != null &&
-                    style.backgroundImageSliceBottom != null &&
-                    style.backgroundImageSliceRight != null) {
-                    slice = new Rectangle(style.backgroundImageSliceLeft,
-                                          style.backgroundImageSliceTop,
-                                          style.backgroundImageSliceRight - style.backgroundImageSliceLeft,
-                                          style.backgroundImageSliceBottom - style.backgroundImageSliceTop);
-                }
-
                 if (slice == null) {
                     if (imageRect.width == imageInfo.width && imageRect.height == imageInfo.height) {
-                        css.backgroundImage = 'url(${imageInfo.data.src})';
-                        if (style.backgroundImageRepeat == null) {
-                            css.backgroundRepeat = "no-repeat";
+                        var backgroundRepeat = null;
+                        var backgroundSizeX = null;
+                        var backgroundSizeY = null;
+                        background.push('url(${imageInfo.data.src})');
+                        if (style.backgroundImageRepeat == null || style.backgroundImageRepeat == "no-repeat") {
+                            backgroundRepeat = "no-repeat";
                         } else if (style.backgroundImageRepeat == "repeat") {
-                            css.backgroundRepeat = "repeat";
+                            backgroundRepeat = "repeat";
                         } else if (style.backgroundImageRepeat == "stretch") {
-                            css.backgroundRepeat = "no-repeat";
-                            css.backgroundSize = '${HtmlUtils.px(width)} ${HtmlUtils.px(height)}';
+                            backgroundRepeat = "no-repeat";
+                            backgroundSizeX = "100%";
+                            backgroundSizeY = "100%";
+                        }
+
+                        if (style.backgroundWidth != null) {
+                            backgroundSizeX = style.backgroundWidth + "px";
+                        } else if (style.backgroundWidthPercent != null) {
+                            backgroundSizeX = style.backgroundWidthPercent + "%";
+                        }
+                        if (style.backgroundHeight != null) {
+                            backgroundSizeY = style.backgroundHeight + "px";
+                        } else if (style.backgroundHeightPercent != null) {
+                            backgroundSizeY = style.backgroundHeightPercent + "%";
+                        }
+                        
+                        background.reverse();
+                        css.background = background.join(",");
+                        if (backgroundSizeX != null || backgroundSizeY != null) {
+                            css.backgroundSize = backgroundSizeX + " " + backgroundSizeY;
+                        } else {
+                            css.removeProperty("background-size");
+                        }
+                        if (backgroundRepeat != null) {
+                            css.backgroundRepeat = backgroundRepeat;
+                        } else {
+                            css.removeProperty("background-repeat");
                         }
                     } else {
-                        var canvas:CanvasElement = Browser.document.createCanvasElement();
-                        canvas.width = cast width;
-                        canvas.height = cast height;
+                        var canvas = component.getCanvas(width, height);
                         var ctx:CanvasRenderingContext2D = canvas.getContext2d();
+                        ctx.clearRect(0, 0, width, height);
                         paintBitmap(ctx, cast imageInfo.data, imageRect, new Rectangle(0, 0, width, height));
-                        var data = canvas.toDataURL();
-                        css.backgroundImage = 'url(${data})';
                     }
                 } else {
                     var rects:Slice9Rects = Slice9.buildRects(width, height, imageRect.width, imageRect.height, slice);
                     var srcRects:Array<Rectangle> = rects.src;
                     var dstRects:Array<Rectangle> = rects.dst;
 
-                    var canvas:CanvasElement = Browser.document.createCanvasElement();
-                    canvas.width = cast width;
-                    canvas.height = cast height;
+                    var canvas = component.getCanvas(width, height);
                     var ctx:CanvasRenderingContext2D = canvas.getContext2d();
+                    ctx.clearRect(0, 0, width, height);
+                    ctx.imageSmoothingEnabled = false;
 
                     for (i in 0...srcRects.length) {
                         var srcRect = new Rectangle(srcRects[i].left + imageRect.left,
@@ -224,15 +309,21 @@ class StyleHelper {
                         var dstRect = dstRects[i];
                         paintBitmap(ctx, cast imageInfo.data, srcRect, dstRect);
                     }
-
-                    var data = canvas.toDataURL();
-                    css.backgroundImage = 'url(${data})';
                 }
             });
+        } else {
+            component.removeCanvas();
+            css.background = background[0];
         }
     }
 
     private static function paintBitmap(ctx:CanvasRenderingContext2D, img:Image, srcRect:Rectangle, dstRect:Rectangle) {
-        ctx.drawImage(img, srcRect.left, srcRect.top, srcRect.width, srcRect.height, dstRect.left, dstRect.top, dstRect.width, dstRect.height);
+        if (srcRect.width == 0 || srcRect.height == 0) {
+            return;
+        }
+        if (dstRect.width == 0 || dstRect.height == 0) {
+            return;
+        }
+        ctx.drawImage(img, Std.int(srcRect.left), Std.int(srcRect.top), Std.int(srcRect.width), Std.int(srcRect.height), Std.int(dstRect.left), Std.int(dstRect.top), Std.int(dstRect.width), Std.int(dstRect.height));
     }
 }

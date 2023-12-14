@@ -18,24 +18,24 @@ class FontDetect {
         
         _initialized = true;
         
-		var body = Browser.document.body;
-		var firstChild = Browser.document.body.firstChild;
+        var body = Browser.document.body;
+        var firstChild = Browser.document.body.firstChild;
         
-		var div = Browser.document.createElement('div');
-		div.id = 'fontdetectHelper';
-		span = Browser.document.createElement('span');
-		span.innerText = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-		div.appendChild(span);
+        var div = Browser.document.createElement('div');
+        div.id = 'fontdetectHelper';
+        span = Browser.document.createElement('span');
+        span.innerText = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        div.appendChild(span);
 
-		body.insertBefore(div, firstChild);
+        body.insertBefore(div, firstChild);
 
-		div.style.position   = 'absolute';
-		div.style.visibility = 'hidden';
-		div.style.top        = '-200px';
-		div.style.left       = '-100000px';
-		div.style.width      = '100000px';
-		div.style.height     = '200px';
-		div.style.fontSize   = '100px';
+        div.style.position   = 'absolute';
+        div.style.visibility = 'hidden';
+        div.style.top        = '-200px';
+        div.style.left       = '-100000px';
+        div.style.width      = '100000px';
+        div.style.height     = '200px';
+        div.style.fontSize   = '100px';
     }
     
     public static function onFontLoaded(cssFontName:String, onLoad:String->Void, onFail:String->Void = null, options:Dynamic = null) {

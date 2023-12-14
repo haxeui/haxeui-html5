@@ -1,13 +1,22 @@
 {
-    "name": "haxeui-html5",
-    "url": "https://github.com/haxeui/haxeui-html5",
+    "version": "1.6.0",
+    "contributors": [
+        "haxeui",
+        "ianharrigan",
+        "_ibilon",
+        "aW4KeNiNG"
+    ],
     "license": "MIT",
-    "tags": ["ui", "gui", "html5"],
-    "description": "The HTML5 backend of the HaxeUI framework",
-    "version": "0.0.3",
-    "releasenote": "change invalidate -> invalidateComponent (openfl 8 conflict)",
-    "contributors": ["haxeui", "ianharrigan", "_ibilon", "aW4KeNiNG"],
+    "tags": [
+        "ui",
+        "gui",
+        "html5"
+    ],
+    "releasenote": "1.6.0 release",
     "dependencies": {
         "haxeui-core": ""
-    }
+    },
+    "name": "haxeui-html5",
+    "description": "The HTML5 backend of the HaxeUI framework",
+    "url": "https://github.com/haxeui/haxeui-html5"
 }

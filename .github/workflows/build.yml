@@ -1,0 +1,28 @@
+name: Build
+
+on: [push, repository_dispatch]
+
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        haxe-version: [4.0.5, 4.1.5, 4.2.2, 4.3.0, 4.3.1]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Setup Haxe (haxe ${{ matrix.haxe-version }}, ${{ matrix.os }})
+      uses: krdlab/setup-haxe@v1
+      with:
+        haxe-version: ${{ matrix.haxe-version }}
+
+    - name: Build app (haxe ${{ matrix.haxe-version }}, ${{ matrix.os }})
+      run: |
+        git clone --branch master https://github.com/haxeui/haxeui-core.git --depth=1
+        haxelib dev haxeui-core haxeui-core
+        cp .github/workflows/build.hxml build.hxml
+        haxelib install build.hxml --always --quiet
+        haxelib list
+        haxe build.hxml

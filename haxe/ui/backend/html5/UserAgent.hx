@@ -31,37 +31,37 @@ class UserAgent {
         }
     }
 
-    private var _opera:Bool;
+    private var _opera:Bool = false;
     public var opera(get, null):Bool;
     private function get_opera():Bool {
         return _opera;
     }
 
-    private var _chrome:Bool;
+    private var _chrome:Bool = false;
     public var chrome(get, null):Bool;
     private function get_chrome():Bool {
         return _chrome;
     }
 
-    private var _safari:Bool;
+    private var _safari:Bool = false;
     public var safari(get, null):Bool;
     private function get_safari():Bool {
         return _safari;
     }
 
-    private var _firefox:Bool;
+    private var _firefox:Bool = false;
     public var firefox(get, null):Bool;
     private function get_firefox():Bool {
         return _firefox;
     }
 
-    private var _msie:Bool;
+    private var _msie:Bool = false;
     public var msie(get, null):Bool;
     private function get_msie():Bool {
         return _msie;
     }
 
-    private var _unknown:Bool;
+    private var _unknown:Bool = false;
     public var unknown(get, null):Bool;
     private function get_unknown():Bool {
         return _unknown;

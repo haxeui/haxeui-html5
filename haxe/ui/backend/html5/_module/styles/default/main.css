@@ -1,27 +1,8 @@
 .button, .label, .textarea, .textfield {
     font-name: "Arial";
-    font-size: 13px;
+    __font-size: 13px;
 }
 
-.button:native {
-    background: none;
-    border: none;
-    border-radius: none;
+.component:disabled {
+    cursor: not-allowed;
 }
-
-.textfield:native {
-    border: none;
-    border-radius: none;
-    filter: none;
-    color: none;
-    background-color: none;
-}
-
-.textarea:native {
-    border: none;
-    border-radius: none;
-    filter: none;
-    color: none;
-    background-color: none;
-}
-

@@ -1,17 +1,24 @@
 package haxe.ui.backend.html5;
 
-import haxe.ui.core.ValidationEvent;
-import haxe.ui.validation.ValidationManager;
-import haxe.ui.util.Size;
+import haxe.ui.geom.Size;
 import js.Browser;
+import js.html.DivElement;
 import js.html.Element;
+
+typedef DivHelper = {
+    var div:DivElement;
+    var claimed:Bool;
+}
 
 class HtmlUtils {
     public static inline function px(value:Float):String {
         return '${value}px';
     }
 
-    public static function color(value:Int):String {
+    public static function color(value:Null<Int>):String {
+        if (value == null) {
+            return 'rgba(0, 0, 0, 0)';
+        }
         return '#${StringTools.hex(value, 6)}';
     }
 
@@ -31,46 +38,91 @@ class HtmlUtils {
         return s;
     }
 
-    public static var DIV_HELPER:Element;
-
-    public static function __init__():Void {
-        ValidationManager.instance.registerEvent(ValidationEvent.STOP, onValidationStop);
+    public static function namedChild(el:Element, child:String, index:Int = 0):Element {
+        if (child != null) {
+            var list = el.getElementsByTagName(child);
+            if (list.length == 0) {
+                return null;
+            }
+            el = list.item(index);
+        }
+        
+        return el;
     }
-
-    private static function onValidationStop(e:ValidationEvent):Void {
-        if (DIV_HELPER != null) {
-            removeElement(DIV_HELPER);
-            DIV_HELPER = null;
+    
+    private static var _divHelpers:Map<DivElement, DivHelper> = new Map<DivElement, DivHelper>();
+    private static var _divHelpersId:Map<String, DivHelper> = new Map<String, DivHelper>();
+    public static function getDivHelper(id:String = null):DivElement {
+        var div = null;
+        if (id != null) {
+            var helper = _divHelpersId.get(id);
+            if (helper != null) {
+                div = helper.div;
+            }
+        } else {
+            for (key in _divHelpers.keys()) {
+                var value = _divHelpers.get(key);
+                if (value.claimed == false) {
+                    div = value.div;
+                    break;
+                }
+            }
+        }
+        
+        if (div == null) {
+            div = Browser.document.createDivElement();
+            div.style.position = "absolute";
+            div.style.top = "-99999px"; // position off-screen!
+            div.style.left = "-99999px"; // position off-screen!
+            Browser.document.body.appendChild(div);
+            var helper:DivHelper = {
+                div: div,
+                claimed: true
+            };
+            if (id != null) {
+                _divHelpersId.set(id, helper);
+            } else {
+                _divHelpers.set(div, helper);
+            }
+        }
+        
+        return div;
+    }
+    
+    public static function releaseDivHelper(div:DivElement) {
+        if (_divHelpers.exists(div)) {
+            _divHelpers.get(div).claimed = false;
         }
     }
-
-    public static function createDivHelper():Void
-    {
-        if (DIV_HELPER == null) {
-            DIV_HELPER = Browser.document.createElement("div");
-            DIV_HELPER.style.position = "absolute";
-            DIV_HELPER.style.top = "-99999px"; // position off-screen!
-            DIV_HELPER.style.left = "-99999px"; // position off-screen!
-            Browser.document.body.appendChild(DIV_HELPER);
-        }
-    }
-
+    
     public static function measureText(text:String, addWidth:Float = 0, addHeight:Float = 0, fontSize:Float = -1, fontName:String = null):Size {
-        if (DIV_HELPER == null) {
-            createDivHelper();
-        }
+        var div = getDivHelper();
 
-        DIV_HELPER.innerHTML = text;
+        div.style.width = "";
+        div.style.height = "";
         if (fontSize > 0) {
-            DIV_HELPER.style.fontSize = px(fontSize);
+            div.style.fontSize = px(fontSize);
+        } else {
+            div.style.fontSize = "";
         }
         if (fontName != null) {
-            DIV_HELPER.style.fontFamily = fontName;
+            div.style.fontFamily = fontName;
+        } else {
+            div.style.fontFamily = "";
         }
+        div.innerHTML = text;
 
-        return new Size(DIV_HELPER.clientWidth + addWidth, DIV_HELPER.clientHeight + addHeight);
+        return new Size(div.clientWidth + addWidth, div.clientHeight + addHeight);
     }
 
+    public static inline function addEventListener(element:Element, type:String, listener:haxe.Constraints.Function, passive:Bool = true) {
+        #if (haxe_ver <= 4.0)
+        element.addEventListener(type, listener);
+        #else
+        element.addEventListener(type, listener, { passive: passive } );
+        #end
+    }
+    
     private static var _dpi:Float = 0;
     public static var dpi(get, null):Float;
     public static function get_dpi():Float {
@@ -109,5 +161,18 @@ class HtmlUtils {
         if  (el != null && el.parentElement != null) {
             el.parentElement.removeChild(el);
         }
+    }
+    
+    private static var _isRetina:Null<Bool> = null;
+    public static function isRetinaDisplay():Bool {
+        if (_isRetina == null) {
+            var query = "(-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2), (min-resolution: 192dpi)";
+            if (Browser.window.matchMedia(query).matches) {
+                _isRetina = true;
+            } else {
+                _isRetina = false;
+            }
+        }
+        return _isRetina;
     }
 }
