@@ -142,7 +142,11 @@ class TextInputImpl extends TextDisplayImpl {
         _inputData.hscrollMax = element.scrollWidth - _width;
         _inputData.hscrollPageSize = (_width * _inputData.hscrollMax) / element.scrollWidth;
 
-        _inputData.vscrollMax = element.scrollHeight - _height;
+         if (element.scrollHeight != 0) {
+            _inputData.vscrollMax = element.scrollHeight - _height;
+         } else {
+             _inputData.vscrollMax = _textHeight - _height;
+         }
         _inputData.vscrollPageSize = (_height * _inputData.vscrollMax) / element.scrollHeight;
     }
 
