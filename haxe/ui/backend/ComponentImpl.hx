@@ -70,6 +70,7 @@ class ComponentImpl extends ComponentBase {
                 -webkit-tap-highlight-color: transparent;
                 webkit-user-select;
                 outline: none !important;
+                touch-action: none;
             }", sheet.cssRules.length);
             @:privateAccess Screen.instance.container.classList.add("haxeui-theme-" + Toolkit.theme);
         }
