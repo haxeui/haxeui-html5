@@ -21,6 +21,10 @@
         </image-loaders>
     </loaders>
 
+    <cssExtensions>
+        <cssDirective name="clip-path" class="haxe.ui.backend.html5.css.directives.ClipPath" />
+    </cssExtensions>
+
     <properties>
         <property name="haxe.ui.containers.menus.menubar.style" value="rounded" />
         <property name="haxe.ui.containers.menus.menu.style" value="rounded" />
