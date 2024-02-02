@@ -263,7 +263,9 @@ class TextInputImpl extends TextDisplayImpl {
         el.addEventListener("input", onChangeEvent);
         el.addEventListener("propertychange", onChangeEvent);
         el.addEventListener("scroll", onScroll);
-
+        #if haxeui_html5_no_autocomplete // wtf chrome! 
+        el.setAttribute("autocomplete", "one-time-code");
+        #end
         return el;
     }
 
