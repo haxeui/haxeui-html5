@@ -169,6 +169,15 @@ class TextDisplayImpl extends TextBase {
         if (allowFixed == false) {
             _fixedHeight = false;
         }
+
+        if (parentComponent != null && parentComponent.style != null) {
+            if (parentComponent.style.borderLeftSize != null && parentComponent.style.borderLeftSize > 0) {
+                style.marginLeft = '-${parentComponent.style.borderLeftSize - 1}px';
+            }
+            if (parentComponent.style.borderTopSize != null && parentComponent.style.borderTopSize > 0) {
+                style.marginTop = '-${parentComponent.style.borderTopSize - 1}px';
+            }
+        }
     }
 
     #if cache_text_metrics
