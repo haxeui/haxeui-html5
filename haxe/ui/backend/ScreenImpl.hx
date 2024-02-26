@@ -34,6 +34,9 @@ class ScreenImpl extends ScreenBase {
             return false;
         });
         */
+
+        Browser.document.documentElement.addEventListener("mouseleave", onMouseLeave);
+        Browser.document.documentElement.addEventListener("mouseenter", onMouseEnter);
     }
 
     private override function set_options(value:ToolkitOptions):ToolkitOptions {
@@ -417,6 +420,26 @@ class ScreenImpl extends ScreenBase {
         return __onMouseEvent(event); 
     }
 
+    private var _lastX:Null<Float> = null;
+    private var _lastY:Null<Float> = null;
+    private function onMouseLeave() {
+        dispatchMouseUp();
+    }
+
+    private function onMouseEnter() {
+        dispatchMouseUp();
+    }
+
+    private function dispatchMouseUp() {
+        if (_lastX != null && _lastY != null) {
+            var fn = _mapping.get(MouseEvent.MOUSE_UP);
+            if (fn != null) {
+                var event = new MouseEvent(MouseEvent.MOUSE_UP);
+                fn(event);
+            }
+        }
+    }
+
     private function __onMouseEvent(event:js.html.Event) {
         var which:Int = -1;
         var sx:Float = -1;
@@ -466,6 +489,8 @@ class ScreenImpl extends ScreenBase {
 
         if (type != null) {
             var fn = _mapping.get(type);
+            _lastX = sx;
+            _lastY = sy;
             if (fn != null) {
                 var mouseEvent = new MouseEvent(type);
                 mouseEvent._originalEvent = event;
