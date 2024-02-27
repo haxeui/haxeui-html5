@@ -28,5 +28,6 @@
     <properties>
         <property name="haxe.ui.containers.menus.menubar.style" value="rounded" />
         <property name="haxe.ui.containers.menus.menu.style" value="rounded" />
+        <property name="haxe.ui.components.pickers.itempicker.style" value="rounded" />
     </properties>
 </module>
