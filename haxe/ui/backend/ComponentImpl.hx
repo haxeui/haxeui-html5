@@ -128,7 +128,7 @@ class ComponentImpl extends ComponentBase {
     }
 
     private function createElement() {
-        if (this.isScroller) {
+        if ((this is IScroller)) {
             if (element == null) {
                 element = Browser.document.createElement(elementType);
             }
