@@ -13,6 +13,7 @@ import haxe.ui.core.ImageDisplay;
 import haxe.ui.core.Screen;
 import haxe.ui.core.TextDisplay;
 import haxe.ui.core.TextInput;
+import haxe.ui.core.IScroller;
 import haxe.ui.events.KeyboardEvent;
 import haxe.ui.events.MouseEvent;
 import haxe.ui.events.ScrollEvent;
@@ -257,14 +258,14 @@ class ComponentImpl extends ComponentBase {
         var parent:Component = c.parentComponent;
         value.toInts();
         if (value != null && parent != null) {
-            if (parent.isScroller) {
+            if ((parent is IScroller)) {
                 parent.element.style.overflow = "hidden";
             }
             element.style.clip = 'rect(${HtmlUtils.px(value.top)},${HtmlUtils.px(value.right)},${HtmlUtils.px(value.bottom)},${HtmlUtils.px(value.left)})';
             element.style.left = '${HtmlUtils.px(Std.int(c.left - value.left))}';
             element.style.top = '${HtmlUtils.px(Std.int(c.top - value.top))}';
         } else {
-            if (parent != null && parent.isScroller) {
+            if (parent != null && (parent is IScroller)) {
                 parent.element.style.removeProperty("overflow");
             }
             element.style.removeProperty("clip");
