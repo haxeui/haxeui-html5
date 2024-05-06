@@ -2,6 +2,9 @@ package haxe.ui.backend.html5.graphics;
 
 import haxe.ui.backend.ComponentGraphicsBase;
 import haxe.ui.backend.html5.svg.SVGBuilder;
+import haxe.ui.backend.html5.svg.SVGPathBuilder;
+import haxe.ui.backend.html5.svg.SVGStrokeData;
+import haxe.ui.backend.html5.svg.SVGFillData;
 import haxe.ui.core.Component;
 import haxe.ui.geom.Point;
 import haxe.ui.loaders.image.ImageLoader;
@@ -10,6 +13,8 @@ import haxe.ui.util.Variant;
 
 class SVGGraphicsImpl extends ComponentGraphicsBase {
     private var _svg:SVGBuilder = null;
+
+    private var currentPath:SVGPathBuilder;
     
     public function new(component:Component) {
         super(component);
@@ -22,40 +27,63 @@ class SVGGraphicsImpl extends ComponentGraphicsBase {
     
     private var _currentPosition:Point = new Point();
     public override function moveTo(x:Float, y:Float) {
-        _currentPosition.x = x;
-        _currentPosition.y = y;
+        if (currentPath != null)  {
+            currentPath.moveTo(x, y);
+        } else {
+            _currentPosition.x = x;
+            _currentPosition.y = y;
+        }
     }
     
     public override function lineTo(x:Float, y:Float) {
-        _svg.line(_currentPosition.x, _currentPosition.y, x, y);
+        var path = currentPath;
+        if (path == null)  {
+            _svg.line(_currentPosition.x, _currentPosition.y, x, y);
+        } else {
+            path.lineTo(x, y);
+        }
         _currentPosition.x = x;
         _currentPosition.y = y;
     }
     
     public override function strokeStyle(color:Null<Color>, thickness:Null<Float> = 1, alpha:Null<Float> = 1) {
+        var currentStrokeStyle:SVGStrokeData = {};
         if (thickness != null) {
-            _svg.currentStrokeStyle.thickness = thickness;
+            currentStrokeStyle.thickness = thickness;
+            
         }
         if (color != null) {
             if (alpha < 1) {
-                _svg.currentStrokeStyle.color = 'rgba(${color.r}, ${color.g}, ${color.b}, ${alpha})';
+                currentStrokeStyle.color = 'rgba(${color.r}, ${color.g}, ${color.b}, ${alpha})';
             } else {
-                _svg.currentStrokeStyle.color = 'rgb(${color.r}, ${color.g}, ${color.b})';
+                currentStrokeStyle.color = 'rgb(${color.r}, ${color.g}, ${color.b})';
             }
         } else {
-            _svg.currentStrokeStyle.color = "none";
+            currentStrokeStyle.color = "none";
+        }
+        if (currentPath == null) {
+            _svg.currentStrokeStyle = currentStrokeStyle;
+        } else {
+            currentPath.stroke(currentStrokeStyle);
         }
     }    
     
     public override function fillStyle(color:Null<Color>, alpha:Null<Float> = 1) {
+        var currentFillStyle:SVGFillData = {};
+        
         if (color != null) {
             if (alpha < 1) {
-                _svg.currentFillStyle.color = 'rgba(${color.r}, ${color.g}, ${color.b}, ${alpha})';
+                currentFillStyle.color = 'rgba(${color.r}, ${color.g}, ${color.b}, ${alpha})';
             } else {
-                _svg.currentFillStyle.color = 'rgb(${color.r}, ${color.g}, ${color.b})';
+                currentFillStyle.color = 'rgb(${color.r}, ${color.g}, ${color.b})';
             }
         } else {
-            _svg.currentFillStyle.color = "none";
+            currentFillStyle.color = "none";
+        }
+        if (currentPath == null) {
+            _svg.currentFillStyle = currentFillStyle;
+        } else {
+            currentPath.fill(currentFillStyle);
         }
     }
     
@@ -64,13 +92,17 @@ class SVGGraphicsImpl extends ComponentGraphicsBase {
     }
     
     public override function curveTo(controlX:Float, controlY:Float, anchorX:Float, anchorY:Float) {
-        _svg.path(_currentPosition.x, _currentPosition.y).quadraticBezier(controlX, controlY, anchorX, anchorY);
+        var path = currentPath;
+        if (path == null)  _svg.path(_currentPosition.x, _currentPosition.y);
+        path.quadraticBezier(controlX, controlY, anchorX, anchorY);
         _currentPosition.x = anchorX;
         _currentPosition.y = anchorY;
     }
     
     public override function cubicCurveTo(controlX1:Float, controlY1:Float, controlX2:Float, controlY2:Float, anchorX:Float, anchorY:Float) {
-        _svg.path(_currentPosition.x, _currentPosition.y).cubicBezier(controlX1, controlY1, controlX2, controlY2, anchorX, anchorY);
+        var path = currentPath;
+        if (path == null)  _svg.path(_currentPosition.x, _currentPosition.y);
+        path.cubicBezier(controlX1, controlY1, controlX2, controlY2, anchorX, anchorY);
         _currentPosition.x = anchorX;
         _currentPosition.y = anchorY;
     }
@@ -83,6 +115,15 @@ class SVGGraphicsImpl extends ComponentGraphicsBase {
         strokeStyle(null);
         fillStyle(color);
         rectangle(x, y, 1, 1);
+    }
+
+    public override function beginPath() {
+        currentPath = _svg.path(_currentPosition.x, _currentPosition.y);
+    }
+
+    public override function closePath() {
+        if (currentPath != null) currentPath.close();
+        currentPath = null;
     }
     
     public override function image(resource:Variant, x:Null<Float> = null, y:Null<Float> = null, width:Null<Float> = null, height:Null<Float> = null) {
