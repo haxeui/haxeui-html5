@@ -27,8 +27,12 @@ class SVGGraphicsImpl extends ComponentGraphicsBase {
     
     private var _currentPosition:Point = new Point();
     public override function moveTo(x:Float, y:Float) {
-        _currentPosition.x = x;
-        _currentPosition.y = y;
+        if (currentPath != null)  {
+            currentPath.moveTo(x, y);
+        } else {
+            _currentPosition.x = x;
+            _currentPosition.y = y;
+        }
     }
     
     public override function lineTo(x:Float, y:Float) {
