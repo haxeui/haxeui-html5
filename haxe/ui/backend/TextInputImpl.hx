@@ -23,6 +23,25 @@ class TextInputImpl extends TextDisplayImpl {
     public override function blur() {
         element.blur();
     }
+
+    public override function get_caretIndex():Int {
+        if ((element is TextAreaElement)) {
+            return cast(element, TextAreaElement).selectionEnd;
+        } else {
+            return cast(element, InputElement).selectionEnd;
+        }
+    }
+
+    private override function set_caretIndex(value:Int):Int {
+        if ((element is TextAreaElement)) {
+            cast(element, TextAreaElement).selectionStart = value;
+            cast(element, TextAreaElement).selectionEnd = value;
+        } else {
+            cast(element, TextAreaElement).selectionStart = value;
+            cast(element, TextAreaElement).selectionEnd = value;
+        }
+        return value;
+    }
     
     private function onChangeEvent(e) {
         var newText = null;
