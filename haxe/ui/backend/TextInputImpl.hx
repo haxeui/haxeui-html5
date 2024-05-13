@@ -37,8 +37,8 @@ class TextInputImpl extends TextDisplayImpl {
             cast(element, TextAreaElement).selectionStart = value;
             cast(element, TextAreaElement).selectionEnd = value;
         } else {
-            cast(element, TextAreaElement).selectionStart = value;
-            cast(element, TextAreaElement).selectionEnd = value;
+            cast(element, InputElement).selectionStart = value;
+            cast(element, InputElement).selectionEnd = value;
         }
         return value;
     }
