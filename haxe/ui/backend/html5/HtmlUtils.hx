@@ -15,14 +15,21 @@ class HtmlUtils {
         return '${value}px';
     }
 
-    public static function color(value:Null<Int>):String {
+    public static inline function colourWithOpacity(value:Null<Int>, alpha:Null<Float>) {
+        if (alpha == null) {
+            return color(value);
+        }
+        return rgba(value, alpha);
+    }
+
+    public static inline function color(value:Null<Int>):String {
         if (value == null) {
             return 'rgba(0, 0, 0, 0)';
         }
         return '#${StringTools.hex(value, 6)}';
     }
 
-    public static function rgba(value:Int, alpha:Float = 1):String {
+    public static inline function rgba(value:Int, alpha:Float = 1):String {
         var r:Int = (value >> 16) & 0xFF;
         var g:Int = (value >> 8) & 0xFF;
         var b:Int = value & 0xFF;

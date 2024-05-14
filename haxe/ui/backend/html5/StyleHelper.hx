@@ -39,123 +39,61 @@ class StyleHelper {
             borderStyle = "solid";
         }
 
-        // border size
-        if (style.borderLeftSize != null &&
-            style.borderLeftSize == style.borderRightSize &&
-            style.borderLeftSize == style.borderBottomSize &&
-            style.borderLeftSize == style.borderTopSize) { // full border
-
-            if (style.borderLeftSize > 0) {
-                css.borderWidth = HtmlUtils.px(style.borderLeftSize);
-                css.borderStyle = borderStyle;
-            } else {
+        switch (style.borderType) {
+            case None:
                 css.removeProperty("border-width");
                 css.removeProperty("border-style");
-            }
-        } else if (style.borderLeftSize == null &&
-            style.borderRightSize == null &&
-            style.borderBottomSize == null &&
-            style.borderTopSize == null) { // no border
-            css.removeProperty("border-width");
-            css.removeProperty("border-style");
-        } else { // compound border
-            if (style.borderTopSize != null && style.borderTopSize > 0) {
-               css.borderTopWidth = HtmlUtils.px(style.borderTopSize);
-               css.borderTopStyle = borderStyle;
-            } else {
+                css.removeProperty("border-color");
                 css.removeProperty("border-top-width");
                 css.removeProperty("border-top-style");
-            }
-
-            if (style.borderLeftSize != null && style.borderLeftSize > 0) {
-               css.borderLeftWidth = HtmlUtils.px(style.borderLeftSize);
-               css.borderLeftStyle = borderStyle;
-            } else {
+                css.removeProperty("border-top-color");
                 css.removeProperty("border-left-width");
                 css.removeProperty("border-left-style");
-            }
-
-            if (style.borderBottomSize != null && style.borderBottomSize > 0) {
-               css.borderBottomWidth = HtmlUtils.px(style.borderBottomSize);
-               css.borderBottomStyle = borderStyle;
-            } else {
+                css.removeProperty("border-left-color");
                 css.removeProperty("border-bottom-width");
                 css.removeProperty("border-bottom-style");
-            }
-
-            if (style.borderRightSize != null && style.borderRightSize > 0) {
-               css.borderRightWidth = HtmlUtils.px(style.borderRightSize);
-               css.borderRightStyle = borderStyle;
-            } else {
-                css.removeProperty("border-right-width");
-                css.removeProperty("border-right-style");
-            }
-        }
-
-        // border colour
-        if (style.borderLeftColor != null &&
-            style.borderLeftColor == style.borderRightColor &&
-            style.borderLeftColor == style.borderBottomColor &&
-            style.borderLeftColor == style.borderTopColor) {
-
-            if (style.borderOpacity == null) {
-                css.borderColor = HtmlUtils.color(style.borderLeftColor);
-            } else {
-                css.borderColor = HtmlUtils.rgba(style.borderLeftColor, style.borderOpacity);
-            }
-        } else if (style.borderLeftColor == null &&
-            style.borderRightColor == null &&
-            style.borderBottomColor == null &&
-            style.borderTopColor == null) {
-            css.removeProperty("border-color");
-        } else {
-            if (style.borderTopColor != null && style.borderTopSize != null) {
-                if (style.borderOpacity == null) {
-                    css.borderTopColor = HtmlUtils.color(style.borderTopColor);
-                } else {
-                    css.borderTopColor = HtmlUtils.rgba(style.borderTopColor, style.borderOpacity);
-                }
-            } else if (style.borderTopColor == null && style.borderTopSize != null) {
-                css.borderTopColor = HtmlUtils.color(style.borderTopColor);
-            } else {
-                css.removeProperty("border-top-color");
-            }
-
-            if (style.borderLeftColor != null && style.borderLeftSize != null) {
-                if (style.borderOpacity == null) {
-                    css.borderLeftColor = HtmlUtils.color(style.borderLeftColor);
-                } else {
-                    css.borderLeftColor = HtmlUtils.rgba(style.borderLeftColor, style.borderOpacity);
-                }
-            } else if (style.borderLeftColor == null && style.borderLeftSize != null) {
-                css.borderLeftColor = HtmlUtils.color(style.borderLeftColor);
-            } else {
-                css.removeProperty("border-left-color");
-            }
-
-            if (style.borderBottomColor != null && style.borderBottomSize != null) {
-                if (style.borderOpacity == null) {
-                    css.borderBottomColor = HtmlUtils.color(style.borderBottomColor);
-                } else {
-                    css.borderBottomColor = HtmlUtils.rgba(style.borderBottomColor, style.borderOpacity);
-                }
-            } else if (style.borderBottomColor == null && style.borderBottomSize != null) {
-                css.borderBottomColor = HtmlUtils.color(style.borderBottomColor);
-            } else {
                 css.removeProperty("border-bottom-color");
-            }
-
-            if (style.borderRightColor != null && style.borderRightSize != null) {
-                if (style.borderOpacity == null) {
-                    css.borderRightColor = HtmlUtils.color(style.borderRightColor);
+            case Full:
+                css.borderWidth = HtmlUtils.px(style.borderLeftSize);
+                css.borderStyle = borderStyle;
+                css.borderColor = HtmlUtils.colourWithOpacity(style.borderLeftColor, style.borderOpacity);
+            case Compound:
+                if (style.borderTopSize != null && style.borderTopSize > 0) {
+                    css.borderTopWidth = HtmlUtils.px(style.borderTopSize);
+                    css.borderTopStyle = borderStyle;
+                    css.borderTopColor = HtmlUtils.colourWithOpacity(style.borderTopColor, style.borderOpacity);
                 } else {
-                    css.borderRightColor = HtmlUtils.rgba(style.borderRightColor, style.borderOpacity);
+                     css.removeProperty("border-top-width");
+                     css.removeProperty("border-top-style");
+                     css.removeProperty("border-top-color");
                 }
-            } else if (style.borderRightColor == null && style.borderRightSize != null) {
-                css.borderRightColor = HtmlUtils.color(style.borderRightColor);
-            } else {
-                css.removeProperty("border-right-color");
-            }
+                if (style.borderLeftSize != null && style.borderLeftSize > 0) {
+                    css.borderLeftWidth = HtmlUtils.px(style.borderLeftSize);
+                    css.borderLeftStyle = borderStyle;
+                    css.borderLeftColor = HtmlUtils.colourWithOpacity(style.borderLeftColor, style.borderOpacity);
+                } else {
+                     css.removeProperty("border-left-width");
+                     css.removeProperty("border-left-style");
+                     css.removeProperty("border-left-color");
+                }
+                if (style.borderBottomSize != null && style.borderBottomSize > 0) {
+                    css.borderBottomWidth = HtmlUtils.px(style.borderBottomSize);
+                    css.borderBottomStyle = borderStyle;
+                    css.borderBottomColor = HtmlUtils.colourWithOpacity(style.borderBottomColor, style.borderOpacity);
+                } else {
+                     css.removeProperty("border-bottom-width");
+                     css.removeProperty("border-bottom-style");
+                     css.removeProperty("border-bottom-color");
+                }
+                if (style.borderRightSize != null && style.borderRightSize > 0) {
+                    css.borderRightWidth = HtmlUtils.px(style.borderRightSize);
+                    css.borderRightStyle = borderStyle;
+                    css.borderRightColor = HtmlUtils.colourWithOpacity(style.borderRightColor, style.borderOpacity);
+                } else {
+                     css.removeProperty("border-right-width");
+                     css.removeProperty("border-right-style");
+                     css.removeProperty("border-right-color");
+                }
         }
 
         // background
