@@ -53,6 +53,9 @@ class StyleHelper {
                 css.removeProperty("border-bottom-width");
                 css.removeProperty("border-bottom-style");
                 css.removeProperty("border-bottom-color");
+                css.removeProperty("border-right-width");
+                css.removeProperty("border-right-style");
+                css.removeProperty("border-right-color");
             case Full:
                 css.borderWidth = HtmlUtils.px(style.borderLeftSize);
                 css.borderStyle = borderStyle;
