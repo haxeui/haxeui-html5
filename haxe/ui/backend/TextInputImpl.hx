@@ -23,6 +23,65 @@ class TextInputImpl extends TextDisplayImpl {
     public override function blur() {
         element.blur();
     }
+
+    public override function get_caretIndex():Int {
+        if ((element is TextAreaElement)) {
+            return cast(element, TextAreaElement).selectionEnd;
+        } else {
+            return cast(element, InputElement).selectionEnd;
+        }
+    }
+
+    private override function set_caretIndex(value:Int):Int {
+        if ((element is TextAreaElement)) {
+            cast(element, TextAreaElement).selectionStart = value;
+            cast(element, TextAreaElement).selectionEnd = value;
+        } else {
+            cast(element, InputElement).selectionStart = value;
+            cast(element, InputElement).selectionEnd = value;
+        }
+        return value;
+    }
+    
+    private override function get_selectionStartIndex():Int {
+        if ((element is TextAreaElement)) {
+            return cast(element, TextAreaElement).selectionStart;
+        } else {
+            return cast(element, InputElement).selectionStart;
+        }
+    }
+    private override function set_selectionStartIndex(value:Int):Int {
+        if (value < 0) {
+            value = 0;
+        }
+        
+        if ((element is TextAreaElement)) {
+            cast(element, TextAreaElement).selectionStart = value;
+        } else {
+            cast(element, TextAreaElement).selectionStart = value;
+        }
+        return value;
+    }
+    
+    private override function get_selectionEndIndex():Int {
+        if ((element is TextAreaElement)) {
+            return cast(element, TextAreaElement).selectionEnd;
+        } else {
+            return cast(element, InputElement).selectionEnd;
+        }
+    }
+    private override function set_selectionEndIndex(value:Int):Int {
+        if (value < 0) {
+            value = 0;
+        }
+
+        if ((element is TextAreaElement)) {
+            cast(element, TextAreaElement).selectionEnd = value;
+        } else {
+            cast(element, TextAreaElement).selectionEnd = value;
+        }
+        return value;
+    }
     
     private function onChangeEvent(e) {
         var newText = null;
@@ -162,42 +221,6 @@ class TextInputImpl extends TextDisplayImpl {
         } else {
             _inputData.vscrollMax = _textHeight - _height;
             _inputData.vscrollPageSize = (_height * _inputData.vscrollMax) / _textHeight;
-        }
-    }
-
-    private var _selectionStartIndex:Int = 0;
-    private override function get_selectionStartIndex():Int {
-        return _selectionStartIndex;
-    }
-    private override function set_selectionStartIndex(value:Int):Int {
-        _selectionStartIndex = value;
-        applySelection();
-        return value;
-    }
-    
-    private var _selectedEndIndex = -1;
-    private override function get_selectionEndIndex():Int {
-        return _selectedEndIndex;
-    }
-    private override function set_selectionEndIndex(value:Int):Int {
-        _selectedEndIndex = value;
-        applySelection();
-        return value;
-    }
-    
-    private function applySelection() {
-        if (_selectionStartIndex < 0 || _selectedEndIndex < 0) {
-            return;
-        }
-        
-        if (_text != null && _selectedEndIndex > _text.length) {
-            _selectedEndIndex = _text.length;
-        }
-        
-        if ((element is InputElement)) {
-            cast(element, InputElement).setSelectionRange(_selectionStartIndex, _selectedEndIndex);
-        } else if ((element is TextAreaElement)) {
-            cast(element, TextAreaElement).setSelectionRange(_selectionStartIndex, _selectedEndIndex);
         }
     }
     

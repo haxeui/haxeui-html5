@@ -71,6 +71,16 @@ class ComponentGraphicsImpl extends ComponentGraphicsBase {
         super.image(resource, x, y, width, height);
         _impl.image(resource, x, y, width, height);
     }
+
+    public override function beginPath() {
+        super.beginPath();
+        _impl.beginPath();
+    }
+
+    public override function closePath() {
+        super.closePath();
+        _impl.closePath();
+    }
     
     public override function resize(width:Null<Float>, height:Null<Float>) {
         super.resize(width, height);
