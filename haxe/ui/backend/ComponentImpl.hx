@@ -690,12 +690,11 @@ class ComponentImpl extends ComponentBase {
             return;
         }
 
-        var debounce = Platform.instance.isMac;
-        if (debounce) {
+        if (Platform.instance.shouldThrottleMouseWheel) {
             var currentTime = Date.now().getTime();
             if (lastMouseWheelEventTime != null) {
                 var delta = currentTime - lastMouseWheelEventTime;
-                if (delta < 20) { // magic number, seems to be the right value
+                if (delta < Platform.instance.throttleMouseWheelTimestampDelta) {
                     return;
                 }
             }

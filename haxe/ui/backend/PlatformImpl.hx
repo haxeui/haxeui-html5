@@ -2,6 +2,7 @@ package haxe.ui.backend;
 
 import haxe.ui.backend.html5.HtmlUtils;
 import haxe.ui.core.Platform;
+import haxe.ui.core.Screen;
 import js.Browser;
 
 class PlatformImpl extends PlatformBase {
@@ -52,5 +53,42 @@ class PlatformImpl extends PlatformBase {
     
     public override function perf():Float {
         return Browser.window.performance.now();
+    }
+
+    public var throttleMouseWheelPlatforms(get, null):Array<String>;
+    private function get_throttleMouseWheelPlatforms():Array<String> @:privateAccess {
+        if (Screen.instance._options == null) {
+            return ["mac"];
+        }
+        if (Screen.instance._options.throttleMouseWheelPlatforms == null) {
+            return ["mac"];
+        }
+        return Screen.instance._options.throttleMouseWheelPlatforms;
+    }
+
+    public var throttleMouseWheelTimestampDelta(get, null):Null<Float>;
+    private function get_throttleMouseWheelTimestampDelta():Null<Float> @:privateAccess {
+        if (Screen.instance._options == null) {
+            return 20;
+        }
+        if (Screen.instance._options.throttleMouseWheelTimestampDelta == null) {
+            return 20;
+        }
+        return Screen.instance._options.throttleMouseWheelTimestampDelta;
+    }
+
+    public var shouldThrottleMouseWheel(get, null):Bool;
+    private function get_shouldThrottleMouseWheel():Bool {
+        var platforms = throttleMouseWheelPlatforms;
+        if (isMac && platforms.indexOf("mac") != -1) {
+            return true;
+        }
+        if (isLinux && platforms.indexOf("linux") != -1) {
+            return true;
+        }
+        if (isWindows && platforms.indexOf("windows") != -1) {
+            return true;
+        }
+        return false;
     }
 }

@@ -265,7 +265,6 @@ class ScreenImpl extends ScreenBase {
         return _containerParent;
     }
     
-    
     private var _hasListener:Bool = false;
     private function addResizeListener() {
         if (_hasListener == true) {
