@@ -9,11 +9,12 @@ import haxe.ui.backend.html5.UserAgent;
 import haxe.ui.backend.html5.util.StyleSheetHelper;
 import haxe.ui.components.Image;
 import haxe.ui.core.Component;
+import haxe.ui.core.IScroller;
 import haxe.ui.core.ImageDisplay;
+import haxe.ui.core.Platform;
 import haxe.ui.core.Screen;
 import haxe.ui.core.TextDisplay;
 import haxe.ui.core.TextInput;
-import haxe.ui.core.IScroller;
 import haxe.ui.events.KeyboardEvent;
 import haxe.ui.events.MouseEvent;
 import haxe.ui.events.ScrollEvent;
@@ -678,13 +679,28 @@ class ComponentImpl extends ComponentBase {
         // ill concieved?
         //return new Point(Screen.instance.pageRoot(element).offsetLeft, Screen.instance.pageRoot(element).offsetTop);
     }
-    
+
+    var lastMouseWheelEventTime:Null<Float> = null;
+
     @:noCompletion 
     @:access(haxe.ui.core.Screen)
     private function __onMouseWheelEvent(event:js.html.MouseEvent) {
         var fn = _eventMap.get(MouseEvent.MOUSE_WHEEL);
         if (fn == null) {
             return;
+        }
+
+        var debounce = Platform.instance.isMac;
+        if (debounce) {
+            var currentTime = Date.now().getTime();
+            if (lastMouseWheelEventTime != null) {
+                var delta = currentTime - lastMouseWheelEventTime;
+                if (delta < 20) { // magic number, seems to be the right value
+                    return;
+                }
+            }
+
+            lastMouseWheelEventTime = currentTime;
         }
 
         var delta:Float = 0;
