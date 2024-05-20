@@ -101,6 +101,9 @@ class PlatformImpl extends PlatformBase {
 
     public var shouldThrottleMouseWheel(get, null):Bool;
     private function get_shouldThrottleMouseWheel():Bool {
+        if (useNativeScrollers || useHybridScrollers) {
+            return false;
+        }
         var platforms = throttleMouseWheelPlatforms;
         if (isMac && platforms.indexOf("mac") != -1) {
             return true;
