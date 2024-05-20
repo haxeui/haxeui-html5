@@ -4,7 +4,7 @@ import js.html.Element;
 
 typedef ToolkitOptions = {
     ?container:Element,
-    ?useNativeScrollers:Bool,
+    ?useNativeScrollers:Null<Bool>,
     ?throttleMouseWheelPlatforms:Array<String>,
     ?throttleMouseWheelTimestampDelta:Null<Float>
 }

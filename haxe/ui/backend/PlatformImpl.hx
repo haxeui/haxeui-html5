@@ -60,7 +60,7 @@ class PlatformImpl extends PlatformBase {
         if (Screen.instance._options == null) {
             return false;
         }
-        if (Screen.instance._options.throttleMouseWheelPlatforms == null) {
+        if (Screen.instance._options.useNativeScrollers == null) {
             return false;
         }
         return Screen.instance._options.useNativeScrollers;
