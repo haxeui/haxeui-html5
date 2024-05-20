@@ -95,7 +95,7 @@ class ComponentImpl extends ComponentBase {
     }
 
     private override function get_isNativeScroller():Bool {
-        return false;
+        return Platform.instance.useNativeScrollers;
     }
     
     private function recursiveReady() {
@@ -136,7 +136,9 @@ class ComponentImpl extends ComponentBase {
 
             element.scrollTop = 0;
             element.scrollLeft = 0;
-            //element.style.overflow = "hidden";
+            if (Platform.instance.useNativeScrollers) {
+                element.style.overflow = "auto";
+            }
             element.classList.add("haxeui-component");
             elementToComponent.set(element, cast(this, Component));
 
@@ -255,6 +257,9 @@ class ComponentImpl extends ComponentBase {
     }
     
     private override function handleClipRect(value:Rectangle) {
+        if (Platform.instance.useNativeScrollers) {
+            return;
+        }
         var c:Component = cast(this, Component);
         var parent:Component = c.parentComponent;
         value.toInts();

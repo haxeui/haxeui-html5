@@ -55,6 +55,17 @@ class PlatformImpl extends PlatformBase {
         return Browser.window.performance.now();
     }
 
+    public var useNativeScrollers(get, null):Bool;
+    private function get_useNativeScrollers():Bool @:privateAccess {
+        if (Screen.instance._options == null) {
+            return false;
+        }
+        if (Screen.instance._options.throttleMouseWheelPlatforms == null) {
+            return false;
+        }
+        return Screen.instance._options.useNativeScrollers;
+    }
+
     public var throttleMouseWheelPlatforms(get, null):Array<String>;
     private function get_throttleMouseWheelPlatforms():Array<String> @:privateAccess {
         if (Screen.instance._options == null) {
