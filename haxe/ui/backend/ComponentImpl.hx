@@ -60,20 +60,36 @@ class ComponentImpl extends ComponentBase {
             _stylesAdded = true;
             
             var sheet:CSSStyleSheet = StyleSheetHelper.getValidStyleSheet();
-            sheet.insertRule("#haxeui-container .haxeui-component, .haxeui-component:focus {
-                position: absolute;
-                box-sizing: border-box;
-                -webkit-touch-callout: none;
-                -webkit-user-select: none;
-                -khtml-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-                user-select: none;
-                -webkit-tap-highlight-color: transparent;
-                webkit-user-select;
-                outline: none !important;
-                touch-action: none;
-            }", sheet.cssRules.length);
+            if (Platform.instance.useNativeScrollers) { // weirdly it seems we can override touch-action:none once its been set... ?
+                sheet.insertRule("#haxeui-container .haxeui-component, .haxeui-component:focus {
+                    position: absolute;
+                    box-sizing: border-box;
+                    -webkit-touch-callout: none;
+                    -webkit-user-select: none;
+                    -khtml-user-select: none;
+                    -moz-user-select: none;
+                    -ms-user-select: none;
+                    user-select: none;
+                    -webkit-tap-highlight-color: transparent;
+                    webkit-user-select;
+                    outline: none !important;
+                }", sheet.cssRules.length);
+            } else {
+                sheet.insertRule("#haxeui-container .haxeui-component, .haxeui-component:focus {
+                    position: absolute;
+                    box-sizing: border-box;
+                    -webkit-touch-callout: none;
+                    -webkit-user-select: none;
+                    -khtml-user-select: none;
+                    -moz-user-select: none;
+                    -ms-user-select: none;
+                    user-select: none;
+                    -webkit-tap-highlight-color: transparent;
+                    webkit-user-select;
+                    outline: none !important;
+                    touch-action: none;
+                }", sheet.cssRules.length);
+            }
 
             sheet.insertRule(".haxeui-hide-native-scrollbars::-webkit-scrollbar {
                 background: transparent; /* Chrome/Safari/Webkit */
