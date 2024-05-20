@@ -551,4 +551,13 @@ class ScreenImpl extends ScreenBase {
         event.preventDefault();
         return false;
     }
+
+    private override function onThemeChanged() {
+        super.onThemeChanged();
+        if (Toolkit.theme.toLowerCase().indexOf("dark") != -1) {
+            container.style.setProperty("color-scheme", "dark");
+        } else {
+            container.style.removeProperty("color-scheme");
+        }
+    }
 }
