@@ -66,6 +66,17 @@ class PlatformImpl extends PlatformBase {
         return Screen.instance._options.useNativeScrollers;
     }
 
+    public var useHybridScrollers(get, null):Bool;
+    private function get_useHybridScrollers():Bool @:privateAccess {
+        if (Screen.instance._options == null) {
+            return false;
+        }
+        if (Screen.instance._options.useHybridScrollers == null) {
+            return false;
+        }
+        return Screen.instance._options.useHybridScrollers;
+    }
+
     public var throttleMouseWheelPlatforms(get, null):Array<String>;
     private function get_throttleMouseWheelPlatforms():Array<String> @:privateAccess {
         if (Screen.instance._options == null) {

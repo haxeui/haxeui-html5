@@ -74,6 +74,17 @@ class ComponentImpl extends ComponentBase {
                 outline: none !important;
                 touch-action: none;
             }", sheet.cssRules.length);
+
+            sheet.insertRule(".haxeui-hide-native-scrollbars::-webkit-scrollbar {
+                background: transparent; /* Chrome/Safari/Webkit */
+                width: 0px;
+            }", sheet.cssRules.length);
+
+            sheet.insertRule(".haxeui-hide-native-scrollbars {
+                scrollbar-width: none; /* Firefox */
+                -ms-overflow-style: none;  /* IE 10+ */
+            }", sheet.cssRules.length);
+
             @:privateAccess Screen.instance.container.classList.add("haxeui-theme-" + Toolkit.theme);
         }
     }
@@ -96,6 +107,10 @@ class ComponentImpl extends ComponentBase {
 
     private override function get_isNativeScroller():Bool {
         return Platform.instance.useNativeScrollers;
+    }
+    
+    private override function get_isHybridScroller():Bool {
+        return Platform.instance.useHybridScrollers;
     }
     
     private function recursiveReady() {
@@ -139,6 +154,15 @@ class ComponentImpl extends ComponentBase {
             if (Platform.instance.useNativeScrollers) {
                 element.style.overflow = "auto";
             }
+            if (Platform.instance.useHybridScrollers) {
+                element.style.overflow = "auto";
+                element.classList.add("haxeui-hide-native-scrollbars");
+                var scroller = cast(this, IScroller);
+                element.onscroll = function(e) {
+                    scroller.vscrollPos = element.scrollTop;
+                    scroller.hscrollPos = element.scrollLeft;
+                }
+            }
             element.classList.add("haxeui-component");
             elementToComponent.set(element, cast(this, Component));
 
@@ -150,6 +174,13 @@ class ComponentImpl extends ComponentBase {
 
         var newElement = Browser.document.createElement(elementType);
         newElement.classList.add("haxeui-component");
+
+        if (Platform.instance.useHybridScrollers && (this is haxe.ui.components.Scroll)) {
+            var scroller = cast(this, Component).findScroller();
+            //if (scroller != null) {
+                newElement.style.position = "sticky";
+            //}
+        }
 
         if ((this is Image)) {
             newElement.style.boxSizing = "initial";
@@ -192,6 +223,11 @@ class ComponentImpl extends ComponentBase {
     private override function handlePosition(left:Null<Float>, top:Null<Float>, style:Style) {
         if (element == null) {
             return;
+        }
+
+        if (Platform.instance.useHybridScrollers && (this is haxe.ui.components.Scroll)) {
+            top--;
+            left--;
         }
 
         if (left != null) {
@@ -260,9 +296,19 @@ class ComponentImpl extends ComponentBase {
         if (Platform.instance.useNativeScrollers) {
             return;
         }
+
         var c:Component = cast(this, Component);
         var parent:Component = c.parentComponent;
         value.toInts();
+
+        if (Platform.instance.useHybridScrollers) {
+            if (value != null && parent != null) {
+                parent.element.scrollTop = Std.int(value.top);
+                parent.element.scrollLeft = Std.int(value.left);
+            }
+            return;
+        }
+
         if (value != null && parent != null) {
             if ((parent is IScroller)) {
                 parent.element.style.overflow = "hidden";
