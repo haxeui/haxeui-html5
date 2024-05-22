@@ -126,6 +126,12 @@ class ComponentImpl extends ComponentBase {
     }
     
     private override function get_isHybridScroller():Bool {
+        if ((this is IScroller)) {
+            var scroller = cast(this, IScroller);
+            if (scroller.virtual) {
+                return false;
+            }
+        }
         return Platform.instance.useHybridScrollers;
     }
     
@@ -318,11 +324,18 @@ class ComponentImpl extends ComponentBase {
         value.toInts();
 
         if (Platform.instance.useHybridScrollers) {
-            if (value != null && parent != null) {
-                parent.element.scrollTop = Std.int(value.top);
-                parent.element.scrollLeft = Std.int(value.left);
+            var use = true;
+            if ((parent is IScroller)) {
+                var scroller = cast(parent, IScroller);
+                use = !scroller.virtual;
             }
-            return;
+            if (use) {
+                if (value != null && parent != null) {
+                    parent.element.scrollTop = Std.int(value.top);
+                    parent.element.scrollLeft = Std.int(value.left);
+                }
+                return;
+            }
         }
 
         if (value != null && parent != null) {
