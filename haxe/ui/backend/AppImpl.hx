@@ -26,7 +26,9 @@ class AppImpl extends AppBase {
 
     private override function getToolkitInit():ToolkitOptions {
         return {
-            container: findContainer(Toolkit.backendProperties.getProp("haxe.ui.html5.container", "body"))
+            container: findContainer(Toolkit.backendProperties.getProp("haxe.ui.html5.container", "body")),
+            useHybridScrollers: Toolkit.backendProperties.getProp("haxe.ui.html5.scrollers") == "hybrid",
+            useNativeScrollers: Toolkit.backendProperties.getProp("haxe.ui.html5.scrollers") == "native",
         };
     }
 

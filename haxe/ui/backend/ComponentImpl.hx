@@ -1,5 +1,6 @@
 package haxe.ui.backend;
 
+import haxe.ui.geom.Size;
 import haxe.ui.Toolkit;
 import haxe.ui.backend.html5.EventMapper;
 import haxe.ui.backend.html5.FilterHelper;
@@ -181,8 +182,12 @@ class ComponentImpl extends ComponentBase {
                 element.classList.add("haxeui-hide-native-scrollbars");
                 var scroller = cast(this, IScroller);
                 element.onscroll = function(e) {
-                    scroller.vscrollPos = element.scrollTop;
-                    scroller.hscrollPos = element.scrollLeft;
+                    if (scroller.vscrollPos != element.scrollTop) {
+                        scroller.vscrollPos = element.scrollTop;
+                    }
+                    if (scroller.hscrollPos != element.scrollLeft) {
+                        scroller.hscrollPos = element.scrollLeft;
+                    }
                 }
             }
             element.classList.add("haxeui-component");
@@ -198,10 +203,7 @@ class ComponentImpl extends ComponentBase {
         newElement.classList.add("haxeui-component");
 
         if (Platform.instance.useHybridScrollers && (this is haxe.ui.components.Scroll)) {
-            var scroller = cast(this, Component).findScroller();
-            //if (scroller != null) {
-                newElement.style.position = "sticky";
-            //}
+            newElement.style.position = "sticky";
         }
 
         if ((this is Image)) {
@@ -226,6 +228,16 @@ class ComponentImpl extends ComponentBase {
         });
     }
 
+    private override function handleDisabled(disable:Bool) {
+        if ((Platform.instance.useNativeScrollers || Platform.instance.useHybridScrollers) && this.element != null && (this is IScroller)) {
+            if (disable) {
+                this.element.style.overflow = "hidden";
+            } else {
+                this.element.style.overflow = "auto";
+            }
+        }
+    }
+
     private function remapEvents() {
         if (_eventMap == null) {
             return;
@@ -247,11 +259,6 @@ class ComponentImpl extends ComponentBase {
             return;
         }
 
-        if (Platform.instance.useHybridScrollers && (this is haxe.ui.components.Scroll)) {
-            top--;
-            left--;
-        }
-
         if (left != null) {
             element.style.left = HtmlUtils.px(left);
         }
@@ -267,6 +274,17 @@ class ComponentImpl extends ComponentBase {
 
         if (this.element == null) {
             return;
+        }
+
+        if (Platform.instance.useHybridScrollers) {
+            var c:Component = cast(this, Component);
+            var parent:Component = c.parentComponent;
+            if (parent != null && (parent is IScroller)) {
+                var size = new Size(width, height);
+                adjustSizeForHybridScroller(cast parent, size);
+                width = size.width;
+                height = size.height;
+            }
         }
 
         var c:Component = cast(this, Component);
@@ -291,6 +309,32 @@ class ComponentImpl extends ComponentBase {
                 child.element.style.marginTop = '-${style.borderTopSize}px';
             } else {
                 child.element.style.marginTop = '';
+            }
+
+            if (Platform.instance.useHybridScrollers && (child is IScroller)) {
+                adjustMarginsForHybridScroller(cast child);
+            }
+        }
+
+        if (Platform.instance.useHybridScrollers && (this is IScroller)) {
+            adjustMarginsForHybridScroller(cast this);
+        }
+    }
+
+    private function adjustSizeForHybridScroller(scroller:IScroller, size:Size) { // we'll artificially inflate the size of the scrollview contents in the case of
+        if ((this is haxe.ui.components.Scroll)) {                                // hybrid scrolls, this is because we are letting the browser handle the scroll size
+            return;                                                               // and it thinks the haxeui scrollbar is "part of" the view (which is is, but shouldnt be included in the max sizes)
+        }
+        if (scroller.isScrollableVertically) {
+            var hscroll = scroller.findHorizontalScrollbar();
+            if (hscroll != null) {
+                size.height += hscroll.height;
+            }
+        }
+        if (scroller.isScrollableHorizontally) {
+            var vscroll = scroller.findVerticalScrollbar();
+            if (vscroll != null) {
+                size.width += vscroll.width;
             }
         }
     }
@@ -325,15 +369,23 @@ class ComponentImpl extends ComponentBase {
 
         if (Platform.instance.useHybridScrollers) {
             var use = true;
+            var scroller:IScroller = null;
             if ((parent is IScroller)) {
-                var scroller = cast(parent, IScroller);
+                scroller = cast(parent, IScroller);
                 use = !scroller.virtual;
             }
-            if (use) {
-                if (value != null && parent != null) {
-                    parent.element.scrollTop = Std.int(value.top);
-                    parent.element.scrollLeft = Std.int(value.left);
+            if (use && value != null && scroller != null) {
+                var scrollTop = Math.round(value.top);
+                var scrollLeft = Math.round(value.left);
+
+                if (parent.element.scrollTop != scrollTop) {
+                    parent.element.scrollTop = scrollTop;
                 }
+                if (parent.element.scrollLeft != scrollLeft) {
+                    parent.element.scrollLeft = scrollLeft;
+                }
+
+                //adjustMarginsForHybridScroller(scroller);
                 return;
             }
         }
@@ -350,6 +402,23 @@ class ComponentImpl extends ComponentBase {
                 parent.element.style.removeProperty("overflow");
             }
             element.style.removeProperty("clip");
+        }
+    }
+
+    private function adjustMarginsForHybridScroller(scroller:IScroller) {
+        if (this.parentComponent == null || this.parentComponent.style == null) {
+            return;
+        }
+        if (scroller.isScrollableHorizontally && scroller.isScrollableVertically) {
+            var borderSize = this.parentComponent.style.borderSize;
+            var hscroll = scroller.findHorizontalScrollbar();
+            var vscroll = scroller.findVerticalScrollbar();
+            if (hscroll != null && vscroll != null) {
+                var marginTop = hscroll.height;
+                var marginLeft = vscroll.width;
+                vscroll.element.style.marginTop = HtmlUtils.px(-marginTop);
+                hscroll.element.style.marginLeft = HtmlUtils.px(-marginLeft);
+            }
         }
     }
 
