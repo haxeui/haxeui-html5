@@ -36,11 +36,10 @@ class SVGGraphicsImpl extends ComponentGraphicsBase {
     }
     
     public override function lineTo(x:Float, y:Float) {
-        var path = currentPath;
-        if (path == null)  {
+        if (currentPath == null)  {
             _svg.line(_currentPosition.x, _currentPosition.y, x, y);
         } else {
-            path.lineTo(x, y);
+            currentPath.lineTo(x, y);
         }
         _currentPosition.x = x;
         _currentPosition.y = y;
@@ -50,17 +49,8 @@ class SVGGraphicsImpl extends ComponentGraphicsBase {
         var currentStrokeStyle:SVGStrokeData = {};
         if (thickness != null) {
             currentStrokeStyle.thickness = thickness;
-            
         }
-        if (color != null) {
-            if (alpha < 1) {
-                currentStrokeStyle.color = 'rgba(${color.r}, ${color.g}, ${color.b}, ${alpha})';
-            } else {
-                currentStrokeStyle.color = 'rgb(${color.r}, ${color.g}, ${color.b})';
-            }
-        } else {
-            currentStrokeStyle.color = "none";
-        }
+        currentStrokeStyle.color = colorToRGBA(color, alpha);
         if (currentPath == null) {
             _svg.currentStrokeStyle = currentStrokeStyle;
         } else {
@@ -70,16 +60,7 @@ class SVGGraphicsImpl extends ComponentGraphicsBase {
     
     public override function fillStyle(color:Null<Color>, alpha:Null<Float> = 1) {
         var currentFillStyle:SVGFillData = {};
-        
-        if (color != null) {
-            if (alpha < 1) {
-                currentFillStyle.color = 'rgba(${color.r}, ${color.g}, ${color.b}, ${alpha})';
-            } else {
-                currentFillStyle.color = 'rgb(${color.r}, ${color.g}, ${color.b})';
-            }
-        } else {
-            currentFillStyle.color = "none";
-        }
+        currentFillStyle.color = colorToRGBA(color, alpha);
         if (currentPath == null) {
             _svg.currentFillStyle = currentFillStyle;
         } else {
@@ -92,17 +73,13 @@ class SVGGraphicsImpl extends ComponentGraphicsBase {
     }
     
     public override function curveTo(controlX:Float, controlY:Float, anchorX:Float, anchorY:Float) {
-        var path = currentPath;
-        if (path == null)  _svg.path(_currentPosition.x, _currentPosition.y);
-        path.quadraticBezier(controlX, controlY, anchorX, anchorY);
+        path().quadraticBezier(controlX, controlY, anchorX, anchorY);
         _currentPosition.x = anchorX;
         _currentPosition.y = anchorY;
     }
     
     public override function cubicCurveTo(controlX1:Float, controlY1:Float, controlX2:Float, controlY2:Float, anchorX:Float, anchorY:Float) {
-        var path = currentPath;
-        if (path == null)  _svg.path(_currentPosition.x, _currentPosition.y);
-        path.cubicBezier(controlX1, controlY1, controlX2, controlY2, anchorX, anchorY);
+        path().cubicBezier(controlX1, controlY1, controlX2, controlY2, anchorX, anchorY);
         _currentPosition.x = anchorX;
         _currentPosition.y = anchorY;
     }
@@ -118,14 +95,35 @@ class SVGGraphicsImpl extends ComponentGraphicsBase {
     }
 
     public override function beginPath() {
+        closePath();
         currentPath = _svg.path(_currentPosition.x, _currentPosition.y);
     }
 
     public override function closePath() {
-        if (currentPath != null) currentPath.close();
+        if (currentPath != null) {
+            currentPath.close();
+        }
         currentPath = null;
     }
+
+    private inline function path():SVGPathBuilder {
+        if (currentPath != null) {
+            return currentPath;
+        }
+        return _svg.path(_currentPosition.x, _currentPosition.y);
+    }
     
+    private inline function colorToRGBA(color:Null<Color>, alpha:Null<Float> = 1) {
+        if (color != null) {
+            if (alpha < 1) {
+                return 'rgba(${color.r}, ${color.g}, ${color.b}, ${alpha})';
+            } else {
+                return 'rgb(${color.r}, ${color.g}, ${color.b})';
+            }
+        }
+        return "none";
+    }
+
     public override function image(resource:Variant, x:Null<Float> = null, y:Null<Float> = null, width:Null<Float> = null, height:Null<Float> = null) {
         ImageLoader.instance.load(resource, function(imageInfo) {
             if (imageInfo != null) {
