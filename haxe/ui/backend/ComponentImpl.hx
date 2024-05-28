@@ -202,10 +202,6 @@ class ComponentImpl extends ComponentBase {
         var newElement = Browser.document.createElement(elementType);
         newElement.classList.add("haxeui-component");
 
-        if (Platform.instance.useHybridScrollers && (this is haxe.ui.components.Scroll)) {
-            newElement.style.position = "sticky";
-        }
-
         if ((this is Image)) {
             newElement.style.boxSizing = "initial";
         }
@@ -343,6 +339,10 @@ class ComponentImpl extends ComponentBase {
         elementToComponent.remove(element);
         if (cast(this, Component).id != null) {
             element.id = cast(this, Component).id;
+        }
+        
+        if (Platform.instance.useHybridScrollers && (this.parentComponent is IScroller) && (this is haxe.ui.components.Scroll)) {
+            element.style.position = "sticky";
         }
     }
 
