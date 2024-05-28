@@ -58,7 +58,7 @@ class TextInputImpl extends TextDisplayImpl {
         if ((element is TextAreaElement)) {
             cast(element, TextAreaElement).selectionStart = value;
         } else {
-            cast(element, TextAreaElement).selectionStart = value;
+            cast(element, InputElement).selectionStart = value;
         }
         return value;
     }
@@ -78,7 +78,7 @@ class TextInputImpl extends TextDisplayImpl {
         if ((element is TextAreaElement)) {
             cast(element, TextAreaElement).selectionEnd = value;
         } else {
-            cast(element, TextAreaElement).selectionEnd = value;
+            cast(element, InputElement).selectionEnd = value;
         }
         return value;
     }
