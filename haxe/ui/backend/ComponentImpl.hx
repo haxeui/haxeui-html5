@@ -132,6 +132,9 @@ class ComponentImpl extends ComponentBase {
                 }
                 return false;
             }
+            if (scroller.scrollMode != "default" && scroller.scrollMode != "native") {
+                return false;
+            }
         }
         if (_isNativeScroller != null) {
             return _isNativeScroller;
@@ -151,6 +154,9 @@ class ComponentImpl extends ComponentBase {
                 if (_isHybridScroller) {
                     trace("WARNING: hybrid scrollers are not compatible with virtualization");
                 }
+                return false;
+            }
+            if (scroller.scrollMode != "default" && scroller.scrollMode != "hybrid") {
                 return false;
             }
         }
