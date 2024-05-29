@@ -185,9 +185,6 @@ class ComponentImpl extends ComponentBase {
 
             element.scrollTop = 0;
             element.scrollLeft = 0;
-            if (Platform.instance.useNativeScrollers) {
-                element.style.overflow = "auto";
-            }
             element.classList.add("haxeui-component");
             elementToComponent.set(element, cast(this, Component));
 
@@ -223,7 +220,7 @@ class ComponentImpl extends ComponentBase {
     }
 
     private override function handleDisabled(disable:Bool) {
-        if ((this is IScroller) && (Platform.instance.useNativeScrollers || isNativeScroller) && this.element != null) {
+        if ((this is IScroller) && (isNativeScroller || isHybridScroller) && this.element != null) {
             if (disable) {
                 this.element.style.overflow = "hidden";
             } else {
@@ -354,6 +351,14 @@ class ComponentImpl extends ComponentBase {
             }
         }
 
+        if ((this is IScroller) && this.isNativeScroller) {
+            if (this.disabled) {
+                this.element.style.overflow = "hidden";
+            } else {
+                this.element.style.overflow = "auto";
+            }
+        }
+
         if (this.parentComponent!= null && this.parentComponent.isHybridScroller && (this is haxe.ui.components.Scroll)) {
             element.style.position = "sticky";
         }
@@ -372,7 +377,7 @@ class ComponentImpl extends ComponentBase {
     }
     
     private override function handleClipRect(value:Rectangle) {
-        if (Platform.instance.useNativeScrollers) {
+        if (this.isNativeScroller) {
             return;
         }
 
