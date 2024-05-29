@@ -122,8 +122,24 @@ class ComponentImpl extends ComponentBase {
         }
     }
 
+    private var _isNativeScroller:Null<Bool> = null;
     private override function get_isNativeScroller():Bool {
         return Platform.instance.useNativeScrollers;
+    }
+    private override function set_isNativeScroller(value:Bool):Bool {
+        if ((this is IScroller)) {
+            var scroller = cast(this, IScroller);
+            if (scroller.virtual) {
+                if (_isNativeScroller) {
+                    trace("WARNING: native scrollers are not compatible with virtualization");
+                }
+                return false;
+            }
+        }
+        if (_isNativeScroller != null) {
+            return _isNativeScroller;
+        }
+        return value;
     }
     
     private var _isHybridScroller:Null<Bool> = null;
