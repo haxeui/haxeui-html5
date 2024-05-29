@@ -126,14 +126,25 @@ class ComponentImpl extends ComponentBase {
         return Platform.instance.useNativeScrollers;
     }
     
+    private var _isHybridScroller:Null<Bool> = null;
     private override function get_isHybridScroller():Bool {
         if ((this is IScroller)) {
             var scroller = cast(this, IScroller);
             if (scroller.virtual) {
+                if (_isHybridScroller) {
+                    trace("WARNING: hybrid scrollers are not compatible with virtualization");
+                }
                 return false;
             }
         }
+        if (_isHybridScroller != null) {
+            return _isHybridScroller;
+        }
         return Platform.instance.useHybridScrollers;
+    }
+    private override function set_isHybridScroller(value:Bool):Bool {
+        _isHybridScroller = value;
+        return value;
     }
     
     private function recursiveReady() {
