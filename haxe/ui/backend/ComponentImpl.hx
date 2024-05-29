@@ -177,19 +177,6 @@ class ComponentImpl extends ComponentBase {
             if (Platform.instance.useNativeScrollers) {
                 element.style.overflow = "auto";
             }
-            if (Platform.instance.useHybridScrollers) {
-                element.style.overflow = "auto";
-                element.classList.add("haxeui-hide-native-scrollbars");
-                var scroller = cast(this, IScroller);
-                element.onscroll = function(e) {
-                    if (scroller.vscrollPos != element.scrollTop) {
-                        scroller.vscrollPos = element.scrollTop;
-                    }
-                    if (scroller.hscrollPos != element.scrollLeft) {
-                        scroller.hscrollPos = element.scrollLeft;
-                    }
-                }
-            }
             element.classList.add("haxeui-component");
             elementToComponent.set(element, cast(this, Component));
 
@@ -225,7 +212,7 @@ class ComponentImpl extends ComponentBase {
     }
 
     private override function handleDisabled(disable:Bool) {
-        if ((Platform.instance.useNativeScrollers || Platform.instance.useHybridScrollers) && this.element != null && (this is IScroller)) {
+        if ((this is IScroller) && (Platform.instance.useNativeScrollers || isNativeScroller) && this.element != null) {
             if (disable) {
                 this.element.style.overflow = "hidden";
             } else {
@@ -272,15 +259,11 @@ class ComponentImpl extends ComponentBase {
             return;
         }
 
-        if (Platform.instance.useHybridScrollers) {
-            var c:Component = cast(this, Component);
-            var parent:Component = c.parentComponent;
-            if (parent != null && (parent is IScroller)) {
-                var size = new Size(width, height);
-                adjustSizeForHybridScroller(cast parent, size);
-                width = size.width;
-                height = size.height;
-            }
+        if (this.parentComponent != null && (this.parentComponent is IScroller) && this.parentComponent.isHybridScroller) {
+            var size = new Size(width, height);
+            adjustSizeForHybridScroller(cast this.parentComponent, size);
+            width = size.width;
+            height = size.height;
         }
 
         var c:Component = cast(this, Component);
@@ -307,12 +290,12 @@ class ComponentImpl extends ComponentBase {
                 child.element.style.marginTop = '';
             }
 
-            if (Platform.instance.useHybridScrollers && (child is IScroller)) {
+            if ((child is IScroller) && child.isHybridScroller) {
                 adjustMarginsForHybridScroller(cast child);
             }
         }
 
-        if (Platform.instance.useHybridScrollers && (this is IScroller)) {
+        if ((this is IScroller) && this.isHybridScroller) {
             adjustMarginsForHybridScroller(cast this);
         }
     }
@@ -341,7 +324,26 @@ class ComponentImpl extends ComponentBase {
             element.id = cast(this, Component).id;
         }
         
-        if (Platform.instance.useHybridScrollers && (this.parentComponent is IScroller) && (this is haxe.ui.components.Scroll)) {
+        if ((this is IScroller) && isHybridScroller) {
+            if (this.disabled) {
+                this.element.style.overflow = "hidden";
+            } else {
+                this.element.style.overflow = "auto";
+            }
+
+            element.classList.add("haxeui-hide-native-scrollbars");
+            var scroller = cast(this, IScroller);
+            element.onscroll = function(e) {
+                if (scroller.vscrollPos != element.scrollTop) {
+                    scroller.vscrollPos = element.scrollTop;
+                }
+                if (scroller.hscrollPos != element.scrollLeft) {
+                    scroller.hscrollPos = element.scrollLeft;
+                }
+            }
+        }
+
+        if (this.parentComponent!= null && this.parentComponent.isHybridScroller && (this is haxe.ui.components.Scroll)) {
             element.style.position = "sticky";
         }
     }
@@ -367,14 +369,8 @@ class ComponentImpl extends ComponentBase {
         var parent:Component = c.parentComponent;
         value.toInts();
 
-        if (Platform.instance.useHybridScrollers) {
-            var use = true;
-            var scroller:IScroller = null;
-            if ((parent is IScroller)) {
-                scroller = cast(parent, IScroller);
-                use = !scroller.virtual;
-            }
-            if (use && value != null && scroller != null) {
+        if ((parent is IScroller) && parent.isHybridScroller) {
+            if (value != null) {
                 var scrollTop = Math.round(value.top);
                 var scrollLeft = Math.round(value.left);
 
