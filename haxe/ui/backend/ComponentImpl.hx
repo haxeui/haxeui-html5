@@ -124,9 +124,6 @@ class ComponentImpl extends ComponentBase {
 
     private var _isNativeScroller:Null<Bool> = null;
     private override function get_isNativeScroller():Bool {
-        return Platform.instance.useNativeScrollers;
-    }
-    private override function set_isNativeScroller(value:Bool):Bool {
         if ((this is IScroller)) {
             var scroller = cast(this, IScroller);
             if (scroller.virtual) {
@@ -139,6 +136,10 @@ class ComponentImpl extends ComponentBase {
         if (_isNativeScroller != null) {
             return _isNativeScroller;
         }
+        return Platform.instance.useNativeScrollers;
+    }
+    private override function set_isNativeScroller(value:Bool):Bool {
+        _isNativeScroller = value;
         return value;
     }
     
