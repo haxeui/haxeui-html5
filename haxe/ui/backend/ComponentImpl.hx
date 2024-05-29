@@ -394,12 +394,12 @@ class ComponentImpl extends ComponentBase {
     }
     
     private override function handleClipRect(value:Rectangle) {
-        if (this.isNativeScroller) {
+        var c:Component = cast(this, Component);
+        var parent:Component = c.parentComponent;
+        if (parent != null && parent.isNativeScroller) {
             return;
         }
 
-        var c:Component = cast(this, Component);
-        var parent:Component = c.parentComponent;
         value.toInts();
 
         if ((parent is IScroller) && parent.isHybridScroller) {
