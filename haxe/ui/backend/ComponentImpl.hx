@@ -382,7 +382,7 @@ class ComponentImpl extends ComponentBase {
             }
         }
 
-        if (this.parentComponent!= null && this.parentComponent.isHybridScroller && (this is haxe.ui.components.Scroll)) {
+        if (this.parentComponent != null && (this.parentComponent is IScroller) && this.parentComponent.isHybridScroller && (this is haxe.ui.components.Scroll)) {
             element.style.position = "sticky";
         }
     }
