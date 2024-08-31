@@ -25,7 +25,7 @@ class PlatformImpl extends PlatformBase {
             systemLocale = htmlTag.lang;
         }
 
-        if (systemLocale == null) {
+        if (systemLocale == null || systemLocale == "" ) {
             systemLocale = Browser.navigator.language;
         }
         return systemLocale;
