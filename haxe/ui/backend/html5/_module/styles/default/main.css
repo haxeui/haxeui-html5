@@ -1,5 +1,5 @@
 .button, .label, .textarea, .textfield {
-    font-name: "Arial";
+    font-name: "sans-serif";
     __font-size: 13px;
 }
 
