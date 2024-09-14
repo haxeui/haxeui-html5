@@ -23,6 +23,7 @@
 
     <cssExtensions>
         <cssDirective name="clip-path" class="haxe.ui.backend.html5.css.directives.ClipPath" />
+        <cssDirective name="rotation" class="haxe.ui.backend.html5.css.directives.Rotate" />
     </cssExtensions>
 
     <properties>
