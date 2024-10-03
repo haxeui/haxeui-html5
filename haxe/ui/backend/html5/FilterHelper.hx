@@ -4,12 +4,14 @@ import haxe.ui.backend.html5.filters.ColorMatrixFilter;
 import haxe.ui.backend.html5.filters.FilterCache;
 import haxe.ui.backend.html5.filters.ISVGFilter;
 import haxe.ui.filters.Blur;
+import haxe.ui.filters.Brightness;
 import haxe.ui.filters.BoxShadow;
 import haxe.ui.filters.Contrast;
 import haxe.ui.filters.DropShadow;
 import haxe.ui.filters.Filter;
 import haxe.ui.filters.Grayscale;
 import haxe.ui.filters.HueRotate;
+import haxe.ui.filters.Invert;
 import haxe.ui.filters.Saturate;
 import haxe.ui.filters.Tint;
 import haxe.ui.util.Color;
@@ -61,6 +63,12 @@ class FilterHelper {
                 } else if ((filter is Saturate)) {
                     var saturate:Saturate = cast filter;
                     addProps(cssProperties, 'saturate(${saturate.multiplier})', ["-webkit-filter", "-moz-filter", "-o-filter", "filter"]);
+                } else if ((filter is Brightness)) {
+                    var brightness:Brightness = cast filter;
+                    addProps(cssProperties, 'brightness(${brightness.multiplier})', ["-webkit-filter", "-moz-filter", "-o-filter", "filter"]);
+                } else if ((filter is Invert)) {
+                    var invert:Invert = cast filter;
+                    addProps(cssProperties, 'invert(${invert.multiplier})', ["-webkit-filter", "-moz-filter", "-o-filter", "filter"]);
                 } else {
                     trace("WARNING: unrecognized filter type: " + Type.getClassName(Type.getClass(filter)));
                 }
