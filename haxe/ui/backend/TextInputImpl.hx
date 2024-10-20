@@ -320,6 +320,7 @@ class TextInputImpl extends TextDisplayImpl {
         div.style.lineHeight = element.style.lineHeight;
         if ((element is TextAreaElement)) {
             div.style.wordBreak = element.style.wordBreak;
+            div.style.font = Browser.window.getComputedStyle(element).font;
         }
         if (autoWidth == false) {
             div.style.width = (_width > 0) ? '${HtmlUtils.px(_width)}' : "";
