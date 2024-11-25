@@ -73,6 +73,10 @@ class AssetsImpl extends AssetsBase {
         */
     }
     
+    public override function imageToBytes(format:String, imageInfo:ImageInfo, callback:Bytes->Void) {
+        callback(null);
+    }
+
     private static var SVG_BYTE_SEQUENCE:Array<Int> = ['<'.charCodeAt(0),
                                                        's'.charCodeAt(0),
                                                        'v'.charCodeAt(0),
