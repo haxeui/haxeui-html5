@@ -254,7 +254,7 @@ class TextInputImpl extends TextDisplayImpl {
             el.style.border = "none";
             el.style.resize = "none";
             el.style.outline = "none";
-            el.style.lineHeight = "1.5";
+            //el.style.lineHeight = "1.5";
             el.style.padding = "0px";
             el.style.margin = "0px";
             el.style.bottom = "0px"; // chrome only?
@@ -317,7 +317,7 @@ class TextInputImpl extends TextDisplayImpl {
         div.style.fontFamily = element.style.fontFamily;
         div.style.fontSize = element.style.fontSize;
         div.style.whiteSpace = element.style.whiteSpace;
-        div.style.lineHeight = element.style.lineHeight;
+        //div.style.lineHeight = element.style.lineHeight;
         if ((element is TextAreaElement)) {
             div.style.wordBreak = element.style.wordBreak;
             div.style.font = Browser.window.getComputedStyle(element).font;
