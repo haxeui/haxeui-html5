@@ -34,9 +34,11 @@ class ScreenImpl extends ScreenBase {
             return false;
         });
         */
-
-        Browser.document.documentElement.addEventListener("mouseleave", onMouseLeave);
-        Browser.document.documentElement.addEventListener("mouseenter", onMouseEnter);
+        
+        // on firefox (131.0.2), "mouseenter" seems to be dispatched when component is moved to front/ back while mouse clicked on it. 
+        // would cause multiple issues with dragging when you moved component to the top beforehand.
+        //Browser.document.documentElement.addEventListener("mouseleave", onMouseLeave);
+        //Browser.document.documentElement.addEventListener("mouseenter", onMouseEnter);
     }
 
     private override function set_options(value:ToolkitOptions):ToolkitOptions {
