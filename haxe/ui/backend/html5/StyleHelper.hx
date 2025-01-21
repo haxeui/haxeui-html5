@@ -15,6 +15,12 @@ class StyleHelper {
     public static function apply(component:ComponentImpl, width:Float, height:Float, style:Style) {
         var element:Element = component.element;
         var css:CSSStyleDeclaration = element.style;
+        
+        if (component.nativeStyling) {
+            css.width = HtmlUtils.px(width);
+            css.height = HtmlUtils.px(height);
+            return;
+        }
 
         var slice:Rectangle = null;
         if (style.backgroundImageSliceTop != null &&

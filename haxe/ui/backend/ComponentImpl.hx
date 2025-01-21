@@ -281,6 +281,7 @@ class ComponentImpl extends ComponentBase {
         }
     }
 
+    public var nativeStyling:Bool = false;
     private override function handleSize(width:Null<Float>, height:Null<Float>, style:Style) {
         if (width == null || height == null || width <= 0 || height <= 0) {
             return;
